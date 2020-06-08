@@ -8,17 +8,6 @@ import OrderRelease from 'components/Contents/OrderRelease';
 import NotFound from 'components/Common/NotFound';
 import './Content.scss';
 
-
-const index = () => {
-  return (
-    <div className="v_content">
-      <Route>
-        <Redirect to={{ pathname: '/dashboard' }} />
-      </Route>
-    </div>
-  );
-};
-
 const Content = () => {
   const [isCollapse] = useContext(CollapseContext);
 

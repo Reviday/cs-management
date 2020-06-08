@@ -76,8 +76,7 @@ const Login = () => {
               {/* <img className="main_logo" src={logo} alt="i-bricks" /> */}
               <ul className="_ul">
                 <li className="tit main_logo_tit">
-                  <span className="tit_first">D</span>
-                  <span className="tit_second">Cast</span>
+                  {/* title */}
                 </li>
               </ul>
               <ul className="_ul">

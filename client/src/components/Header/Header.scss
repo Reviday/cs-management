@@ -2,7 +2,7 @@ div.v-top {
     background-color: #fff;
     position: fixed;
     width: calc(100% - 0px);
-    height: 50px;
+    height: 60px;
     border-bottom: 1px solid darkgray;
     /*box-shadow: 0px 1px 5px -2px rgba(0,0,0,0.1);*/
     z-index: 10;
@@ -37,6 +37,60 @@ div.t_right {
     line-height: 50px;
 }
 
+div.search_field {
+    position: relative;
+    float: left;
+    width: 400px;
+    height: 50px;
+    margin: auto;
+    margin-right: 50px;
+}
+
+div.search_field input.search {
+    padding: 0 20px;
+    margin: 14px;
+    width: 350px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    font-size: 16px;
+    color: rgb(59, 59, 59);
+    outline: none;
+    transition: 0.3s;
+}
+
+div.search_field input.search:focus {
+    border-color: rgb(59, 59, 59);
+}
+
+div.search_field input.search::placeholder {
+    font-size: 15px;
+}
+
+div.search_field button.search_btn {
+    font-family: "Ionicons";
+    position: absolute;
+    top: 13px;
+    right: 0px;
+    text-align: center;
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: rgb(120, 120, 120);
+    transition: 0.2s;
+}
+
+div.search_field button.search_btn:hover {
+    color: rgb(59, 59, 59);
+}
+
+div.search_field button.search_btn:before {
+    content: "\f2f5";
+}
+
+
 div.pro_icon {
     width: 25px;
     height: 25px;
@@ -51,29 +105,30 @@ div.pro_icon > svg{
 
 .t_right .pro_icon {
     float: left;
-    margin: 13px 3px;
+    margin: 18px 3px;
     font-size: 25px;
     color: rgb(229,181,31);
 }
 .t_right .pro_id {
-    width: 75px;
+    width: 128px;
     padding-right: 15px;
-    height: 50px;
-    line-height: 50px;
+    height: 60px;
+    line-height: 60px;
     float: right;
-    font-weight: 400;
-    font-size: small;
-    /*margin: 11px 20px 0 5px;*/
+    font-weight: 300;
+    font-size: 16px;
+    color: #bbb;
 }
 .t_right div.profile {
+    float: right;
     padding-bottom: 50px;
 }
 .pro_view {
     position: absolute;
     display: inline-block;
-    width: 100px;
-    top: 45px;
-    right: 20px;
+    width: 120px;
+    top: 50px;
+    right: 40px;
     z-index: 20;
     cursor: pointer;
 }
