@@ -1,0 +1,10 @@
+{
+  "apps": [{
+    "name": "_app",
+    "script": "bin.js",
+    "watch": "../",
+    "exec_mode": "cluster",
+    "args": ["master"],
+    "instances": 1
+  }]
+}

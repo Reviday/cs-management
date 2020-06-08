@@ -1,0 +1,93 @@
+/*constant*/
+@import '../../resources/styles/constant.scss';
+
+
+/*** inputBtn Template ***/
+div.inputBtn {
+    position: relative;
+    width: 210px;
+    margin-top: 20px;
+}
+
+input[type="text"].inputBtnTemp {
+    width: 210px;
+    box-sizing: border-box;
+    height: 40px;
+    padding: 15px 35px 15px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background: #fff;
+    resize: none;
+    outline: 0;
+}
+
+input[type="text"][required].inputBtnTemp:focus {
+    border-color: rgb(47,84,150);
+}
+
+input[type="text"][required].inputBtnTemp:focus+label[placeholder]:before {
+    color: rgb(47,84,150);
+}
+
+input[type="text"][required].inputBtnTemp:focus+label[placeholder]:before,
+input[type="text"][required].inputBtnTemp:valid+label[placeholder]:before {
+    transition-duration: 0.2s;
+    -webkit-transform: translate(0, -1.4em) scale(0.9, 0.9);
+    transform: translate(0, -1.4em) scale(0.9, 0.9);
+}
+
+input[type="text"][required].inputBtnTemp:invalid+label[placeholder][alt]:before {
+    content: attr(alt);
+}
+
+input[type="text"][required].inputBtnTemp+label[placeholder] {
+    box-sizing: border-box;
+    height: 35px;
+    line-height: 35px;
+    display: block;
+    position: relative;
+    top: -40px;
+    pointer-events: none;
+    font-size: 16px;
+}
+
+input[type="text"][required].inputBtnTemp+label[placeholder]:before {
+    content: attr(placeholder);
+    font-size: 0.8em;
+    display: inline-block;
+    margin: 0 calc(1em + 2px);
+    padding: 0 2px;
+    color: #898989;
+    white-space: nowrap;
+    transition: 0.3s ease-in-out;
+    background-image: linear-gradient(to bottom, white, white);
+    background-size: 100% 5px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+button.inputBtnStyle {
+    font-family: "Ionicons";
+    position: absolute;
+    cursor: pointer;
+    right: 5px;
+    top: 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 25px;
+    outline:0;
+}
+
+button.inputBtnStyle:hover {
+    font-weight: 600;
+}
+
+div.inputBtn svg {
+    width: 25px;
+    height: 25px;
+}
+
+.add:before {
+    content: "\f2c7";
+}
+/*** inputBtn Template End ***/

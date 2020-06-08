@@ -1,0 +1,23 @@
+div._sec {
+    height: 30px;
+    background: #eee;
+    border-bottom: 1px solid #eee;
+}
+
+div._sec_item {
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    font-size: small;
+    background: #bbb;
+    border-right: 1px solid white;
+    width: 180px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+a.active div._sec_item {
+    background: navy;
+}

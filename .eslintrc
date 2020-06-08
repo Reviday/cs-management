@@ -1,0 +1,57 @@
+{
+  "env": {
+    "es6": true,
+    "browser": false,
+    "node": true
+  },
+  "extends":
+    [
+    "react-app",
+    "airbnb"
+  ],
+  "rules": {
+    // disable requiring trailing commas because it might be nice to revert to
+    // being JSON at some point, and I don't want to make big changes now.
+    "prettier/prettier": "off",
+    "comma-dangle": 0,
+    "prefer-destructuring": 0,
+    "object-shorthand": "off",
+    "strict": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/no-this-in-sfc": "off",
+    "prefer-const": "off",
+    "consistent-return": "off",
+    "max-len": ["error", { "code": 500 }],
+    "no-unused-vars": "off",
+    "import/order": "off",
+    "react/destructuring-assignment": "off",
+    "react/prop-types": "off",
+    "no-undef": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "react/jsx-filename-extension": "off",
+    "prefer-template": "off",
+    "import/newline-after-import": "off",
+    "import/no-dynamic-require": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "object-curly-newline": "off",
+    "react/prefer-stateless-function": "off",
+    "no-console": "off",
+    "arrow-body-style": "off",
+    "import/no-unresolved": "off",
+    "no-trailing-spaces": ["error", { "skipBlankLines": true }],
+    "padded-blocks": ["error", { "switches": "always" }],
+    "func-names": "off",
+    "no-restricted-syntax": "off",
+    "no-underscore-dangle": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "no-confusing-arrow": "off",
+    "no-await-in-loop": "off",
+    "no-nested-ternary": "off",
+    "no-shadow": "off"
+  },
+  "plugins": [
+    "react"
+  ]
+}

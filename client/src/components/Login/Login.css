@@ -1,0 +1,159 @@
+ol,
+ul {
+  list-style: none;
+}
+img.main_logo {
+  margin-top: 30px;
+}
+div.v_container {
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  border: 0px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: rgb(34, 34, 34);
+  font-weight: 200;
+  font-family: "Nanum Gothic", sans-serif;
+  border: 0 solid #444;
+  float: left;
+  font-size: 13px;
+  color: #666;
+}
+div.center_layout {
+  width: 100%;
+  min-height: 100vh;
+  /* height: 100%; */
+  height: 100vh;
+  border: 0px solid #ddd;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.login_box {
+  width: 400px;
+  height: 500px;
+  margin-top: 50px;
+  animation: fade 0.7s linear;
+}
+div.login_box .top {
+  position: relative;
+  width: 100%;
+  float: left;
+  height: 260px;
+}
+.main_logo_tit {
+  color: rgb(220, 220, 220);
+}
+.login_box .top .tit {
+  font-size: 35px;
+  font-weight: 100;
+}
+.login_box .top .tit > span {
+  color: #ddd;
+  font-size: 65px;
+  font-weight: 600;
+}
+.login_box .top .tit > span.tit_first {
+  font-size: 100px;
+  font-weight: 100;
+  color: rgb(250, 186, 28);
+  animation: blink 5s linear infinite;
+}
+.login_box .top .tit > span.tit_second {
+  position: absolute;
+  font-weight: 100;
+  top: 132px;
+  left: 55px;
+}
+.login_box .top ._ul {
+  width: 50%;
+  float: left;
+  margin: 0;
+}
+.login_box .top ._ul .ver{
+  position: absolute;
+  top: 183px;
+  left: 180px;
+}
+.login_box .top .desc {
+  font-size: 14px;
+  font-weight: 100;
+  margin-left: 188px;
+  color: #888;
+}
+.login_box .cont .inp {
+  border-bottom: 1px solid #ddd;
+  padding: 0px 0px 5px 5px;
+  font-weight: 100;
+  width: calc(100% - 0px);
+  box-sizing: border-box;
+}
+
+.login_box .cont .inp input {
+  border: 0 solid #ddd;
+  padding: 0;
+  color: #ddd;
+  width: calc(100% - 20px);
+  font-size: 14px;
+  font-weight: 100;
+  outline: none;
+  background-color: transparent;
+}
+.login_box .cont .inp:focus {
+  border: 1px solid #ddd;
+}
+.login_box .bot .log_btn {
+  border: 1px solid #444;
+  background-color: #444;
+  font-size: 15px;
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  font-weight: 100;
+  color: #fff;
+  width: calc(100% - 0px);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+.login_box .bot .log_btn:hover {
+  background-color: #36ade8;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+@keyframes blink {
+  0% {
+    color: rgb(250, 200, 74);
+  }
+  25% {
+    color: rgb(250, 186, 28);
+  }
+  50% {
+    color: rgb(248, 178, 0);
+  }
+  75% {
+    color: rgb(250, 186, 28);
+  }
+  100% {
+    color: rgb(250, 200, 74);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    margin-top: 80px;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}

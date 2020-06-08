@@ -1,0 +1,28 @@
+button.BorderButton {
+    height: 25px;
+    border-radius: 12px;
+    width: 150px;
+    color: cornflowerblue;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 1px solid lightgray;
+    background: white;
+    cursor: pointer;
+    outline: 0;
+    opacity: 0.9;
+}
+
+button.BorderButton:hover {
+    background-color: #eee;
+    opacity: 1;
+}
+
+button.BorderButton:active {
+    opacity: 0.6;
+}
+
+button.BorderButton:disabled {
+    opacity: 0.5;
+    cursor: default;
+    background: white;
+}

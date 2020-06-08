@@ -1,0 +1,13 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 4,
+  "semi": true,
+  "singleQuote": true,
+  "parser":"flow",
+  "arrowParens":"avoid",
+  "proseWrap":"never",
+  "useTabs":false,
+  "usePrettierrc":false,
+  "withNodeModules": true,
+  "usePrettierrc": true
+}
