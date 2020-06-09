@@ -76,8 +76,8 @@
 
 .ct_title ._rt .addCostomerBtn {
   width: 75px;
-  height: 22px;
-  font-size: 10px;
+  height: 23px;
+  font-size: 12px;
   border-color: #aaa;
   color: #aaa;
   font-weight: 500;
@@ -85,19 +85,19 @@
 }
 
 .ct_title ._rt .addOrderBtn {
-  width: 75px;
-  height: 22px;
-  font-size: 10px;
-  border-color: #aaa;
-  color: #aaa;
+  width: 100px;
+  height: 23px;
+  font-size: 12px;
+  background-color: rgb(250, 186, 28);
+  color: rgb(80, 80, 80);
   font-weight: 500;
   margin: 10px;
 }
 
 .ct_title ._rt .moreBtn {
   width: 75px;
-  height: 22px;
-  font-size: 10px;
+  height: 23px;
+  font-size: 12px;
   border-color: #aaa;
   color: #aaa;
   font-weight: 500;
@@ -116,9 +116,9 @@
 }
 
 .ct_box_footer{
-  width: calc(100% - 20px);
+  width: calc(100% - 145px);
   height: 46px;
-  border-top: 1px solid lightgray;
+  margin: 0 50px;
 }
 
 .ct_box_ft{

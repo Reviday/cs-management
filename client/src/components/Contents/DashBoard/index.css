@@ -1,0 +1,32 @@
+div._flex {
+  width: calc(100% - 20px);
+  display: flex;
+  margin: auto 20px;
+}
+
+div.card {
+  width: fit-content;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  margin: auto 20px;
+  transition: 0.3s;
+}
+
+div.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+div.card_cont {
+  width: calc(100% - 0px);
+}
+
+div.card_cont .cont_header {
+  width: calc(100% - 32px);
+  padding: 2px 16px;
+  border-bottom: 1px solid #aaa;
+}
+
+div.card_cont .cont_body {
+  width: calc(100% - 32px);
+  padding: 2px 16px;
+}

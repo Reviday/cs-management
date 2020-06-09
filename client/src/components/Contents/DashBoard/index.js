@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+/*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
+/*  CSS  */
+import './index.css';
 
 const DashBoard = (props) => {
 
@@ -38,7 +42,48 @@ const DashBoard = (props) => {
           </div>
         </div>
         <div className="ct_box">
-          content
+          <div className="_flex">
+            <div className="card">
+              <div className="card_cont">
+                <div className="cont_header">
+                  {moment(new Date()).format('YYYY.MM.DD HH:mm')}
+                </div>
+                <div className="cont_body">
+                  <div className="item_name">
+                    전체
+                  </div>
+                  <div className="item_val">
+                    <div className="val_all">
+                      64/
+                    </div>
+                    <div className="val_???">
+                      27
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card_cont">
+                <div className="cont_header">
+                  {moment(new Date()).format('YYYY.MM.DD HH:mm')}
+                </div>
+                <div className="cont_body">
+                  body
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card_cont">
+                <div className="cont_header">
+                  {moment(new Date()).format('YYYY.MM.DD HH:mm')}
+                </div>
+                <div className="cont_body">
+                  body
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -1,40 +1,76 @@
 /*constant*/
-@import 'resources/styles/constant.scss';
+@import "resources/styles/constant.scss";
 
-.page_div_layout{float:left; width:500px; border:0px solid #555; position: relative;}
-.div_paging{width:100%; position:relative;  border:0px solid #555;
-   padding:10px; padding-left:5px;
-   box-sizing: border-box;
- }
-.div_paging ul{width:100%; display:flex; justify-content:flex-start; align-items:center;}
-.div_paging ._li{
-  font-weight:300; font-size:12px;
-  cursor:pointer; float:left; height:20px;
-  display:flex; justify-content:center; align-items:center;
-  color:#777; padding:2px 5px;
-  border:1px solid #e8ecf6;
-  border-right:0px;
+.page_div_layout {
+  float: left;
+  width: 500px;
+  border: 0px solid #555;
+  position: relative;
 }
-.div_paging ._li:last-child{border-right:1px solid #e8ecf6;}
-.div_paging ._li:hover{color:#444;}
-.div_paging .btn{
-  margin-right:0px;
-  width:20px; height:20px;
+.div_paging {
+  width: 100%;
+  position: relative;
+  border: 0px solid #555;
+  padding: 10px;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+.div_paging ul {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.div_paging ._li {
+  font-weight: 300;
+  font-size: 13px;
+  cursor: pointer;
+  float: left;
+  height: 25px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #777;
+  padding: 5px 10px;
+  /* border: 1px solid #e8ecf6; */
+  border-radius: 50px;
+  border-right: 0px;
+}
+.div_paging ._li:last-child {
+  border-right: 1px solid #e8ecf6;
+}
+.div_paging ._li:hover {
+  color: #444;
+}
+.div_paging .btn {
+  margin-right: 0px;
+  width: 20px;
+  height: 20px;
   /* border:1px solid #bbb; */
 }
-.div_paging .btn:hover{background-color:#ddd;}
-.div_paging ._li.on{
-  /*font-weight:400;*/
-  color:#fff;
-  background-color:#5373b4 !important;
+.div_paging .btn:hover {
+  background-color: #ddd;
 }
-.div_paging ._li:hover{background-color:#e8ecf6; }
-.div_paging .btn.dis{
-  // border:1px solid #f2f2f2;
-  background-color: #f2f2f2;
-  color:#ddd; cursor:default;}
-.div_paging .btn.dis:hover{background-color:#f2f2f2;}
+.div_paging ._li.on {
+  /*font-weight:400;*/
+  color: #fff;
+  background-color: #5373b4 !important;
+}
+.div_paging ._li:hover {
+  background-color: #e8ecf6;
+}
+.div_paging .btn.dis {
+  color: #ddd;
+  cursor: default;
+}
+.div_paging .btn.dis:hover {
+  background-color: transparent !important;
+}
 // .div_paging .btn.ppre{border-right:0px;}
-.div_paging .btn.pre{margin-right:0px;}
+.div_paging .btn.pre {
+  margin-right: 0px;
+}
 // .div_paging .btn.next{ border-right:0px;margin-left:0px;}
-.div_paging .btn.nnext{}
+.div_paging .btn.nnext {
+}

@@ -1,137 +1,39 @@
-div._table {
-    align-items: center;
-    width: fit-content;
-    height: 236px;
-    font-family: "Nanum Gothic", "sans-serif";
-    font-size: small;
+._table {
+  width: calc(100% - 150px);
+  margin: 50px;
+  margin-bottom: 15px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-div._table ul li {
-    padding-left: 10px;
-    padding-right: 10px;
+._thead {
+  border-bottom: 1px solid #aaa;
 }
 
-div._table > ul._header, div._body > ul {
-    list-style: none;
-    margin : 0;
-    padding: 0;
+._thead tr th {
+  padding: 10px;
+  font-weight: 400;
+  font-size: 15px;
+  color: rgb(80, 80, 80);
 }
 
-div._table > ul._header > li {
-    display: inline-block;
-    height: 30px;
-    line-height: 30px;
-    font-size: small;
-    text-align: center;
-    color: cornflowerblue;
+._tbody {
 }
 
-div._body {
-    border-left: 1px solid lightgray;
-    border-right: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
-    min-width: 1000px;
+._tbody tr {
+  border-bottom: 1px dashed #aaa;
 }
 
-div._body > ul > li {
-    display: inline-block;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+._tbody tr:hover {
+  background-color: rgb(250, 250, 250);
+  cursor: pointer;
 }
 
-div._body > ul {
-    border-top : 1px solid lightgray;
-    min-width: 1100px;
-    cursor: pointer;
-}
-
-div._body > ul:hover {
-    background-color: rgba(250, 250, 250);
-    box-shadow:0px 4px 6px -2px rgba(0,0,0,0.10);
-}
-
-div.noItem {
-    border-top: 1px solid lightgray;
-    height: 160px;
-    line-height: 160px;
-    text-align: center;
-    color: lightslategray;
-}
-
-div._table li {
-    min-width: 150px;
-    text-align: left;
-}
-
-div._table li:first-child {
-    min-width: 200px;
-    text-align: left !important;
-}
-
-div._table li:last-child {
-    min-width: 50px;
-}
-
-/* div._table li.Session {
-    min-width: 150px;
-    text-align: left !important;
-    padding-left: 15px;
-    cursor: pointer;
-}
-
-div._table li.Url{
-    min-width: 250px;
-    text-align: left;
-}
-
-div._table li.Create.Date {
-    min-width: 200px;
-}
-
-div._table li.Connection {
-    min-width: 200px;
-}
-
-li.State {
-    min-width: 100px;
-}
-
-li.State > div {
-    text-align: left;
-}
-
-li.State > div.waiting {
-    text-align : center;
-}*/
-
-li.Delete {
-    min-width: 50px;
-    text-align: center !important;
-}
-
-li.Delete > button {
-    outline: 0;
-    border: none;
-    background: transparent;
-}
-
-li.Delete > button > span {
-    font-family: "Ionicons";
-    vertical-align: middle;
-    color: cornflowerblue;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-li.Delete > button > span:hover {
-    font-size: 22px;
-    color: rgb(49, 118, 245);
-}
-
-li.Delete > button > span:before {
-    content: "\f4c5";
+._tbody tr td {
+  font-weight: 300;
+  font-size: 15px;
+  padding: 20px;
+  color: rgb(100, 100, 100);
 }

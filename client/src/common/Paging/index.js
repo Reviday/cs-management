@@ -156,7 +156,7 @@ const Paging = (props) => {
             className={`_li btn ppre ${state.ppreView === 'on' ? '' : 'dis'}`}
             onClick={() => handlePageClick(0, 'pprev', state.ppreView)}
           >
-            F
+            {'<<'}
           </li>
           <li
             className={`_li btn pre ion-ios-arrow-left ${state.preView === 'on' ? '' : 'dis'}`}
@@ -182,7 +182,7 @@ const Paging = (props) => {
             className={`_li btn nnext ${state.nnextView === 'on' ? '' : 'dis'}`}
             onClick={() => handlePageClick(0, 'nnext', state.nnextView)}
           >
-            L
+            {'>>'}
           </li>
         </ul>
       </div>
