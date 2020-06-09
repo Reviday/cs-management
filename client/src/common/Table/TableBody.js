@@ -1,30 +1,29 @@
 import React from 'react';
+import Record from './TableRecord';
 
-function TableBody(props) {
+const TableBody = (props) => {
   const headerSet = props.headerSet;
   const data = props.data;
-  const viewModal = props.viewModal;
   const tableStyle = props.tableStyle;
-  const CustomRecord = props.CustomRecord;
 
   let count = 0;
 
   return (
-    <div className="_body" style={tableStyle}>
-      {data.length === 0
-        ? (
-          <div className="noItem">
-            설정 목록이 없습니다.
-          </div>
-        )
-        : data.map((record) => {
-          return (
-            <CustomRecord key={count} id={count++} headerSet={headerSet} record={record} viewModal={viewModal} />
-          );
-        })
-      }
-    </div>
+    <React.Fragment>
+      <tbody className="_tbody">
+        {data.length === 0
+          ? (
+            <tr>결과 목록이 없습니다.</tr>
+          )
+          : data.map((record) => {
+            return (
+              <Record key={count} id={count++} headerSet={headerSet} record={record} />
+            );
+          })
+        }
+      </tbody>
+    </React.Fragment>
   );
-}
+};
 
 export default TableBody;
