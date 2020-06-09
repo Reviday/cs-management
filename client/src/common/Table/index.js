@@ -7,6 +7,7 @@ const Table = (props) => {
   const headerSet = props.headerSet;
   const data = props.data;
   const tableStyle = props.tableStyle || {};
+  const recordLimit = props.recordLimit || 'none';
 
   return (
     <React.Fragment>
@@ -16,6 +17,7 @@ const Table = (props) => {
           headerSet={headerSet}
           data={data}
           tableStyle={tableStyle}
+          recordLimit={recordLimit}
         />
       </table>
     </React.Fragment>

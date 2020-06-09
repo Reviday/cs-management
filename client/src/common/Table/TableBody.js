@@ -5,6 +5,7 @@ const TableBody = (props) => {
   const headerSet = props.headerSet;
   const data = props.data;
   const tableStyle = props.tableStyle;
+  const recordLimit = props.recordLimit;
 
   let count = 0;
 
@@ -16,6 +17,10 @@ const TableBody = (props) => {
             <tr>결과 목록이 없습니다.</tr>
           )
           : data.map((record) => {
+            if (recordLimit !== 'none' && count >= recordLimit) {
+              return;
+            }
+            
             return (
               <Record key={count} id={count++} headerSet={headerSet} record={record} />
             );

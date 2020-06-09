@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
+import Paging from 'common/Paging';
 
 import './index.css';
 
@@ -80,6 +81,11 @@ const UpdateBtn = (type, id) => {
 
 const OrderRelease = (props) => {
 
+  const [more, setMore] = useState({
+    receipt: false,
+    release: false
+  });
+
   // Receipt Table Header Set
   const receiptHeaderSet = [
     { field: 'locate', text: '지점', sort: '' },
@@ -102,6 +108,28 @@ const OrderRelease = (props) => {
       orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('receipt', '123', '입고완료'),
+      updateBtn: UpdateBtn('receipt', '123'),
+      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: '456',
+      locate: '청담',
+      name: '최용국',
+      items: '캐시미어 코드 1EA',
+      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('receipt', '456', '원단입고'),
+      updateBtn: UpdateBtn('receipt', '456'),
+      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: '789',
+      locate: '대구',
+      name: '이병호',
+      items: '헤링본 스포츠 자켓 1EA',
+      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('receipt', '123', '제작'),
       updateBtn: UpdateBtn('receipt', '123'),
       updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
@@ -172,6 +200,26 @@ const OrderRelease = (props) => {
       progressBtn: ProgressBtn('release', 1, '출고완료'),
       updateBtn: UpdateBtn('release', 3),
       updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      number: 4,
+      name: '최용국',
+      items: '캐시미어 코드 1EA',
+      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('release', 2, '출고준비'),
+      updateBtn: UpdateBtn('release', 2),
+      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      number: 5,
+      name: '이병호',
+      items: '헤링본 스포츠 자켓 1EA',
+      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('release', 1, '출고완료'),
+      updateBtn: UpdateBtn('release', 3),
+      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     }
   ];
 
@@ -179,10 +227,22 @@ const OrderRelease = (props) => {
   const addOrder = () => {
     console.log('btn click');
   };
+
+  const getReceiptList = () => {
+    console.log('getReceiptList');
+  };
+
+  const getReleaseList = () => {
+    console.log('getReleaseList');
+  };
   
   // 더보기
-  const onMoreBtn = () => {
-    console.log('btn click');
+  const onMoreBtn = (type) => {
+    if (type === 'receipt') {
+      setMore({ ...more, receipt: !more.receipt });
+    } else if (type === 'release') {
+      setMore({ ...more, release: !more.release });
+    }
   };
 
   return (
@@ -199,7 +259,7 @@ const OrderRelease = (props) => {
             <div className="_more">
               <BorderButton
                 addClass="moreBtn"
-                onHandle={e => onMoreBtn(e)}
+                onHandle={() => onMoreBtn('receipt')}
                 name="더보기"
               />
             </div>
@@ -218,7 +278,23 @@ const OrderRelease = (props) => {
           <Table
             headerSet={receiptHeaderSet}
             data={receiptTempItem}
+            recordLimit={more.receipt ? 'none' : 3}
           />
+          {
+            more.receipt
+              ? (
+                <div className="ct_box_footer">
+                  <Paging
+                    onClick={getReceiptList}
+                    totalCount={100} // total 가져오는 로직 필요.
+                    listCount={10}
+                    displayCount={10}
+                    current={1}
+                  />
+                </div>
+              )
+              : null
+          }
         </div>
 
         <div className="ct_title">
@@ -231,11 +307,8 @@ const OrderRelease = (props) => {
             <div className="_more">
               <BorderButton
                 addClass="moreBtn"
-                onHandle={e => onMoreBtn(e)}
+                onHandle={() => onMoreBtn('release')}
                 name="더보기"
-                style={{
-                  
-                }}
               />
             </div>
           </div>
@@ -244,7 +317,23 @@ const OrderRelease = (props) => {
           <Table
             headerSet={releaseHeaderSet}
             data={releaseTempItem}
+            recordLimit={more.release ? 'none' : 3}
           />
+          {
+            more.release
+              ? (
+                <div className="ct_box_footer">
+                  <Paging
+                    onClick={getReleaseList}
+                    totalCount={100} // total 가져오는 로직 필요.
+                    listCount={10}
+                    displayCount={10}
+                    current={1}
+                  />
+                </div>
+              )
+              : null
+          }
         </div>
       </div>
     </React.Fragment>

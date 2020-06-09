@@ -1,6 +1,7 @@
 ._table {
   width: calc(100% - 150px);
   margin: 50px;
+  margin-bottom: 15px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -23,6 +24,11 @@
 
 ._tbody tr {
   border-bottom: 1px dashed #aaa;
+}
+
+._tbody tr:hover {
+  background-color: rgb(250, 250, 250);
+  cursor: pointer;
 }
 
 ._tbody tr td {
