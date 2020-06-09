@@ -20,6 +20,10 @@ const FileStore = require('session-file-store')(session);
 const sessionIndex = require('../routes/session');
 const sessionSecret = '_ibricks_';
 
+/* Connect DB */
+const sequelize = require(`${approot}/db/models`).sequelize;
+sequelize.sync();
+
 /** configfile */
 const configfile = require(`${approot}/config/config.json`);
 const config = require(`${approot}/config/config`);

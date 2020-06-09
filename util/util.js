@@ -34,6 +34,7 @@ module.exports.res_param_err = function (req, statusCode, err) {
 module.exports.param_check = (req, res, fileName, param) => {
   this.reqParam(`[${req.paramStatus}]Info`, req, fileName);
   if (req.method === 'POST') req.query = req.body;
+  console.log(req.body.mode);
 
   const errStatus = { status: false, errMsg: '' };
   param.forEach((item, idx) => {
@@ -51,19 +52,11 @@ module.exports.param_check = (req, res, fileName, param) => {
 };
 
 /** [SET] response send SUCCESS */
-module.exports.res_ok = async function (req, body, elapsed) {
-  elapsed = (elapsed !== undefined) ? elapsed : {};
-  if (req === undefined);
-  else {
-    // control
-  }
-  console.trace(`[send body] ${JSON.stringify(body)}`);
-  const ret = { status: 200, reason: 'OK', _elapsed: elapsed };
-  Object.keys(body).forEach((key) => {
-    ret[key] = body[key];
-  });
+module.exports.res_ok = async function (rows) {
+
+  console.trace(`[send body] ${JSON.stringify(rows)}`);
   // console.log(ret);
-  return ret;
+  return {status: 200, reason: 'OK', data: rows};
 };
 
 
@@ -202,4 +195,9 @@ module.exports.setError = {
     }
     return retFlag;
   }
+};
+
+
+module.exports.addComma = function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

@@ -1,18 +1,19 @@
 {
+  "runMode" : "development",
   "development": {
     "username": "root",
-    "password": null,
-    "database": "database_development",
+    "password": "1q2w3e!Q@W#E",
+    "database": "formentera",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "1q2w3e!Q@W#E",
     "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
+    "host": "192.168.0.219",
+    "dialect": "formentera",
     "operatorsAliases": false
   },
   "production": {
