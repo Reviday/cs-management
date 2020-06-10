@@ -36,6 +36,16 @@ module.exports = (sequelize, DataTypes) => {
         complete_date : {
             type : DataTypes.DATE,
             allowNull : false,
+        },
+        create_at : {
+            type: 'TIMESTAMP',
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+            allowNull : false,
+        },
+        update_at : {
+            type: 'TIMESTAMP',
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+            allowNull : false,
         }
     },{
         timestamps : false

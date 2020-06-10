@@ -5,7 +5,7 @@
     "password": "1q2w3e!Q@W#E",
     "database": "formentera",
     "host": "127.0.0.1",
-    
+    "dialect": "mysql",
     "operatorsAliases": false
   },
   "test": {

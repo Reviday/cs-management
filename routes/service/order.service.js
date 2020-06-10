@@ -15,7 +15,8 @@ module.exports = {
                     rows.push(data);
                 });
             }
-            return rows;
+
+            return Util.setResponseMessage(rows);
         } catch (err) {
             throw err;
         }
@@ -23,7 +24,7 @@ module.exports = {
     orderInfoInsert: async (requestParam) => {
         try {
             const result = await Order.create(requestParam);
-            return result._options.isNewRecord;
+            return Util.setResponseMessage(result._options.isNewRecord);
 
         } catch (err) {
             throw err;
