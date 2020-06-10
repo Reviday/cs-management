@@ -49,6 +49,7 @@ module.exports = {
                 setReqParams = {
                     mode          : req.query.mode,
                     title         : req.query.title,
+                    id            : req.query.id,
                     site          : req.query.site,
                     name          : req.query.name,
                     telpno        : req.query.telpno,
@@ -62,13 +63,11 @@ module.exports = {
                 result = await Service.orderInfoUpdate(setReqParams);
 
             } else {
-
                 // 전체 목록 조회
                 setReqParams = {
                     title: req.query.title,
                     start: req.query.start || 1,
                 };
-
                 result = await Service.orderInfoList(setReqParams);
             }
             // 최종 결과 Responses
