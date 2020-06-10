@@ -1,50 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import moment from 'moment';
 
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
 import Paging from 'common/Paging';
+import Modal from 'common/Modal/ModalCover';
+import OrderModalContent from './OrderModal';
+import Config from 'config';
 
 import './index.css';
 
 // 진행사항 버튼
-const ProgressBtn = (type, id, val) => {
+const ProgressBtn = (title, id, val) => {
 
   let name = '';
   let addClass = '';
 
-  if (type === 'receipt') {
+  if (title === 'order') {
     switch (val) {
 
-      case '입고완료':
-        name = '입고완료';
-        addClass = 'complete';
-        break;
-      case '원단입고':
-        name = '원단입고';
-        addClass = 'receipt';
-        break;
-      case '제작':
+      case 0:
         name = '제작';
+        addClass = 'order';
+        break;
+      case 1:
+        name = '가봉완료';
+        addClass = 'basting';
+        break;
+      case 2:
+        name = '제작완료';
         addClass = 'making';
+        break;
+      case 3:
+        name = '2차 수선';
+        addClass = 'repair';
         break;
       default: break;
     
     }
-  } else if (type === 'release') {
+  } else if (title === 'out') {
     switch (val) {
 
-      case '출고완료':
-        name = '출고완료';
-        addClass = 'complete';
-        break;
-      case '출고준비':
+      case 4:
         name = '출고준비';
         addClass = 'ready';
         break;
-      case '제작':
-        name = '제작';
-        addClass = 'making';
+      case 5:
+        name = '출고완료';
+        addClass = 'complete';
         break;
       default: break;
     
@@ -52,7 +56,7 @@ const ProgressBtn = (type, id, val) => {
   }
 
   const onHandle = () => {
-    console.log(`onHandle::: ${type} || ${id} || ${val}`);
+    console.log(`onHandle::: ${title} || ${id} || ${val}`);
   };
 
   return (
@@ -81,151 +85,111 @@ const UpdateBtn = (type, id) => {
 
 const OrderRelease = (props) => {
 
+  const [receiptData, setReceiptData] = useState([]);
+  const [releaseData, setReleaseData] = useState([]);
+
   const [more, setMore] = useState({
     receipt: false,
     release: false
   });
 
+  // Modal State
+  const [isModal, setIsModal] = useState({
+    view: false,
+    data: {
+    }
+  });
+
+  // close modal
+  const toggleModal = () => {
+    setIsModal({ ...isModal,
+      view: !isModal.view,
+      data: {}
+    });
+  };
+
+  const viewModal = async () => {
+    setIsModal({
+      ...isModal,
+      view: !isModal.view,
+      data: {
+      }
+    });
+  };
+
   // Receipt Table Header Set
   const receiptHeaderSet = [
-    { field: 'locate', text: '지점', sort: '' },
+    { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
-    { field: 'items', text: '품명', sort: '' },
-    { field: 'orderDate', text: '주문 날짜', sort: '' },
-    { field: 'completeDate', text: '입고완료 날짜', sort: '' },
+    { field: 'product', text: '품명', sort: '' },
+    { field: 'order_date', text: '주문 날짜', sort: '' },
+    { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
-    { field: 'updateDate', text: '업데이트 날짜', sort: '' }
-  ];
-
-  // Receipt Temp Data
-  const receiptTempItem = [
-    {
-      id: '123',
-      locate: '본점',
-      name: '유진호',
-      items: '정장 1EA, 셔츠 2EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('receipt', '123', '입고완료'),
-      updateBtn: UpdateBtn('receipt', '123'),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: '456',
-      locate: '청담',
-      name: '최용국',
-      items: '캐시미어 코드 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('receipt', '456', '원단입고'),
-      updateBtn: UpdateBtn('receipt', '456'),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: '789',
-      locate: '대구',
-      name: '이병호',
-      items: '헤링본 스포츠 자켓 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('receipt', '123', '제작'),
-      updateBtn: UpdateBtn('receipt', '123'),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: '456',
-      locate: '청담',
-      name: '최용국',
-      items: '캐시미어 코드 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('receipt', '456', '원단입고'),
-      updateBtn: UpdateBtn('receipt', '456'),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: '789',
-      locate: '대구',
-      name: '이병호',
-      items: '헤링본 스포츠 자켓 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('receipt', '123', '제작'),
-      updateBtn: UpdateBtn('receipt', '123'),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    }
+    { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
 
   // Release Table Header Set
   const releaseHeaderSet = [
-    { field: 'number', text: '번호', sort: '' },
+    { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
-    { field: 'items', text: '품명', sort: '' },
-    { field: 'orderDate', text: '출고요청 날짜', sort: '' },
-    { field: 'completeDate', text: '출고완료 날짜', sort: '' },
+    { field: 'product', text: '품명', sort: '' },
+    { field: 'order_date', text: '출고요청 날짜', sort: '' },
+    { field: 'complete_date', text: '출고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
-    { field: 'updateDate', text: '업데이트 날짜', sort: '' }
+    { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
+  
+  const getOderList = async (title, start) => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+      method: 'post',
+      data: {
+        mode: 'l',
+        size: 10,
+        start: start || 1,
+        title: title // title : 'order' or 'out'
+      }
+    };
+    try {
+      let setData = await axios(options);
+      // if (setData.data.status === 400) {
+      //   setAlertModal({
+      //     show: true,
+      //     title: '오류 메시지',
+      //     content: setData.data.message
+      //   });
+      //   return false;
+      // }
 
-  // Release Temp Data
-  const releaseTempItem = [
-    {
-      number: 1,
-      name: '유진호',
-      items: '정장 1EA, 셔츠 2EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('release', 1, '출고완료'),
-      updateBtn: UpdateBtn('release', 1),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      number: 2,
-      name: '최용국',
-      items: '캐시미어 코드 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('release', 2, '출고준비'),
-      updateBtn: UpdateBtn('release', 2),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      number: 3,
-      name: '이병호',
-      items: '헤링본 스포츠 자켓 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('release', 1, '출고완료'),
-      updateBtn: UpdateBtn('release', 3),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      number: 4,
-      name: '최용국',
-      items: '캐시미어 코드 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('release', 2, '출고준비'),
-      updateBtn: UpdateBtn('release', 2),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      number: 5,
-      name: '이병호',
-      items: '헤링본 스포츠 자켓 1EA',
-      orderDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      completeDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('release', 1, '출고완료'),
-      updateBtn: UpdateBtn('release', 3),
-      updateDate: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+      console.log(setData);
+      let result = setData.data.data;
+      let items = [];
+      for (let i in result) {
+        if (Object.prototype.hasOwnProperty.call(result, i)) {
+          let row = result[i];
+
+          let convertData = {
+            ...row,
+            order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
+            complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
+            progressBtn: ProgressBtn(title, row.id, row.order_status),
+            updateBtn: UpdateBtn(title, row.id),
+            update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
+          };
+
+          items.push(convertData);
+        }
+      }
+
+      // 데이터 set
+      if (title === 'order') setReceiptData(items);
+      else if (title === 'out') setReleaseData(items);
+      
+    } catch (e) {
+      console.log('ERROR', e);
     }
-  ];
-
-  // 주문 등록
-  const addOrder = () => {
-    console.log('btn click');
   };
 
   const getReceiptList = () => {
@@ -245,13 +209,18 @@ const OrderRelease = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (receiptData.length === 0) getOderList('order');
+    if (releaseData.length === 0) getOderList('out');
+  }, []); // [] : Run useEffect only once.
+ 
   return (
     <React.Fragment>
       <div className="ct_layout">
         <div className="ct_title">
           <div className="_lt">
             <div className="_title">
-             입고 일정
+              입고 일정
             </div>
           </div>
           
@@ -268,7 +237,7 @@ const OrderRelease = (props) => {
             <div className="_addOrder">
               <BorderButton
                 addClass="addOrderBtn"
-                onHandle={e => addOrder(e)}
+                onHandle={e => viewModal(e)}
                 name="주문 등록"
               />
             </div>
@@ -277,24 +246,9 @@ const OrderRelease = (props) => {
         <div className="ct_box">
           <Table
             headerSet={receiptHeaderSet}
-            data={receiptTempItem}
-            recordLimit={more.receipt ? 'none' : 3}
+            data={receiptData}
+            recordLimit={3}
           />
-          {
-            more.receipt
-              ? (
-                <div className="ct_box_footer">
-                  <Paging
-                    onClick={getReceiptList}
-                    totalCount={100} // total 가져오는 로직 필요.
-                    listCount={10}
-                    displayCount={10}
-                    current={1}
-                  />
-                </div>
-              )
-              : null
-          }
         </div>
 
         <div className="ct_title">
@@ -316,26 +270,96 @@ const OrderRelease = (props) => {
         <div className="ct_box">
           <Table
             headerSet={releaseHeaderSet}
-            data={releaseTempItem}
-            recordLimit={more.release ? 'none' : 3}
+            data={releaseData}
+            recordLimit={3}
           />
-          {
-            more.release
-              ? (
-                <div className="ct_box_footer">
-                  <Paging
-                    onClick={getReleaseList}
-                    totalCount={100} // total 가져오는 로직 필요.
-                    listCount={10}
-                    displayCount={10}
-                    current={1}
-                  />
-                </div>
-              )
-              : null
-          }
         </div>
       </div>
+      <div className={`ct_layout abs ${more.receipt ? 'on' : ''}`}>
+        <div className="ct_title">
+          <div className="_lt">
+            <div className="_title">
+              입고 일정
+            </div>
+          </div>
+          
+          <div className="_rt">
+            <div className="_more">
+              <BorderButton
+                addClass="moreBtn"
+                onHandle={() => onMoreBtn('receipt')}
+                name="접기"
+              />
+            </div>
+          </div>
+          <div className="_rt">
+            <div className="_addOrder">
+              <BorderButton
+                addClass="addOrderBtn"
+                onHandle={e => viewModal(e)}
+                name="주문 등록"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="ct_box">
+          <Table
+            headerSet={receiptHeaderSet}
+            data={receiptData}
+            recordLimit="none"
+          />
+          <div className="ct_box_footer">
+            <Paging
+              onClick={getReceiptList}
+              totalCount={100} // total 가져오는 로직 필요.
+              listCount={10}
+              displayCount={10}
+              current={1}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={`ct_layout abs ${more.release ? 'on' : ''}`}>
+        <div className="ct_title">
+          <div className="_lt">
+            <div className="_title">
+              출고 현황
+            </div>
+          </div>
+          <div className="_rt">
+            <div className="_more">
+              <BorderButton
+                addClass="moreBtn"
+                onHandle={() => onMoreBtn('release')}
+                name="접기"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="ct_box">
+          <Table
+            headerSet={releaseHeaderSet}
+            data={releaseData}
+            recordLimit="none"
+          />
+          <div className="ct_box_footer">
+            <Paging
+              onClick={getReleaseList}
+              totalCount={100} // total 가져오는 로직 필요.
+              listCount={10}
+              displayCount={10}
+              current={1}
+            />
+          </div>
+        </div>
+      </div>
+      <Modal
+        set={isModal}
+        hide={toggleModal}
+        title=""
+        style={{ width: '500px', height: '550px' }}
+        contents={OrderModalContent}
+      />
     </React.Fragment>
   );
 };

@@ -4,7 +4,6 @@
     "DEBUG_LEVEL": "debug",
     "API_HOST": {"IP":"127.0.0.1","PORT":"4000"},
     "APP_HOST": {"IP":"127.0.0.1","PORT":"4000"},
-    "ELASTICSEARCH_HOST": [{"IP":"127.0.0.1","PORT":"9200"}],
     "SESSION_EXPIRE": 3600000
   },
   "timezoneoffset_value": 60000
