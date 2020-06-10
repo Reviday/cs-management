@@ -1,7 +1,7 @@
 {
-  "name": "C/S-Management",
+  "name": "CS-Management",
   "version": "0.0.0",
-  "description": "new C/S-Management package.",
+  "description": "new CS-Management package.",
   "private": true,
   "scripts": {
     "client": "node ./scripts/start.js",
