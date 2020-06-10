@@ -1,7 +1,7 @@
 {
-  "name": "d-cast",
+  "name": "C/S-Management",
   "version": "0.0.0",
-  "description": "new D-Cast package.",
+  "description": "new C/S-Management package.",
   "private": true,
   "scripts": {
     "client": "node ./scripts/start.js",
