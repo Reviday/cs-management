@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.TEXT,
             allowNull : true
         },
+        needs :{
+            type : DataTypes.TEXT,
+            allowNull : true
+        },
         product : {
             type : DataTypes.TEXT,
             allowNull : true

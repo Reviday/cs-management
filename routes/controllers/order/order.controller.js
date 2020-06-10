@@ -18,11 +18,10 @@ module.exports = {
         const complete_day = moment(date).add(10,"days").format('YYYY-MM-DD');
         try {
             req.paramStatus = 'making';
-            const validateResult = Util.param_check(req, res, fileName, ['mode']);
+            const validateResult = Util.param_check(req, res, fileName, ['mode', 'title']);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
             let paramCheck = null;
             let setReqParams = null;
-            console.log('MODE ::: ',req.mode);
             if (req.query.mode === 'i') {
                 // [주문 정보 insert]
                 // 1. Check Request Parameters
@@ -30,10 +29,13 @@ module.exports = {
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 // 2. Set Request Parameters
                 setReqParams = {
+                    title         : req.query.title,
+                    start         : req.query.start || 1,
                     site          : req.query.site,
                     name          : req.query.name,
                     telpno        : req.query.telpno,
                     address       : req.query.address,
+                    needs         : req.query.needs,
                     product       : req.query.product,
                     price         : req.query.price,
                     order_status  : 0,
@@ -44,11 +46,30 @@ module.exports = {
                 result = await Service.orderInfoInsert(setReqParams);
 
             } else if (req.query.mode === 'u') {
+                setReqParams = {
+                    mode          : req.query.mode,
+                    title         : req.query.title,
+                    site          : req.query.site,
+                    name          : req.query.name,
+                    telpno        : req.query.telpno,
+                    address       : req.query.address,
+                    needs         : req.query.needs,
+                    product       : req.query.product,
+                    price         : req.query.price,
+                    order_status  : req.query.order_status,
+                };
                 // 주문 정보 update
+                result = await Service.orderInfoUpdate(setReqParams);
 
             } else {
+
                 // 전체 목록 조회
-                result = await Service.orderInfoList(req);
+                setReqParams = {
+                    title: req.query.title,
+                    start: req.query.start || 1,
+                };
+
+                result = await Service.orderInfoList(setReqParams);
             }
             // 최종 결과 Responses
             res.json(Util.res_ok(result));
