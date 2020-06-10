@@ -14,7 +14,9 @@ const TableBody = (props) => {
       <tbody className="_tbody">
         {data.length === 0
           ? (
-            <tr>결과 목록이 없습니다.</tr>
+            <tr>
+              <td className="none-data" colSpan={headerSet.length}>결과 목록이 없습니다.</td>
+            </tr>
           )
           : data.map((record) => {
             if (recordLimit !== 'none' && count >= recordLimit) {

@@ -4,7 +4,7 @@ import './Modal.scss';
 
 const Modal = (props) => {
 
-  const ModalContent = props.contents || <div>Contents does not exist.</div>;
+  const ModalContent = props.contents || null;
   const boxStyle = props.style || {};
   const data = props.set.data || {};
   // 정해져 있는 props, 그 외 함수 및 변수 등을 Content에 props로 전달할 때 사용.
@@ -27,8 +27,11 @@ const Modal = (props) => {
                   <div className="m_close" onClick={props.hide} onKeyDown={props.hide} />
                 </div>
               </div>
-              
-              <ModalContent hide={props.hide} data={data} items={items} />
+              {
+                ModalContent !== null
+                  ? <ModalContent hide={props.hide} data={data} items={items} />
+                  : <div>Contents does not exist.</div>
+              }
             </div>
           </div>
         </div>
