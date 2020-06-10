@@ -7,44 +7,77 @@
     opacity: 0.5;
 }
 
-.progressBtn.complete {
-    background-color: #6991e2;
+.progressBtn.order {
+    background-color: rgb(255, 206, 84);
     color: rgb(80, 80, 80);
+    opacity: 0.8;
+}
+
+.progressBtn.order:hover {
+    background-color: rgb(255, 206, 84);
+    color: rgb(80, 80, 80);
+    opacity: 1;
+}
+
+.progressBtn.basting {
+    background-color: rgb(126, 197, 237);
+    color: rgb(80, 80, 80);;
+    opacity: 0.8;
+}
+
+.progressBtn.basting:hover {
+    background-color: rgb(126, 197, 237);
+    color: rgb(80, 80, 80);;
+    opacity: 1;
+}
+
+.progressBtn.making {
+    background-color: rgb(237, 85, 101);
+    color: white;
+    opacity: 0.8;
+}
+
+.progressBtn.making:hover {
+    background-color: rgb(237, 85, 101);
+    color: white;
+    opacity: 1;
+}
+
+.progressBtn.repair {
+    background-color: rgb(72, 207, 173);
+    color: rgb(80, 80, 80);;
+    opacity: 0.8;
+}
+
+.progressBtn.repair:hover {
+    background-color: rgb(72, 207, 173);
+    color: rgb(80, 80, 80);;
+    opacity: 1;
+}
+
+.progressBtn.ready {
+    background-color: rgb(93, 156, 236);
+    color: white;
+    opacity: 0.8;
+}
+
+.progressBtn.ready:hover {
+    background-color: rgb(93, 156, 236);
+    color: white;
+    opacity: 1;
+}
+
+.progressBtn.complete {
+    background-color: rgb(236, 135, 192);
+    color: rgb(80, 80, 80);;
     opacity: 0.8;
 }
 
 .progressBtn.complete:hover {
-    background-color: #6991e2;
-    color: rgb(80, 80, 80);
+    background-color: rgb(236, 135, 192);
+    color: rgb(80, 80, 80);;
     opacity: 1;
 }
-
-.progressBtn.receipt {
-    background-color: rgb(80, 80, 80);
-    color: white;
-    opacity: 0.8;
-}
-
-.progressBtn.receipt:hover {
-    background-color: rgb(80, 80, 80);
-    color: white;
-    opacity: 1;
-}
-
-.progressBtn.making,
-.progressBtn.ready {
-    background-color: rgb(250, 186, 28);
-    color: rgb(80, 80, 80);
-    opacity: 0.8;
-}
-
-.progressBtn.making:hover,
-.progressBtn.ready:hover {
-    background-color: rgb(250, 186, 28);
-    color: rgb(80, 80, 80);
-    opacity: 1;
-}
-
 
 button.updateBtn {
     width: 120px !important;
@@ -62,3 +95,63 @@ button.updateBtn:hover {
 button.updateBtn:active {
     opacity: 0.5;
 }
+
+
+/* Modal Contents CSS */
+div.order_row_title {
+    float: left;
+    width: 70px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px 5px;
+    margin: 5px 0;
+    border-right: 3px solid black;
+}
+
+div.order_row_input {
+    position: relative;
+    display: inline-block;
+}
+
+div.order_row_input input[type=text] {
+    border: 1px solid #aaa;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 0px 10px;
+    font-size: 15px;
+    color: rgb(80, 80, 80);
+    outline: none;
+    transition: 0.3s;
+}
+
+div.order_row_input input[type=text]:focus {
+    border-color: rgb(59, 59, 59);
+}
+
+div.order_row_input input[type=text]::placeholder {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+input[type=button].addr_searchBtn {
+    float: right;
+    margin: 0px 10px 7px 0px;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 25px;
+    background-color: rgb(0, 176, 80);
+    color: white;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type=button].addr_searchBtn:hover {
+    opacity: 1;
+}
+
+input[type=button].addr_searchBtn:active {
+    opacity: 0.5;
+}
+

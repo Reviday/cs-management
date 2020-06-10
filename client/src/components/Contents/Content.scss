@@ -44,6 +44,18 @@
   border: 1px solid #ccc;
   border-radius: 15px;
 }
+
+.ct_layout.abs{
+  position: absolute;
+  top: 0;
+  left: 100%;
+  transition: 0.8s;
+}
+
+.ct_layout.abs.on{
+  left: 0 !important;
+}
+
 .ct_title {
   width: calc(100% - 0px);
   height: 60px;
@@ -104,15 +116,13 @@
   margin: 10px;
 }
 
-.ct_title ._rt .moreBtn:hover {
-
-}
 
 .ct_box{
   width: calc(100% - 20px);
   position: relative;
   margin: 20px;
   border: 0px solid #ddd;
+  transition: 1s;
 }
 
 .ct_box_footer{
@@ -204,6 +214,7 @@
   box-shadow:0px 0px 5px -2px rgba(0,0,0,0.2);
   float:left;
 }
+
 .box_layout.noshadow{box-shadow:0px 0px 0px 0px rgba(0,0,0,0);}
 .box_layout.pa{}
 .box_layout ._desc{
@@ -337,8 +348,13 @@
   height: 100px;
 }
 
-.rows {}
+.rows {
+}
 
 .rows-mt-10 {
   margin-top: 10px !important;
+}
+
+.rows-mb-20 {
+  margin-bottom: 20px !important;
 }

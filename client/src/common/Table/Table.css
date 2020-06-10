@@ -37,3 +37,10 @@
   padding: 20px;
   color: rgb(100, 100, 100);
 }
+
+._tbody tr td.none-data {
+  height: 200px;
+  vertical-align: middle;
+  background-color: white !important;
+  cursor: default;
+}
