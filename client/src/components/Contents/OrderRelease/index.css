@@ -113,6 +113,14 @@ div.order_row_input {
     display: inline-block;
 }
 
+div.order_row_input select {
+    width: 120px;
+    height: 30px;
+    margin: auto 15px;
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
 div.order_row_input input[type=text] {
     border: 1px solid #aaa;
     border-radius: 20px;

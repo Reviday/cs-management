@@ -153,6 +153,7 @@ const OrderRelease = (props) => {
       }
     };
     try {
+      console.log('options:::', options);
       let setData = await axios(options);
       // if (setData.data.status === 400) {
       //   setAlertModal({
@@ -309,13 +310,27 @@ const OrderRelease = (props) => {
             recordLimit="none"
           />
           <div className="ct_box_footer">
-            <Paging
-              onClick={getReceiptList}
-              totalCount={100} // total 가져오는 로직 필요.
-              listCount={10}
-              displayCount={10}
-              current={1}
-            />
+            <div className="rows_flex">
+              <Paging
+                onClick={start => getOderList('order', start)}
+                totalCount={100} // total 가져오는 로직 필요.
+                listCount={10}
+                displayCount={10}
+                current={1}
+              />
+            </div>
+            <div className="rows_flex">
+              <div className="search_field">
+                <select name="sel_field">
+                  <option value="" selected disabled hidden>검색영역</option>
+                  <option value="site">지점</option>
+                  <option value="name">고객명</option>
+                  <option value="product">품명</option>
+                </select>
+                <input type="text" className="search" placeholder="Search" />
+                <button type="button" className="search_btn" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -343,13 +358,27 @@ const OrderRelease = (props) => {
             recordLimit="none"
           />
           <div className="ct_box_footer">
-            <Paging
-              onClick={getReleaseList}
-              totalCount={100} // total 가져오는 로직 필요.
-              listCount={10}
-              displayCount={10}
-              current={1}
-            />
+            <div className="rows_flex">
+              <Paging
+                onClick={start => getOderList('out', start)}
+                totalCount={100} // total 가져오는 로직 필요.
+                listCount={10}
+                displayCount={10}
+                current={1}
+              />
+            </div>
+            <div className="rows_flex">
+              <div className="search_field">
+                <select name="sel_field">
+                  <option value="" selected disabled hidden>검색영역</option>
+                  <option value="site">지점</option>
+                  <option value="name">고객명</option>
+                  <option value="product">품명</option>
+                </select>
+                <input type="text" className="search" placeholder="Search" />
+                <button type="button" className="search_btn" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
