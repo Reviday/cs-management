@@ -12,12 +12,12 @@ import Config from 'config';
 import './index.css';
 
 // 진행사항 버튼
-const ProgressBtn = (title, id, val) => {
+const ProgressBtn = (category, id, val) => {
 
   let name = '';
   let addClass = '';
 
-  if (title === 'order') {
+  if (category === 'order') {
     switch (val) {
 
       case 0:
@@ -39,7 +39,7 @@ const ProgressBtn = (title, id, val) => {
       default: break;
     
     }
-  } else if (title === 'out') {
+  } else if (category === 'ship') {
     switch (val) {
 
       case 4:
@@ -56,7 +56,7 @@ const ProgressBtn = (title, id, val) => {
   }
 
   const onHandle = () => {
-    console.log(`onHandle::: ${title} || ${id} || ${val}`);
+    console.log(`onHandle::: ${category} || ${id} || ${val}`);
   };
 
   return (
@@ -96,24 +96,25 @@ const OrderRelease = (props) => {
   // Modal State
   const [isModal, setIsModal] = useState({
     view: false,
-    data: {
-    }
+    type: '',
+    data: {}
   });
 
   // close modal
   const toggleModal = () => {
     setIsModal({ ...isModal,
       view: !isModal.view,
+      type: '',
       data: {}
     });
   };
 
-  const viewModal = async () => {
+  const viewModal = async (type) => {
     setIsModal({
       ...isModal,
       view: !isModal.view,
-      data: {
-      }
+      type: type,
+      data: {}
     });
   };
 
@@ -141,15 +142,14 @@ const OrderRelease = (props) => {
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
   
-  const getOderList = async (title, start) => {
+  const getOderList = async (category, start) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
       method: 'post',
       data: {
-        mode: 'l',
-        size: 10,
-        start: start || 1,
-        title: title // title : 'order' or 'out'
+        category: category,
+        action: 's',
+        start: start || 1
       }
     };
     try {
@@ -175,8 +175,8 @@ const OrderRelease = (props) => {
             ...row,
             order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
             complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
-            progressBtn: ProgressBtn(title, row.id, row.order_status),
-            updateBtn: UpdateBtn(title, row.id),
+            progressBtn: ProgressBtn(category, row.id, row.order_status),
+            updateBtn: UpdateBtn(category, row.id),
             update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
           };
 
@@ -185,22 +185,14 @@ const OrderRelease = (props) => {
       }
 
       // 데이터 set
-      if (title === 'order') setReceiptData(items);
-      else if (title === 'out') setReleaseData(items);
+      if (category === 'order') setReceiptData(items);
+      else if (category === 'ship') setReleaseData(items);
       
     } catch (e) {
       console.log('ERROR', e);
     }
   };
 
-  const getReceiptList = () => {
-    console.log('getReceiptList');
-  };
-
-  const getReleaseList = () => {
-    console.log('getReleaseList');
-  };
-  
   // 더보기
   const onMoreBtn = (type) => {
     if (type === 'receipt') {
@@ -212,7 +204,7 @@ const OrderRelease = (props) => {
 
   useEffect(() => {
     if (receiptData.length === 0) getOderList('order');
-    if (releaseData.length === 0) getOderList('out');
+    if (releaseData.length === 0) getOderList('ship');
   }, []); // [] : Run useEffect only once.
  
   return (
@@ -238,7 +230,7 @@ const OrderRelease = (props) => {
             <div className="_addOrder">
               <BorderButton
                 addClass="addOrderBtn"
-                onHandle={e => viewModal(e)}
+                onHandle={() => viewModal('insertOrder')}
                 name="주문 등록"
               />
             </div>
@@ -297,7 +289,7 @@ const OrderRelease = (props) => {
             <div className="_addOrder">
               <BorderButton
                 addClass="addOrderBtn"
-                onHandle={e => viewModal(e)}
+                onHandle={() => viewModal('insertOrder')}
                 name="주문 등록"
               />
             </div>
@@ -360,7 +352,7 @@ const OrderRelease = (props) => {
           <div className="ct_box_footer">
             <div className="rows_flex">
               <Paging
-                onClick={start => getOderList('out', start)}
+                onClick={start => getOderList('ship', start)}
                 totalCount={100} // total 가져오는 로직 필요.
                 listCount={10}
                 displayCount={10}
@@ -385,9 +377,10 @@ const OrderRelease = (props) => {
       <Modal
         set={isModal}
         hide={toggleModal}
-        title=""
-        style={{ width: '500px', height: '550px' }}
+        title={isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
+        style={{ width: '500px', height: '565px' }}
         contents={OrderModalContent}
+        items={{ type: isModal.type }}
       />
     </React.Fragment>
   );
