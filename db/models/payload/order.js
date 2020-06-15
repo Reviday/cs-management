@@ -1,19 +1,61 @@
 const APPROOT = require('app-root-path');
 const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 module.exports = {
-    orderInfoListQuery: function (title, start) {
-        const result = {
-            where: {
-                order_status: {[Op.gt]: 3}
-            },
-            limit: 10,
-            offset: (10 * start) - 10
-        };
+    selectQueryByOrder: function (reqParams) {
+        const category = reqParams.category;
+        const start = reqParams.start;
 
-        if (title === 'order') {
-            result.where.order_status = {[Op.lte]: 3};
-        } else {
-            result.where.order_status = {[Op.gt]: 3};
+        let result = null;
+        switch (category) {
+            case 'order' :
+                result = {
+                    where: {
+                        order_status: {[Op.lte]: 3}
+                    },
+                    limit: 10,
+                    offset: (10 * start) - 10
+                };
+                break;
+            case 'ship' :
+                result = {
+                    where: {
+                        order_status: {[Op.gt]: 3}
+                    },
+                    limit: 10,
+                    offset: (10 * start) - 10
+                };
+                break;
+        }
+
+        return result;
+    },
+    selectQueryById: function (reqParams) {
+        const category = reqParams.category;
+        const id = reqParams.id;
+        const start = reqParams.start;
+
+        let result = null;
+        switch (category) {
+            case 'order' :
+                result = {
+                    where: {
+                        // order_status: {[Op.lte]: 3},
+                        id : id
+                    },
+                    limit: 10,
+                    offset: (10 * start) - 10
+                };
+                break;
+            case 'ship' :
+                result = {
+                    where: {
+                        //order_status: {[Op.gt]: 3},
+                        id : id
+                    },
+                    limit: 10,
+                    offset: (10 * start) - 10
+                };
+                break;
         }
 
         return result;

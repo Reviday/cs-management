@@ -5,9 +5,8 @@ const APPROOT = require('app-root-path');
 const path = require('path');
 const fileName = path.basename(__filename);
 const Util = require(`${APPROOT}/util/util.js`);
-const Service = require(`${APPROOT}/routes/service/order.service`);
+const Service = require(`${APPROOT}/routes/service/db.service`);
 const moment = require('moment');
-
 
 
 module.exports = {
@@ -15,60 +14,71 @@ module.exports = {
         let result = null;
         const date = new Date();
         const today = moment(date).format('YYYY-MM-DD');
-        const complete_day = moment(date).add(10,"days").format('YYYY-MM-DD');
+        const complete_day = moment(date).add(10, "days").format('YYYY-MM-DD');
         try {
             req.paramStatus = 'making';
-            const validateResult = Util.param_check(req, res, fileName, ['mode', 'title']);
+            // 1. 최초 필수 파라미터 확인.
+            const validateResult = Util.param_check(req, res, fileName, ['category', 'action']);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
             let paramCheck = null;
             let setReqParams = null;
-            if (req.query.mode === 'i') {
+            let category = req.query.category.toLowerCase();
+            const action = req.query.action.toLowerCase();
+            if (action === 'i') {
                 // [주문 정보 insert]
                 // 1. Check Request Parameters
                 paramCheck = Util.param_check(req, res, fileName, ['site', 'name', 'telpno', 'product', 'price']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 // 2. Set Request Parameters
                 setReqParams = {
-                    title         : req.query.title,
-                    start         : req.query.start || 1,
-                    site          : req.query.site,
-                    name          : req.query.name,
-                    telpno        : req.query.telpno,
-                    address       : req.query.address,
-                    needs         : req.query.needs,
-                    product       : req.query.product,
-                    price         : req.query.price,
-                    order_status  : 0,
-                    order_date    : req.query.order_date || today,
-                    complete_date : req.query.complete_date || complete_day,
+                    category: req.query.category,
+                    start: req.query.start || 1,
+                    site: req.query.site,
+                    name: req.query.name,
+                    telpno: req.query.telpno,
+                    address: req.query.address,
+                    needs: req.query.needs,
+                    product: req.query.product,
+                    price: req.query.price,
+                    order_status: 0,
+                    order_date: req.query.order_date || today,
+                    complete_date: req.query.complete_date || complete_day,
                 };
                 // 3. Call DB insert function
-                result = await Service.orderInfoInsert(setReqParams);
+                result = await Service.orderInfoInsert(setReqParams, category);
 
-            } else if (req.query.mode === 'u') {
+            } else if (action === 'u') {
+                paramCheck = Util.param_check(req, res, fileName, ['mode', 'title', 'id', 'site', 'name', 'telpno', 'address', 'needs', 'product', 'price', 'order_status']);
+                if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
-                    mode          : req.query.mode,
-                    title         : req.query.title,
-                    id            : req.query.id,
-                    site          : req.query.site,
-                    name          : req.query.name,
-                    telpno        : req.query.telpno,
-                    address       : req.query.address,
-                    needs         : req.query.needs,
-                    product       : req.query.product,
-                    price         : req.query.price,
-                    order_status  : req.query.order_status,
+                    mode: req.query.mode,
+                    title: req.query.title,
+                    id: req.query.id,
+                    site: req.query.site,
+                    name: req.query.name,
+                    telpno: req.query.telpno,
+                    address: req.query.address,
+                    needs: req.query.needs,
+                    product: req.query.product,
+                    price: req.query.price,
+                    order_status: req.query.order_status,
                 };
                 // 주문 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
 
             } else {
-                // 전체 목록 조회
+                // 전체 목록 및 상세 조회
                 setReqParams = {
-                    title: req.query.title,
+                    category: req.query.category,
                     start: req.query.start || 1,
                 };
-                result = await Service.orderInfoList(setReqParams);
+                const id = req.query.id
+                if (id !== null || id !== '') {
+                    setReqParams.id = id;
+
+                }
+                result = await Service.selectAllList(setReqParams);
+
             }
             // 최종 결과 Responses
             res.json(Util.res_ok(result));

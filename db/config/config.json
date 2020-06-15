@@ -1,5 +1,5 @@
 {
-  "runMode" : "test",
+  "runMode" : "development",
   "development": {
     "username": "root",
     "password": "1q2w3e!Q@W#E",
