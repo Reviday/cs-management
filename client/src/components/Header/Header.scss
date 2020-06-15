@@ -37,60 +37,6 @@ div.t_right {
     line-height: 50px;
 }
 
-div.search_field {
-    position: relative;
-    float: left;
-    width: 400px;
-    height: 50px;
-    margin: auto;
-    margin-right: 50px;
-}
-
-div.search_field input.search {
-    padding: 0 20px;
-    margin: 14px;
-    width: 350px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 50px;
-    font-size: 16px;
-    color: rgb(59, 59, 59);
-    outline: none;
-    transition: 0.3s;
-}
-
-div.search_field input.search:focus {
-    border-color: rgb(59, 59, 59);
-}
-
-div.search_field input.search::placeholder {
-    font-size: 15px;
-}
-
-div.search_field button.search_btn {
-    font-family: "Ionicons";
-    position: absolute;
-    top: 13px;
-    right: 0px;
-    text-align: center;
-    font-size: 30px;
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    color: rgb(120, 120, 120);
-    transition: 0.2s;
-}
-
-div.search_field button.search_btn:hover {
-    color: rgb(59, 59, 59);
-}
-
-div.search_field button.search_btn:before {
-    content: "\f2f5";
-}
-
-
 div.pro_icon {
     width: 25px;
     height: 25px;

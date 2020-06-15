@@ -38,10 +38,6 @@ function Header() {
         </div>
         
         <div className="t_right">
-          <div className="search_field">
-            <input type="text" className="search" placeholder="Search" />
-            <button type="button" className="search_btn" />
-          </div>
           <div
             className="pointer profile"
             onMouseEnter={() => setIsShown(true)}
