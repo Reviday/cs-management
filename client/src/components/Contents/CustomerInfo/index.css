@@ -1,0 +1,24 @@
+div.ct_flex {
+    display: flex;
+    height: calc(100% - 80px);
+}
+
+div.ct_flex div.flex_box {
+    margin: 20px;
+    width: 50%;
+    height: calc(100% - 10px);
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    overflow: auto;
+}
+
+div.name_title {
+    
+}
+
+div.rows ._rt {
+    float: right;
+    height: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
