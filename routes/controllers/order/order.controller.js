@@ -40,6 +40,8 @@ module.exports = {
                     needs: req.query.needs,
                     product: req.query.product,
                     price: req.query.price,
+                    price_type : req.query.price_type,
+                    manager : req.query.manager,
                     order_status: 0,
                     order_date: req.query.order_date || today,
                     complete_date: req.query.complete_date || complete_day,
@@ -48,11 +50,11 @@ module.exports = {
                 result = await Service.orderInfoInsert(setReqParams, category);
 
             } else if (action === 'u') {
-                paramCheck = Util.param_check(req, res, fileName, ['mode', 'title', 'id', 'site', 'name', 'telpno', 'address', 'needs', 'product', 'price', 'order_status']);
+                // [주문 정보 update]
+                paramCheck = Util.param_check(req, res, fileName, ['id', 'site', 'name', 'telpno', 'address',
+                    'needs', 'product', 'price', 'order_status','price_type','manager']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
-                    mode: req.query.mode,
-                    title: req.query.title,
                     id: req.query.id,
                     site: req.query.site,
                     name: req.query.name,
@@ -61,9 +63,25 @@ module.exports = {
                     needs: req.query.needs,
                     product: req.query.product,
                     price: req.query.price,
+                    price_type : req.query.price_type,
+                    manager : req.query.manager,
                     order_status: req.query.order_status,
                 };
                 // 주문 정보 update
+                result = await Service.orderInfoUpdate(setReqParams);
+
+            } else if (action === 'status_u') {
+                // [주문 상태 정보 update]
+                paramCheck = Util.param_check(req, res, fileName, ['needs','order_status']);
+                if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
+                setReqParams = {
+                    category: req.query.category,
+                    action : req.query.action,
+                    id: req.query.id,
+                    needs: req.query.needs,
+                    order_status: req.query.order_status,
+                };
+                // 주문 상태 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
 
             } else {
@@ -73,7 +91,7 @@ module.exports = {
                     start: req.query.start || 1,
                 };
                 const id = req.query.id
-                if (id !== null || id !== '') {
+                if (id !== null || id !== '' || id !== undefined) {
                     setReqParams.id = id;
 
                 }

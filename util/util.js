@@ -57,25 +57,40 @@ module.exports.res_ok = function (data) {
     return {
         'status': 200,
         'reason': 'OK',
-        'data'  : data,
+        'data': data,
     };
 };
 
 module.exports.setResponseMessage = (rows) => {
-    if(Array.isArray(rows)){
-        const result = [];
+    let result = null;
+    if (Array.isArray(rows)) {
+        result = [];
         rows.map(row => {
             const data = {};
-            for(let col in row){
+            for (let col in row) {
+                if(col === 'order_status_code'){
+                    col = 'status_name';
+                    row['status_name'] = row['order_status_code']['status_name'];
+                }
                 data[col] = this.emptyValueConvert(row[col]);
             }
             result.push(data);
         });
+    } else {
+        result = {};
+        if (rows.price !== 0 || rows.price !== undefined)
+            rows.price = this.addComma(rows.price);
+        Object.keys(rows).map((key, idx) => {
+            if(key === 'order_status_code'){
+                key = 'status_name';
+                rows['status_name'] = rows['order_status_code']['status_name'];
+            }
+            result[key] = this.emptyValueConvert(rows[key]);
 
-        return result;
+        })
     }
-    return rows;
-}
+    return result;
+};
 
 
 /** [LOG] Request Parameter */
@@ -221,9 +236,28 @@ module.exports.addComma = function numberWithCommas(x) {
 };
 
 module.exports.emptyValueConvert = function (value) {
-    if (value === "" || value === null || value === undefined) {
+    if (value === "" || value === null || value === undefined || value === 'null') {
         value = "";
     }
     return value;
 };
+
+// 입력 받은 계정의 password 암호화
+module.exports.encryptInputPassword = function(password){
+    const cipher = crypto.createCipher('aes-256-cbc', 'tailer');
+    let result = cipher.update(password, 'utf8', 'base64');
+    result += cipher.final('base64');
+
+    return result;
+}
+
+// 사용자 계정 password 복호화 및 확인
+module.exports.encryptPasswd = function(encryptedPassword, inputPassword){
+    // const decipher = crypto.createDecipher('aes-256-cbc', 'tailer');
+    // let decipherPassword = decipher.update(encryptedPassword, 'base64', 'utf8');
+    // decipherPassword += decipher.final('utf8');
+
+    //return inputPassword === decipherPassword;
+    return inputPassword === encryptedPassword;
+}
 

@@ -1,18 +1,18 @@
 {
   "runMode" : "development",
   "development": {
-    "username": "root",
-    "password": "1q2w3e!Q@W#E",
-    "database": "formentera",
-    "host": "127.0.0.1",
+    "username": "wjddls8468",
+    "password": "eogksalsrnr1!",
+    "database": "dbwjddls8468",
+    "host": "211.47.75.102",
     "dialect": "mysql",
     "operatorsAliases": false
   },
   "test": {
-    "username": "root",
-    "password": "1q2w3e!Q@W#E",
-    "database": "formentera",
-    "host": "192.168.0.219",
+    "username": "wjddls8468",
+    "password": "eogksalsrnr1!",
+    "database": "dbwjddls8468",
+    "host": "211.41.75.102",
     "dialect": "mysql",
     "operatorsAliases": false
   },

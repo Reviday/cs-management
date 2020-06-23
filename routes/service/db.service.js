@@ -1,6 +1,7 @@
 const APPROOT = require('app-root-path');
 const Util = require(`${APPROOT}/util/util`);
 const Order = require(`${APPROOT}/db/models`).Order;
+const OrderStatusCode = require(`${APPROOT}/db/models`).OrderStatusCode;
 const Customer = require(`${APPROOT}/db/models`).Customer;
 const OrderQuery = require(`${APPROOT}/db/models/payload/order`);
 const CustomerQuery = require(`${APPROOT}/db/models/payload/order`);
@@ -9,20 +10,37 @@ const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 
 module.exports = {
     selectAllList: async (reqParams) => {
-        try {
 
+        try {
             let result = null;
             let query = null;
             const category = reqParams.category;
             if (category === 'order' || category === 'ship') {
-                if (reqParams.id === null) {
+                /************* 입출고 관리 게시판 Select Query *************/
+                if (reqParams.id === null || reqParams.id === undefined) {
+                    /* 전체 조회 */
                     query = OrderQuery.selectQueryByOrder(reqParams);
                     result = await Order.findAll(query);
+                    const rows = [];
+                    if (result !== null) {
+                        result.map(value => {
+                            let data = value.dataValues; //  Object
+                            data.price = Util.addComma(data.price);
+                            rows.push(data);
+                        });
+                    }
+                    return Util.setResponseMessage(rows);
                 } else {
+                    /* 상세 조회 */
                     query = OrderQuery.selectQueryById(reqParams);
-                    result = await Order.findByPk(query);
+                    result = await Order.findAll(query);
+                    if(result !== null){
+                        result = result[0].dataValues;
+                    }
+                    return Util.setResponseMessage(result);
                 }
             } else {
+                /************* 고객 관리 게시판 Select Query *************/
                 if (reqParams.id === null) {
                     query = CustomerQuery.selectQueryByCustomer(reqParams);
                     result = await Customer.findAll(query);
@@ -33,15 +51,7 @@ module.exports = {
 
             }
 
-            const rows = [];
-            if (result !== null) {
-                result.map(value => {
-                    let data = value.dataValues; //  Object
-                    data.price = Util.addComma(data.price);
-                    rows.push(data);
-                });
-            }
-            return Util.setResponseMessage(rows);
+
         } catch (err) {
             throw err;
         }
@@ -69,7 +79,7 @@ module.exports = {
     orderInfoUpdate: async (reqParams) => {
         try {
             const rows = [];
-            const query = Payload.orderInfoUpdateQuery(reqParams);
+            const query = OrderQuery.orderInfoUpdateQuery(reqParams);
             console.log('query ::: %j', query);
             const result = await Order.update(query, {where: {id: reqParams.id}});
             if (result !== null) {
