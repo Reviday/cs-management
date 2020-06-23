@@ -68,3 +68,92 @@ table td.td_data {
     padding: 10px;
     font-size: 15px;
 }
+
+
+/* Modal Contents CSS */
+div.customer_row_title {
+    float: left;
+    width: 70px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px 5px;
+    margin: 5px 0;
+    border-right: 3px solid black;
+}
+
+div.customer_row_input {
+    position: relative;
+    display: inline-block;
+}
+
+div.customer_row_input select {
+    width: 120px;
+    height: 36px;
+    margin: 2px 10px;
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
+div.customer_row_input input[type=text] {
+    border: 1px solid #aaa;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 0px 10px;
+    font-size: 15px;
+    color: rgb(80, 80, 80);
+    outline: none;
+    transition: 0.3s;
+}
+
+div.customer_row_input input[type=text]:focus {
+    border-color: rgb(59, 59, 59);
+}
+
+div.customer_row_input input[type=text]::placeholder {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+input[type=button].addr_searchBtn {
+    float: right;
+    margin: 0px 10px 7px 0px;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 25px;
+    background-color: rgb(0, 176, 80);
+    color: white;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type=button].addr_searchBtn:hover {
+    opacity: 1;
+}
+
+input[type=button].addr_searchBtn:active {
+    opacity: 0.5;
+}
+
+/* Modal BorderBtn CSS */
+.BorderButton.insertBtn,
+.BorderButton.cancelBtn,
+.BorderButton.updateBtn,
+.BorderButton.deleteBtn {
+    width: 100px;
+    border: 1px solid rgb(0, 112, 192);
+    background-color: rgb(0, 112, 192);
+    color: white;
+    margin: 5px 30px;
+    transition: 0.3s;
+}
+
+.BorderButton.insertBtn:hover,
+.BorderButton.cancelBtn:hover,
+.BorderButton.updateBtn:hover,
+.BorderButton.deleteBtn:hover {
+    border: 1px solid rgb(0, 112, 192);
+    background-color: white;
+    color: rgb(0, 112, 192);
+}

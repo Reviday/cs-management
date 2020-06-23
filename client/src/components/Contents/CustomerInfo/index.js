@@ -5,6 +5,8 @@ import moment from 'moment';
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
 import Paging from 'common/Paging';
+import Modal from 'common/Modal/ModalCover';
+import CustomerModalContent from './CustomerModal';
 import Config from 'config';
 
 import './index.css';
@@ -12,6 +14,31 @@ import './index.css';
 const CustomerInfo = (props) => {
   const [customerData, setCustomerData] = useState([]);
   const [selectCutomer, setSelectCustomer] = useState({});
+
+  // Modal State
+  const [isModal, setIsModal] = useState({
+    view: false,
+    type: '',
+    data: {}
+  });
+
+  // close modal
+  const toggleModal = () => {
+    setIsModal({ ...isModal,
+      view: !isModal.view,
+      type: '',
+      data: {}
+    });
+  };
+
+  const viewModal = async (type) => {
+    setIsModal({
+      ...isModal,
+      view: !isModal.view,
+      type: type,
+      data: {}
+    });
+  };
   
   const addCostomer = () => {
     console.log('btn click');
@@ -74,7 +101,7 @@ const CustomerInfo = (props) => {
             <div className="_more">
               <BorderButton
                 addClass="addCostomerBtn"
-                onHandle={e => addCostomer(e)}
+                onHandle={e => viewModal('insertCustomer')}
                 name="고객등록"
               />
             </div>
@@ -97,7 +124,7 @@ const CustomerInfo = (props) => {
               <div className="ct_box_footer">
                 <div className="rows_flex">
                   <Paging
-                    onClick={start => getOderList('ship', start)}
+                    onClick={start => getCustomerList(start)}
                     totalCount={100} // total 가져오는 로직 필요.
                     listCount={10}
                     displayCount={10}
@@ -129,7 +156,7 @@ const CustomerInfo = (props) => {
               </div>
 
               <div className="name_title" style={{ marginTop: '50px' }}>
-                고객정보
+                고객 정보
               </div>
               <div className="customer_info_table">
                 <table>
@@ -196,8 +223,14 @@ const CustomerInfo = (props) => {
             </div>
           </div>
         </div>
-        
-        
+        <Modal
+          set={isModal}
+          hide={toggleModal}
+          title="Customer Card"
+          style={{ width: '500px', height: '565px' }}
+          contents={CustomerModalContent}
+          items={{ type: isModal.type }}
+        />
       </div>
     </React.Fragment>
   );
