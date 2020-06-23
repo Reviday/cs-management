@@ -13,7 +13,19 @@ div.ct_flex div.flex_box {
 }
 
 div.name_title {
-    
+    font-size: 25px;
+    font-weight: 600;
+    border-left: 3px solid black;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+div.name_text {
+    font-size: 25px;
+    font-weight: 300;
+    color: #aaa;
+    margin: 10px 0;
+    padding-left: 13px;
 }
 
 div.rows ._rt {
@@ -21,4 +33,38 @@ div.rows ._rt {
     height: 20px;
     font-size: 14px;
     font-weight: 600;
+}
+
+div.customer_info_table > table {
+    width: calc(100% - 100px);
+    margin: 30px;
+    margin-bottom: 15px;
+    text-align: left;
+    /* 한 줄 효과 */
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+}
+
+table tr.tr_top {
+    border-top: 2px solid black;
+}
+
+table tr.tr_bottom {
+    border-bottom: 1px solid #aaa;
+}
+
+table td.td_title {
+    width: 25%;
+    background-color: rgb(251, 244, 231);
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+table td.td_data {
+    width: 25%;
+    background-color: white;
+    padding: 10px;
+    font-size: 15px;
 }
