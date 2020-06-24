@@ -43,12 +43,6 @@ const ModalContents = (props) => {
     });
   };
 
-  const selected = useRef();
-
-  const onHandle = (e) => {
-    setValue(list.find(e => e._id === selected.current.value));
-  };
-
   const checkValidate = () => {
     let validation = true;
     let message = '';
@@ -71,24 +65,19 @@ const ModalContents = (props) => {
     return validation;
   };
 
-  // 일괄 order 처리 함수
-  // conf
-  const executeOrder = async (type, id) => {
 
-    // data default setting
+  // 일괄 처리 함수
+  const executeCustomer = async (type, id) => {
+    // check validate
+    if (checkValidate()) return false;
+
+    // data setting
     let data = {
       category: 'order',
       action: '',
-      site: state.site,
-      name: state.name,
-      telpno: state.telpno,
-      address: state.address,
-      needs: state.needs,
-      product: state.product,
-      price: state.price,
-      order_status: state.order_status,
-      // order_date: state.order_date,
-      // complete_date: state.complete_date
+      /**
+       * 고객 테이블 인터페이스 정리 후 작업.
+       */
     };
 
     switch (type) {
@@ -143,76 +132,58 @@ const ModalContents = (props) => {
             <div className="_content fx_h_380">
               <div className="grid_box">
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    지점
-                  </div>
-                  <div className="order_row_input">
-                    <select ref={selected} onChange={onHandle}>
-                      {
-                        state.list?.map((item, index) => {
-                          return (
-                            <option value={item} key={index}>
-                              {item}
-                            </option>
-                          );
-                        })
-                      }
-                    </select>
-                  </div>
-                </div>
-                <div className="rows-mb-20">
-                  <div className="order_row_title">
+                  <div className="customer_row_title">
                     고객명
                   </div>
-                  <div className="order_row_input">
+                  <div className="customer_row_input">
                     <input type="text" placeholder="고객명" style={{ width: '150px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
+                  <div className="customer_row_title">
                     연락처
                   </div>
-                  <div className="order_row_input">
+                  <div className="customer_row_input">
                     <input type="text" placeholder="연락처" style={{ width: '300px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
+                  <div className="customer_row_title">
                     주소
                   </div>
-                  <div className="order_row_input" style={{ width: '360px' }}>
+                  <div className="customer_row_input" style={{ width: '360px' }}>
                     <input type="text" placeholder="우편번호" style={{ width: '100px' }} />
                     <input className="addr_searchBtn" type="button" value="주소 검색" />
                     <input type="text" placeholder="상세주소" style={{ width: '300px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    상품명
+                  <div className="customer_row_title">
+                    고객 성향
                   </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="상품명" style={{ width: '300px' }} />
-                  </div>
-                </div>
-                <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    가격
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="가격" style={{ width: '300px' }} />
+                  <div className="customer_row_input">
+                    <input type="text" placeholder="고객 정보" style={{ width: '300px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    특이사항
+                  <div className="customer_row_title">
+                    메모
                   </div>
-                  <div className="order_row_input">
+                  <div className="customer_row_input">
                     <input type="text" placeholder="특이사항" style={{ width: '300px' }} />
+                  </div>
+                </div>
+                <div className="rows-mb-20">
+                  <div className="customer_row_title">
+                    사진등록
+                  </div>
+                  <div className="customer_row_input">
+                    <input type="text" placeholder="사진첨부" style={{ width: '300px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
-                    items.type === 'insertOrder'
+                    items.type === 'insertCustomer'
                       ? (
                         <React.Fragment>
                           <BorderButton
@@ -223,7 +194,7 @@ const ModalContents = (props) => {
                               setConfirmModal({
                                 show: true,
                                 title: '확인 메시지',
-                                content: '주문을 등록하시겠습니까?',
+                                content: '고객을 등록하시겠습니까?',
                                 type: 'insert'
                               });
                             }}
@@ -248,7 +219,7 @@ const ModalContents = (props) => {
                               setConfirmModal({
                                 show: true,
                                 title: '확인 메시지',
-                                content: '주문을 수정하시겠습니까?',
+                                content: '고객 정보를 수정하시겠습니까?',
                                 type: 'update',
                                 id: state?.id
                               });
@@ -264,7 +235,7 @@ const ModalContents = (props) => {
                               setConfirmModal({
                                 show: true,
                                 title: '확인 메시지',
-                                content: '주문을 삭제하시겠습니까?',
+                                content: '고객 정보를 삭제하시겠습니까?',
                                 type: 'delete',
                                 id: state?.id
                               });
@@ -292,7 +263,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={executeOrder(confirmModal.type, confirmModal?.id)}
+        execute={executeCustomer(confirmModal.type, confirmModal?.id)}
       />
       <Alert
         view={alertModal.show}

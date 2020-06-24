@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
+import OrderPage from './OrderPage';
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
-import Paging from 'common/Paging';
 import Modal from 'common/Modal/ModalCover';
 import OrderModalContent from './OrderModal';
 import Config from 'config';
@@ -69,14 +69,14 @@ const ProgressBtn = (category, id, val) => {
 };
 
 // 수정 버튼
-const UpdateBtn = (type, id) => {
+const UpdateBtn = (category, id) => {
   const onHandle = () => {
-    console.log(`onHandle::: ${type} || ${id}`);
+    console.log(`onHandle::: ${category} || ${id}`);
   };
 
   return (
     <BorderButton
-      addClass="updateBtn"
+      addClass="_tbBtn updateBtn"
       onHandle={e => onHandle(e)}
       name="수정"
     />
@@ -89,8 +89,8 @@ const OrderRelease = (props) => {
   const [releaseData, setReleaseData] = useState([]);
 
   const [more, setMore] = useState({
-    receipt: false,
-    release: false
+    order: false,
+    ship: false
   });
 
   // Modal State
@@ -130,6 +130,65 @@ const OrderRelease = (props) => {
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
 
+  // Receipt Temp Data
+  const receiptTempItem = [
+    {
+      id: 1,
+      site: '본점',
+      name: '유진호',
+      product: '정장 1EA, 셔츠 2EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('order', 1, 1),
+      updateBtn: UpdateBtn('order', 5),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 2,
+      site: '청담',
+      name: '최용국',
+      product: '캐시미어 코드 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('order', 2, 2),
+      updateBtn: UpdateBtn('order', 5),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 3,
+      site: '대구',
+      name: '이병호',
+      product: '헤링본 스포츠 자켓 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('order', 3, 3),
+      updateBtn: UpdateBtn('order', 5),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 4,
+      site: '청담',
+      name: '최용국',
+      product: '캐시미어 코드 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('order', 4, 0),
+      updateBtn: UpdateBtn('order', 5),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 5,
+      site: '대구',
+      name: '이병호',
+      product: '헤링본 스포츠 자켓 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('order', 5, 1),
+      updateBtn: UpdateBtn('order', 5),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    }
+  ];
+
   // Release Table Header Set
   const releaseHeaderSet = [
     { field: 'site', text: '지점', sort: '' },
@@ -141,8 +200,62 @@ const OrderRelease = (props) => {
     { field: 'updateBtn', text: '업데이트' },
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
+
+  // Release Temp Data
+  const releaseTempItem = [
+    {
+      id: 1,
+      name: '유진호',
+      product: '정장 1EA, 셔츠 2EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('ship', 1, 4),
+      updateBtn: UpdateBtn('ship', 1),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 2,
+      name: '최용국',
+      product: '캐시미어 코드 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('ship', 2, 5),
+      updateBtn: UpdateBtn('ship', 2),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 3,
+      name: '이병호',
+      product: '헤링본 스포츠 자켓 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('ship', 1, 4),
+      updateBtn: UpdateBtn('ship', 3),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 4,
+      name: '최용국',
+      product: '캐시미어 코드 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('ship', 2, 5),
+      updateBtn: UpdateBtn('ship', 2),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    },
+    {
+      id: 5,
+      name: '이병호',
+      product: '헤링본 스포츠 자켓 1EA',
+      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
+      progressBtn: ProgressBtn('ship', 1, 4),
+      updateBtn: UpdateBtn('ship', 3),
+      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
+    }
+  ];
   
-  const getOderList = async (category, start) => {
+  const getOrderList = async (category, start) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
       method: 'post',
@@ -194,17 +307,17 @@ const OrderRelease = (props) => {
   };
 
   // 더보기
-  const onMoreBtn = (type) => {
-    if (type === 'receipt') {
-      setMore({ ...more, receipt: !more.receipt });
-    } else if (type === 'release') {
-      setMore({ ...more, release: !more.release });
+  const onMoreBtn = (category) => {
+    if (category === 'order') {
+      setMore({ ...more, order: !more.order });
+    } else if (category === 'ship') {
+      setMore({ ...more, ship: !more.ship });
     }
   };
 
   useEffect(() => {
-    if (receiptData.length === 0) getOderList('order');
-    if (releaseData.length === 0) getOderList('ship');
+    if (receiptData.length === 0) setReceiptData(receiptTempItem); // getOrderList('order');
+    if (releaseData.length === 0) setReleaseData(releaseTempItem); // getOrderList('ship');
   }, []); // [] : Run useEffect only once.
  
   return (
@@ -221,7 +334,7 @@ const OrderRelease = (props) => {
             <div className="_more">
               <BorderButton
                 addClass="moreBtn"
-                onHandle={() => onMoreBtn('receipt')}
+                onHandle={() => onMoreBtn('order')}
                 name="더보기"
               />
             </div>
@@ -254,7 +367,7 @@ const OrderRelease = (props) => {
             <div className="_more">
               <BorderButton
                 addClass="moreBtn"
-                onHandle={() => onMoreBtn('release')}
+                onHandle={() => onMoreBtn('ship')}
                 name="더보기"
               />
             </div>
@@ -268,112 +381,24 @@ const OrderRelease = (props) => {
           />
         </div>
       </div>
-      <div className={`ct_layout abs ${more.receipt ? 'on' : ''}`}>
-        <div className="ct_title">
-          <div className="_lt">
-            <div className="_title">
-              입고 일정
-            </div>
-          </div>
-          
-          <div className="_rt">
-            <div className="_more">
-              <BorderButton
-                addClass="moreBtn"
-                onHandle={() => onMoreBtn('receipt')}
-                name="접기"
-              />
-            </div>
-          </div>
-          <div className="_rt">
-            <div className="_addOrder">
-              <BorderButton
-                addClass="addOrderBtn"
-                onHandle={() => viewModal('insertOrder')}
-                name="주문 등록"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="ct_box">
-          <Table
-            headerSet={receiptHeaderSet}
-            data={receiptData}
-            recordLimit="none"
-          />
-          <div className="ct_box_footer">
-            <div className="rows_flex">
-              <Paging
-                onClick={start => getOderList('order', start)}
-                totalCount={100} // total 가져오는 로직 필요.
-                listCount={10}
-                displayCount={10}
-                current={1}
-              />
-            </div>
-            <div className="rows_flex">
-              <div className="search_field">
-                <select name="sel_field" defaultValue="default">
-                  <option value="default" disabled hidden>검색영역</option>
-                  <option value="site">지점</option>
-                  <option value="name">고객명</option>
-                  <option value="product">품명</option>
-                </select>
-                <input type="text" className="search" placeholder="Search" />
-                <button type="button" className="search_btn" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={`ct_layout abs ${more.release ? 'on' : ''}`}>
-        <div className="ct_title">
-          <div className="_lt">
-            <div className="_title">
-              출고 현황
-            </div>
-          </div>
-          <div className="_rt">
-            <div className="_more">
-              <BorderButton
-                addClass="moreBtn"
-                onHandle={() => onMoreBtn('release')}
-                name="접기"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="ct_box">
-          <Table
-            headerSet={releaseHeaderSet}
-            data={releaseData}
-            recordLimit="none"
-          />
-          <div className="ct_box_footer">
-            <div className="rows_flex">
-              <Paging
-                onClick={start => getOderList('ship', start)}
-                totalCount={100} // total 가져오는 로직 필요.
-                listCount={10}
-                displayCount={10}
-                current={1}
-              />
-            </div>
-            <div className="rows_flex">
-              <div className="search_field">
-                <select name="sel_field" defaultValue="default">
-                  <option value="default" disabled hidden>검색영역</option>
-                  <option value="site">지점</option>
-                  <option value="name">고객명</option>
-                  <option value="product">품명</option>
-                </select>
-                <input type="text" className="search" placeholder="Search" />
-                <button type="button" className="search_btn" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <OrderPage // 입고 일정
+        category="order"
+        headerSet={receiptHeaderSet}
+        data={receiptData}
+        more={more}
+        onMoreBtn={onMoreBtn}
+        viewModal={viewModal}
+        getOrderList={getOrderList}
+      />
+      <OrderPage // 출고 일정
+        category="ship"
+        headerSet={releaseHeaderSet}
+        data={releaseData}
+        more={more}
+        onMoreBtn={onMoreBtn}
+        viewModal={viewModal}
+        getOrderList={getOrderList}
+      />
       <Modal
         set={isModal}
         hide={toggleModal}
