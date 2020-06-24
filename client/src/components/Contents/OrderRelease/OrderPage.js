@@ -5,6 +5,7 @@ import Table from 'common/Table';
 import Paging from 'common/Paging';
 
 const OrderPage = (props) => {
+  const category = props.category; // category is 'order' or 'ship'
   const headerSet = props.headerSet;
   const data = props.data;
   const more = props.more;
@@ -13,7 +14,7 @@ const OrderPage = (props) => {
   const getOrderList = props.getOrderList;
 
   return (
-    <div className={`ct_layout abs ${more.receipt ? 'on' : ''}`}>
+    <div className={`ct_layout abs ${more[category] ? 'on' : ''}`}>
       <div className="ct_title">
         <div className="_lt">
           <div className="_title">
@@ -25,20 +26,27 @@ const OrderPage = (props) => {
           <div className="_more">
             <BorderButton
               addClass="moreBtn"
-              onHandle={() => onMoreBtn('receipt')}
+              onHandle={() => onMoreBtn(category)}
               name="접기"
             />
           </div>
         </div>
-        <div className="_rt">
-          <div className="_addOrder">
-            <BorderButton
-              addClass="addOrderBtn"
-              onHandle={() => viewModal('insertOrder')}
-              name="주문 등록"
-            />
-          </div>
-        </div>
+        {
+          category === 'receipt'
+            ? (
+              <div className="_rt">
+                <div className="_addOrder">
+                  <BorderButton
+                    addClass="addOrderBtn"
+                    onHandle={() => viewModal('insertOrder')}
+                    name="주문 등록"
+                  />
+                </div>
+              </div>
+            )
+            : null
+        }
+        
       </div>
       <div className="ct_box">
         <Table
@@ -49,7 +57,7 @@ const OrderPage = (props) => {
         <div className="ct_box_footer">
           <div className="rows_flex">
             <Paging
-              onClick={start => getOrderList('order', start)}
+              onClick={start => getOrderList(category, start)}
               totalCount={100} // total 가져오는 로직 필요.
               listCount={10}
               displayCount={10}

@@ -5,8 +5,6 @@ import moment from 'moment';
 import CustomerTablePage from './CustomerTablePage';
 import CustomerInfoPage from './CustomerInfoPage';
 import BorderButton from 'common/Button/BorderButton';
-import Table from 'common/Table';
-import Paging from 'common/Paging';
 import Modal from 'common/Modal/ModalCover';
 import CustomerModalContent from './CustomerModal';
 import Config from 'config';
