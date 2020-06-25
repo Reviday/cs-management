@@ -68,6 +68,21 @@ const ProgressBtn = (category, id, val) => {
   );
 };
 
+// 수정 버튼
+const UpdateBtn = (category, id) => {
+  const onHandle = () => {
+    console.log(`onHandle::: ${category} || ${id}`);
+  };
+
+  return (
+    <BorderButton
+      addClass="_tbBtn updateBtn"
+      onHandle={e => onHandle(e)}
+      name="수정"
+    />
+  );
+};
+
 const OrderRelease = (props) => {
 
   const [receiptData, setReceiptData] = useState([]);
@@ -94,46 +109,13 @@ const OrderRelease = (props) => {
     });
   };
 
-  const viewModal = async (type, data) => {
+  const viewModal = async (type) => {
     setIsModal({
       ...isModal,
       view: !isModal.view,
       type: type,
-      data: data
+      data: {}
     });
-  };
-
-  const showOrder = (category, id) => {
-    console.log(`onHandle::: ${category} || ${id}`);
-    console.log(receiptData);
-
-    if (category === 'order') {
-      receiptData.filter((order) => {
-        console.log(order);
-        if (order.id === id) return order;
-        return order;
-      });
-      viewModal('showOrder', receiptData.filter(order => order.id === id));
-    } else if (category === 'ship') {
-      viewModal('showOrder', releaseData.filter(order => order.id === id));
-    }
-    
-  };
-
-  // 수정 버튼
-  const UpdateBtn = (category, id) => {
-    const onHandle = () => {
-      
-      showOrder(category, id);
-    };
-
-    return (
-      <BorderButton
-        addClass="_tbBtn updateBtn"
-        onHandle={e => onHandle(e)}
-        name="수정"
-      />
-    );
   };
 
   // Receipt Table Header Set
@@ -158,7 +140,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('order', 1, 1),
-      updateBtn: UpdateBtn('order', 1),
+      updateBtn: UpdateBtn('order', 5),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
     {
@@ -169,7 +151,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('order', 2, 2),
-      updateBtn: UpdateBtn('order', 2),
+      updateBtn: UpdateBtn('order', 5),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
     {
@@ -180,7 +162,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('order', 3, 3),
-      updateBtn: UpdateBtn('order', 3),
+      updateBtn: UpdateBtn('order', 5),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
     {
@@ -191,7 +173,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('order', 4, 0),
-      updateBtn: UpdateBtn('order', 4),
+      updateBtn: UpdateBtn('order', 5),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
     {
@@ -258,7 +240,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('ship', 2, 5),
-      updateBtn: UpdateBtn('ship', 4),
+      updateBtn: UpdateBtn('ship', 2),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     },
     {
@@ -268,7 +250,7 @@ const OrderRelease = (props) => {
       order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
       progressBtn: ProgressBtn('ship', 1, 4),
-      updateBtn: UpdateBtn('ship', 5),
+      updateBtn: UpdateBtn('ship', 3),
       update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
     }
   ];
