@@ -137,6 +137,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
+      {console.log(state)}
       <div className="modal_content" style={{ height: '550px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
@@ -165,7 +166,7 @@ const ModalContents = (props) => {
                     고객명
                   </div>
                   <div className="order_row_input">
-                    <input type="text" placeholder="고객명" style={{ width: '150px' }} />
+                    <input value={state?.name} type="text" placeholder="고객명" style={{ width: '150px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
@@ -173,7 +174,7 @@ const ModalContents = (props) => {
                     연락처
                   </div>
                   <div className="order_row_input">
-                    <input type="text" placeholder="연락처" style={{ width: '300px' }} />
+                    <input value={state?.phone} onChange={e => setState({ ...state, phone: e.target.value })} type="text" placeholder="연락처" style={{ width: '300px' }} />
                   </div>
                 </div>
                 <div className="rows-mb-20">
