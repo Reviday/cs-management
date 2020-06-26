@@ -16,7 +16,7 @@ module.exports = {
             case 'order' :
                 result = {
                     attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at","order_status","needs","order_status","address"],
+                        "complete_date", "update_at","order_status","needs","order_status","address","telpno"],
                     where: {
                         order_status: {[Op.lte]: 3}
                     },
@@ -32,8 +32,7 @@ module.exports = {
             case 'ship' :
                 result = {
                     attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at","order_status","needs","order_status","address" +
-                        ""],
+                        "complete_date", "update_at","order_status","needs","order_status","address"],
                     where: {
                         order_status: {[Op.gt]: 3}
                     },
