@@ -15,6 +15,7 @@ const OrderPage = (props) => {
 
   return (
     <div className={`ct_layout abs ${more[category] ? 'on' : ''}`}>
+      {console.log(data)}
       <div className="ct_title">
         <div className="_lt">
           <div className="_title">

@@ -2,9 +2,12 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
+import Input from 'common/Input/Input';
+import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import BorderButton from 'common/Button/BorderButton';
+import Config from 'config';
 import 'common/Modal/Modal.scss';
 
 const ModalContents = (props) => {
@@ -111,7 +114,7 @@ const ModalContents = (props) => {
         // state값 초기화 후, modal 닫기
         setState({});
         props.hide();
-        break;
+        return false;
       default: return false;
 
     }
@@ -135,6 +138,11 @@ const ModalContents = (props) => {
     }
   };
 
+  // 주소 검색
+  const addrSearch = () => {
+
+  };
+
   return (
     <React.Fragment>
       <div className="modal_content" style={{ height: '550px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
@@ -143,10 +151,10 @@ const ModalContents = (props) => {
             <div className="_content fx_h_380">
               <div className="grid_box">
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
+                  <div className="row_title">
                     지점
                   </div>
-                  <div className="order_row_input">
+                  <div className="row_input">
                     <select ref={selected} onChange={onHandle}>
                       {
                         state.list?.map((item, index) => {
@@ -161,54 +169,68 @@ const ModalContents = (props) => {
                   </div>
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    고객명
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="고객명" style={{ width: '150px' }} />
-                  </div>
+                  <Input
+                    name="고객명"
+                    value={state.name}
+                    setValue={e => setState({ ...state, name: e })}
+                    style={{ width: '150px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    연락처
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="연락처" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="연락처"
+                    value={state.telpno}
+                    setValue={e => setState({ ...state, telpno: e })}
+                    style={{ width: '300px' }}
+                    setReg={/^[0-9\b]+$/}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    주소
-                  </div>
-                  <div className="order_row_input" style={{ width: '360px' }}>
-                    <input type="text" placeholder="우편번호" style={{ width: '100px' }} />
-                    <input className="addr_searchBtn" type="button" value="주소 검색" />
-                    <input type="text" placeholder="상세주소" style={{ width: '300px' }} />
-                  </div>
+                  <InputCustom
+                    name="주소"
+                    topObj={{
+                      value: state.zipcode,
+                      setValue: e => setState({ ...state, zipcode: e }),
+                      placeholder: '우편번호',
+                      style: { width: '100px' },
+                      disabled: true
+                    }}
+                    bottomObj={{
+                      value: state.address,
+                      setValue: e => setState({ ...state, address: e }),
+                      placeholder: '상세주소',
+                      style: { width: '300px' },
+                    }}
+                    btnObj={{
+                      addClass: 'addr_searchBtn',
+                      value: '주소 검색',
+                      onClick: addrSearch
+                    }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    상품명
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="상품명" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="상품명"
+                    value={state.product}
+                    setValue={e => setState({ ...state, product: e })}
+                    style={{ width: '300px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    가격
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="가격" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="가격"
+                    value={state.price}
+                    setValue={e => setState({ ...state, price: e })}
+                    style={{ width: '300px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="order_row_title">
-                    특이사항
-                  </div>
-                  <div className="order_row_input">
-                    <input type="text" placeholder="특이사항" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="특이사항"
+                    value={state.needs}
+                    setValue={e => setState({ ...state, needs: e })}
+                    style={{ width: '300px' }}
+                  />
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {

@@ -4,10 +4,11 @@ import TableBody from './TableBody';
 import './Table.css';
 
 const Table = (props) => {
-  const headerSet = props.headerSet;
-  const data = props.data;
+  const headerSet = props.headerSet; // Header Columns Set
+  const data = props.data; // Table body data
+  const onClick = props.onClick; // Table Row onClick Event Function
   const tableStyle = props.tableStyle || {};
-  const recordLimit = props.recordLimit || 'none';
+  const recordLimit = props.recordLimit || 'none'; // 테이블에 출력되는 Row의 최대값.
 
   return (
     <React.Fragment>
@@ -16,6 +17,7 @@ const Table = (props) => {
         <TableBody
           headerSet={headerSet}
           data={data}
+          onClick={onClick}
           tableStyle={tableStyle}
           recordLimit={recordLimit}
         />

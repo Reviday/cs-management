@@ -109,12 +109,12 @@ const OrderRelease = (props) => {
     });
   };
 
-  const viewModal = async (type) => {
+  const viewModal = async (type, data) => {
     setIsModal({
       ...isModal,
       view: !isModal.view,
       type: type,
-      data: {}
+      data: data
     });
   };
 
@@ -124,6 +124,8 @@ const OrderRelease = (props) => {
     { field: 'name', text: '고객명', sort: '' },
     { field: 'product', text: '품명', sort: '' },
     { field: 'order_date', text: '주문 날짜', sort: '' },
+    { field: 'price_type', text: '결제 상태', sort: '' }, // 추후 price_chk로 변경해야 함.
+    { field: 'manager', text: '매니저', sort: '' },
     { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
@@ -277,8 +279,8 @@ const OrderRelease = (props) => {
       //   return false;
       // }
 
-      console.log(setData);
       let result = setData.data.data;
+      console.log(result);
       let items = [];
       for (let i in result) {
         if (Object.prototype.hasOwnProperty.call(result, i)) {
@@ -316,8 +318,8 @@ const OrderRelease = (props) => {
   };
 
   useEffect(() => {
-    if (receiptData.length === 0) setReceiptData(receiptTempItem); // getOrderList('order');
-    if (releaseData.length === 0) setReleaseData(releaseTempItem); // getOrderList('ship');
+    if (receiptData.length === 0) getOrderList('order'); // setReceiptData(receiptTempItem);
+    if (releaseData.length === 0) getOrderList('ship'); // setReleaseData(releaseTempItem);
   }, []); // [] : Run useEffect only once.
  
   return (
@@ -354,6 +356,7 @@ const OrderRelease = (props) => {
             headerSet={receiptHeaderSet}
             data={receiptData}
             recordLimit={3}
+            onClick={data => viewModal('showOrder', data)}
           />
         </div>
 
