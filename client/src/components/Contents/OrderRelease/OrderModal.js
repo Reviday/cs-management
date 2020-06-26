@@ -3,6 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import Input from 'common/Input/Input';
+import Select from 'common/Select/Select';
 import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
@@ -44,12 +45,6 @@ const ModalContents = (props) => {
       content: '',
       type: ''
     });
-  };
-
-  const selected = useRef();
-
-  const onHandle = (e) => {
-    setValue(list.find(e => e._id === selected.current.value));
   };
 
   const checkValidate = () => {
@@ -151,22 +146,11 @@ const ModalContents = (props) => {
             <div className="_content fx_h_380">
               <div className="grid_box">
                 <div className="rows-mb-20">
-                  <div className="row_title">
-                    지점
-                  </div>
-                  <div className="row_input">
-                    <select ref={selected} onChange={onHandle}>
-                      {
-                        state.list?.map((item, index) => {
-                          return (
-                            <option value={item} key={index}>
-                              {item}
-                            </option>
-                          );
-                        })
-                      }
-                    </select>
-                  </div>
+                  <Select
+                    name="지점"
+                    list={state.list}
+                    setValue={e => setState({ ...state, site: e })}
+                  />
                 </div>
                 <div className="rows-mb-20">
                   <Input
