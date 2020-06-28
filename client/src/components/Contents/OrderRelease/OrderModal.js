@@ -12,7 +12,19 @@ import Config from 'config';
 import 'common/Modal/Modal.scss';
 
 const ModalContents = (props) => {
-  const [state, setState] = useState(props.data);
+  const [state, setState] = useState(props.data || {
+    list: [],
+    site: '',
+    name: '',
+    telpno: '',
+    zipcode: '',
+    address: '',
+    product: '',
+    price: '',
+    needs: '',
+    price_type: 0,
+    manager: ''
+  });
   const items = props.items;
 
   // alertModal State
@@ -140,7 +152,8 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      <div className="modal_content" style={{ height: '550px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
+      {console.log(state)}
+      <div className="modal_content" style={{ height: '670px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
             <div className="_content fx_h_380">
@@ -216,35 +229,45 @@ const ModalContents = (props) => {
                     style={{ width: '300px' }}
                   />
                 </div>
+                <div className="rows-mb-20">
+                  <Select
+                    name="결제상태"
+                    list={[0, 1, 2]} // 표기하는거 좀 고민해보자
+                    setValue={e => setState({ ...state, price_type: e })}
+                  />
+                </div>
+                <div className="rows-mb-20">
+                  <Input
+                    name="매니저"
+                    value={state.manager}
+                    setValue={e => setState({ ...state, manager: e })}
+                    style={{ width: '300px' }}
+                  />
+                </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
                     items.type === 'insertOrder'
-                      ? (
-                        <React.Fragment>
-                          <BorderButton
-                            addClass="insertBtn"
-                            onHandle={() => {
-                              // check validate
-                              if (!checkValidate()) return false;
-                              setConfirmModal({
-                                show: true,
-                                title: '확인 메시지',
-                                content: '주문을 등록하시겠습니까?',
-                                type: 'insert'
-                              });
-                            }}
-                            name="등록"
-                            style={{ width: '80px' }}
-                          />
-                          <BorderButton
-                            addClass="cancelBtn"
-                            onHandle={() => executeOrder('cancel')}
-                            name="취소"
-                            style={{ width: '80px' }}
-                          />
-                        </React.Fragment>
+                      && (
+                        <BorderButton
+                          addClass="insertBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '주문을 등록하시겠습니까?',
+                              type: 'insert'
+                            });
+                          }}
+                          name="등록"
+                          style={{ width: '80px' }}
+                        />
                       )
-                      : (
+                  }
+                  {
+                    items.type === 'update'
+                      && (
                         <React.Fragment>
                           <BorderButton
                             addClass="updateBtn"
@@ -278,15 +301,15 @@ const ModalContents = (props) => {
                             name="삭제"
                             style={{ width: '80px' }}
                           />
-                          <BorderButton
-                            addClass="cancelBtn"
-                            onHandle={() => executeOrder('cancel')}
-                            name="취소"
-                            style={{ width: '80px' }}
-                          />
                         </React.Fragment>
                       )
                   }
+                  <BorderButton
+                    addClass="cancelBtn"
+                    onHandle={() => executeOrder('cancel')}
+                    name="취소"
+                    style={{ width: '80px' }}
+                  />
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import Paging from 'common/Paging';
 
 const OrderPage = (props) => {
   const category = props.category; // category is 'order' or 'ship'
+  const title = props.title;
   const headerSet = props.headerSet;
   const data = props.data;
   const more = props.more;
@@ -15,14 +16,16 @@ const OrderPage = (props) => {
 
   return (
     <div className={`ct_layout abs ${more[category] ? 'on' : ''}`}>
-      {console.log(data)}
       <div className="ct_title">
         <div className="_lt">
-          <div className="_title">
-              입고 일정
+          <div className={`_title ${category === 'delay' && 'delay_alert'}`}>
+            {title}
+            {
+              category === 'delay'
+                && (<span>: 3개</span>) // 추후에 개수 넘기면 수정
+            }
           </div>
         </div>
-          
         <div className="_rt">
           <div className="_more">
             <BorderButton
@@ -32,6 +35,20 @@ const OrderPage = (props) => {
             />
           </div>
         </div>
+        {
+          category === 'order'
+            && (
+              <div className="_rt">
+                <div className="_addOrder">
+                  <BorderButton
+                    addClass="addOrderBtn"
+                    onHandle={() => viewModal('insertOrder')}
+                    name="주문 등록"
+                  />
+                </div>
+              </div>
+            )
+        }
         {
           category === 'receipt'
             ? (
@@ -53,6 +70,7 @@ const OrderPage = (props) => {
         <Table
           headerSet={headerSet}
           data={data}
+          onClick={data => viewModal('showOrder', data)}
           recordLimit="none"
         />
         <div className="ct_box_footer">

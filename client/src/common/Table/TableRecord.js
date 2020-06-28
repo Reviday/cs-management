@@ -19,7 +19,7 @@ const TableRecord = (props) => {
           let field = item.field.replace(' ', '_');
 
           return (
-            <td key={field} className={field} onClick={onHandle} style={headerStyle}>
+            <td key={field} className={field} onDoubleClick={onHandle} style={headerStyle}>
               {record[field]}
             </td>
           );

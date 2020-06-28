@@ -82,7 +82,6 @@
 .progressBtn.complete:hover {
     background-color: rgb(236, 135, 192);
     color: rgb(80, 80, 80);;
-    opacity: 1;
 }
 
 button._tbBtn.updateBtn {
@@ -107,8 +106,6 @@ button._tbBtn.updateBtn:active {
 
 
 /* Modal Contents CSS */
-
-
 input[type=button].addr_searchBtn {
     float: right;
     margin: 0px 10px 7px 0px;

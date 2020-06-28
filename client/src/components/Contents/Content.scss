@@ -56,6 +56,11 @@
   left: 0 !important;
 }
 
+.ct_layout.delay_receipt {
+  width: calc(100% - 95px);
+  height: fit-content;
+}
+
 .ct_title {
   width: calc(100% - 0px);
   height: 60px;
@@ -68,6 +73,7 @@
   font-size: 20px;
   border-bottom: 1px solid #aaa;
 }
+
 .ct_title ._lt {
   float: left;
   align-items:center;
@@ -80,6 +86,14 @@
   font-weight: 400;
   font-size: 20px;
   color: #426cc3;
+}
+
+.ct_title ._lt .delay_alert {
+  color: #ff4343;
+}
+
+.ct_title ._lt .delay_alert span {
+  color: #3c3c3c;
 }
 
 .ct_title ._rt {
