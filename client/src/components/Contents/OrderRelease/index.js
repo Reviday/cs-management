@@ -18,6 +18,9 @@ const OrderRelease = (props) => {
   const [receiptData, setReceiptData] = useState([]); // 입고
   const [releaseData, setReleaseData] = useState([]); // 출고
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
+  const [receiptTotal, setReceiptTotal] = useState(0);
+  const [releaseTotal, setReleaseTotal] = useState(0);
+  const [delayTotal, setdelayTotal] = useState(0);
 
   const [more, setMore] = useState({
     order: false,
@@ -121,13 +124,11 @@ const OrderRelease = (props) => {
   const getProgressInfo = async () => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/statuslist`,
-      method: 'get'
+      method: 'post'
     };
 
     try {
-      console.log('options:::', options);
       let setData = await axios(options);
-      console.log('progress setData:::', setData);
       let result = setData?.data?.data;
       if (result) setProgress(result);
     } catch (e) {
@@ -137,18 +138,38 @@ const OrderRelease = (props) => {
 
   // 주문 리스트 가져오기
   const getOrderList = async (category, start) => {
-    let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
-      method: 'post',
-      data: {
-        category: category,
-        action: 's',
-        start: start || 1
-      }
-    };
+    let options = {};
+    let countOption = {};
+
+    if (category === 'delay') {
+      options = {
+        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/delay`,
+        method: 'post',
+        data: {
+          start: start || 1
+        }
+      };
+    } else {
+      options = {
+        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+        method: 'post',
+        data: {
+          category: category,
+          action: 's',
+          start: start || 1
+        }
+      };
+      countOption = {
+        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
+        method: 'post',
+        data: {
+          category: category,
+        }
+      };
+    }
     try {
-      console.log('options:::', options);
-      let setData = await axios(options);
+      let listSetData = await axios(options);
+      let countSetData = category === 'delay' ? 0 : await axios(countOption); // 아직 delay 로직은 없는 관계로
       // if (setData.data.status === 400) {
       //   setAlertModal({
       //     show: true,
@@ -158,8 +179,8 @@ const OrderRelease = (props) => {
       //   return false;
       // }
 
-      let result = setData?.data?.data;
-      console.log(result);
+      let result = listSetData?.data?.data; // list result
+      let count = countSetData?.data?.data?.total; // count result
       let items = [];
       if (result) {
         for (let i in result) {
@@ -181,11 +202,17 @@ const OrderRelease = (props) => {
       }
 
       // 데이터 set
-      if (category === 'order') setReceiptData(items);
-      else if (category === 'ship') setReleaseData(items);
+      if (category === 'order') {
+        setReceiptData(items);
+        setReceiptTotal(count);
+      } else if (category === 'ship') {
+        setReleaseData(items);
+        setReleaseTotal(count);
+      } else if (category === 'delay') {
+        setDelayReceiptData(items);
+        // setdelayTotal(count);
+      }
       
-      // test setting
-      setDelayReceiptData(items);
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -207,6 +234,7 @@ const OrderRelease = (props) => {
     else {
       if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
       if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
+      if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
     }
   }, [progress]); // [] : Run useEffect only once.
 
@@ -281,7 +309,7 @@ const OrderRelease = (props) => {
                   <div className="_lt">
                     <div className="_title delay_alert">
                       입고 지연 제품
-                      <span>: 3개</span>
+                      <span>{`: ${delayTotal}개`}</span>
                     </div>
                   </div>
                   <div className="_rt">
@@ -317,6 +345,7 @@ const OrderRelease = (props) => {
         title="입고 일정"
         headerSet={receiptHeaderSet}
         data={receiptData}
+        total={receiptTotal}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}
@@ -327,6 +356,7 @@ const OrderRelease = (props) => {
         title="출고 일정"
         headerSet={releaseHeaderSet}
         data={releaseData}
+        total={releaseTotal}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}
@@ -337,6 +367,7 @@ const OrderRelease = (props) => {
         title="입고 지연 제품"
         headerSet={releaseHeaderSet}
         data={releaseData}
+        total={delayTotal}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}

@@ -9,6 +9,7 @@ const OrderPage = (props) => {
   const title = props.title;
   const headerSet = props.headerSet;
   const data = props.data;
+  const total = props.total;
   const more = props.more;
   const onMoreBtn = props.onMoreBtn;
   const viewModal = props.viewModal;
@@ -22,7 +23,7 @@ const OrderPage = (props) => {
             {title}
             {
               category === 'delay'
-                && (<span>: 3개</span>) // 추후에 개수 넘기면 수정
+                && (<span>{`: ${total}개`}</span>) // 추후에 개수 넘기면 수정
             }
           </div>
         </div>
@@ -77,7 +78,7 @@ const OrderPage = (props) => {
           <div className="rows_flex">
             <Paging
               onClick={start => getOrderList(category, start)}
-              totalCount={100} // total 가져오는 로직 필요.
+              totalCount={total}
               listCount={10}
               displayCount={10}
               current={1}
