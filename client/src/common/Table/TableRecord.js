@@ -3,6 +3,12 @@ import React, { useState } from 'react';
 const TableRecord = (props) => {
   const [record, setRecord] = useState(props.record);
   const headerSet = props.headerSet;
+
+  const onHandle = () => {
+    if (props.onClick) {
+      props.onClick(record);
+    }
+  };
       
   return (
     <React.Fragment>
@@ -13,7 +19,7 @@ const TableRecord = (props) => {
           let field = item.field.replace(' ', '_');
 
           return (
-            <td key={field} className={field} style={headerStyle}>
+            <td key={field} className={field} onDoubleClick={onHandle} style={headerStyle}>
               {record[field]}
             </td>
           );

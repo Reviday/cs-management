@@ -68,29 +68,16 @@ const ProgressBtn = (category, id, val) => {
   );
 };
 
-// 수정 버튼
-const UpdateBtn = (category, id) => {
-  const onHandle = () => {
-    console.log(`onHandle::: ${category} || ${id}`);
-  };
-
-  return (
-    <BorderButton
-      addClass="_tbBtn updateBtn"
-      onHandle={e => onHandle(e)}
-      name="수정"
-    />
-  );
-};
-
 const OrderRelease = (props) => {
 
-  const [receiptData, setReceiptData] = useState([]);
-  const [releaseData, setReleaseData] = useState([]);
+  const [receiptData, setReceiptData] = useState([]); // 입고
+  const [releaseData, setReleaseData] = useState([]); // 출고
+  const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
 
   const [more, setMore] = useState({
     order: false,
-    ship: false
+    ship: false,
+    delay: false
   });
 
   // Modal State
@@ -109,12 +96,12 @@ const OrderRelease = (props) => {
     });
   };
 
-  const viewModal = async (type) => {
+  const viewModal = async (type, data) => {
     setIsModal({
       ...isModal,
       view: !isModal.view,
       type: type,
-      data: {}
+      data: data
     });
   };
 
@@ -124,69 +111,12 @@ const OrderRelease = (props) => {
     { field: 'name', text: '고객명', sort: '' },
     { field: 'product', text: '품명', sort: '' },
     { field: 'order_date', text: '주문 날짜', sort: '' },
+    { field: 'price_type', text: '결제 상태', sort: '' }, // 추후 price_chk로 변경해야 함.
+    { field: 'manager', text: '매니저', sort: '' },
     { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
-  ];
-
-  // Receipt Temp Data
-  const receiptTempItem = [
-    {
-      id: 1,
-      site: '본점',
-      name: '유진호',
-      product: '정장 1EA, 셔츠 2EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('order', 1, 1),
-      updateBtn: UpdateBtn('order', 5),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 2,
-      site: '청담',
-      name: '최용국',
-      product: '캐시미어 코드 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('order', 2, 2),
-      updateBtn: UpdateBtn('order', 5),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 3,
-      site: '대구',
-      name: '이병호',
-      product: '헤링본 스포츠 자켓 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('order', 3, 3),
-      updateBtn: UpdateBtn('order', 5),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 4,
-      site: '청담',
-      name: '최용국',
-      product: '캐시미어 코드 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('order', 4, 0),
-      updateBtn: UpdateBtn('order', 5),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 5,
-      site: '대구',
-      name: '이병호',
-      product: '헤링본 스포츠 자켓 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('order', 5, 1),
-      updateBtn: UpdateBtn('order', 5),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    }
   ];
 
   // Release Table Header Set
@@ -201,60 +131,22 @@ const OrderRelease = (props) => {
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
 
-  // Release Temp Data
-  const releaseTempItem = [
-    {
-      id: 1,
-      name: '유진호',
-      product: '정장 1EA, 셔츠 2EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('ship', 1, 4),
-      updateBtn: UpdateBtn('ship', 1),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 2,
-      name: '최용국',
-      product: '캐시미어 코드 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('ship', 2, 5),
-      updateBtn: UpdateBtn('ship', 2),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 3,
-      name: '이병호',
-      product: '헤링본 스포츠 자켓 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('ship', 1, 4),
-      updateBtn: UpdateBtn('ship', 3),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 4,
-      name: '최용국',
-      product: '캐시미어 코드 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('ship', 2, 5),
-      updateBtn: UpdateBtn('ship', 2),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    },
-    {
-      id: 5,
-      name: '이병호',
-      product: '헤링본 스포츠 자켓 1EA',
-      order_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      complete_date: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss'),
-      progressBtn: ProgressBtn('ship', 1, 4),
-      updateBtn: UpdateBtn('ship', 3),
-      update_at: moment(new Date('2018.07.02 04:30:00')).format('YYYY.MM.DD HH:mm:ss')
-    }
-  ];
-  
+  // 수정 버튼
+  const UpdateBtn = (category, id, data) => {
+    const onHandle = () => {
+      console.log(`onHandle::: ${category} || ${id}`);
+      viewModal('update', data);
+    };
+
+    return (
+      <BorderButton
+        addClass="_tbBtn updateBtn"
+        onHandle={e => onHandle(e)}
+        name="수정"
+      />
+    );
+  };
+
   const getOrderList = async (category, start) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
@@ -277,8 +169,8 @@ const OrderRelease = (props) => {
       //   return false;
       // }
 
-      console.log(setData);
       let result = setData.data.data;
+      console.log(result);
       let items = [];
       for (let i in result) {
         if (Object.prototype.hasOwnProperty.call(result, i)) {
@@ -289,7 +181,7 @@ const OrderRelease = (props) => {
             order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
             complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
             progressBtn: ProgressBtn(category, row.id, row.order_status),
-            updateBtn: UpdateBtn(category, row.id),
+            updateBtn: UpdateBtn(category, row.id, row),
             update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
           };
 
@@ -301,6 +193,8 @@ const OrderRelease = (props) => {
       if (category === 'order') setReceiptData(items);
       else if (category === 'ship') setReleaseData(items);
       
+      // test setting
+      setDelayReceiptData(items);
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -308,16 +202,16 @@ const OrderRelease = (props) => {
 
   // 더보기
   const onMoreBtn = (category) => {
-    if (category === 'order') {
-      setMore({ ...more, order: !more.order });
-    } else if (category === 'ship') {
-      setMore({ ...more, ship: !more.ship });
-    }
+    setMore({
+      order: category === 'order' ? !more.order : false,
+      ship: category === 'ship' ? !more.ship : false,
+      delay: category === 'delay' ? !more.delay : false
+    });
   };
 
   useEffect(() => {
-    if (receiptData.length === 0) setReceiptData(receiptTempItem); // getOrderList('order');
-    if (releaseData.length === 0) setReleaseData(releaseTempItem); // getOrderList('ship');
+    if (receiptData.length === 0) getOrderList('order');
+    if (releaseData.length === 0) getOrderList('ship');
   }, []); // [] : Run useEffect only once.
  
   return (
@@ -353,6 +247,7 @@ const OrderRelease = (props) => {
           <Table
             headerSet={receiptHeaderSet}
             data={receiptData}
+            onClick={data => viewModal('showOrder', data)}
             recordLimit={3}
           />
         </div>
@@ -377,12 +272,53 @@ const OrderRelease = (props) => {
           <Table
             headerSet={releaseHeaderSet}
             data={releaseData}
+            onClick={data => viewModal('showOrder', data)}
             recordLimit={3}
           />
         </div>
+        {
+          delayReceiptData?.length > 0
+            && (
+              <div className="ct_layout delay_receipt">
+                {/* 입고 지연 제품 */}
+                <div className="ct_title">
+                  <div className="_lt">
+                    <div className="_title delay_alert">
+                      입고 지연 제품
+                      <span>: 3개</span>
+                    </div>
+                  </div>
+                  <div className="_rt">
+                    <div className="_more">
+                      <BorderButton
+                        addClass="moreBtn"
+                        onHandle={() => onMoreBtn('delay')}
+                        name="더보기"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {
+                  more.delay
+                    && (
+                      <div className="ct_box">
+                        <Table
+                          headerSet={releaseHeaderSet}
+                          data={releaseData}
+                          onClick={data => viewModal('showOrder', data)}
+                          recordLimit={3}
+                        />
+                      </div>
+                    )
+                }
+              </div>
+            )
+        }
       </div>
+
       <OrderPage // 입고 일정
         category="order"
+        title="입고 일정"
         headerSet={receiptHeaderSet}
         data={receiptData}
         more={more}
@@ -392,6 +328,17 @@ const OrderRelease = (props) => {
       />
       <OrderPage // 출고 일정
         category="ship"
+        title="출고 일정"
+        headerSet={releaseHeaderSet}
+        data={releaseData}
+        more={more}
+        onMoreBtn={onMoreBtn}
+        viewModal={viewModal}
+        getOrderList={getOrderList}
+      />
+      <OrderPage // 입고 지연 제품
+        category="delay"
+        title="입고 지연 제품"
         headerSet={releaseHeaderSet}
         data={releaseData}
         more={more}
@@ -403,7 +350,7 @@ const OrderRelease = (props) => {
         set={isModal}
         hide={toggleModal}
         title={isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
-        style={{ width: '500px', height: '565px' }}
+        style={{ width: '500px', height: '685px' }}
         contents={OrderModalContent}
         items={{ type: isModal.type }}
       />

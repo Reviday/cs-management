@@ -4,6 +4,7 @@ import Record from './TableRecord';
 const TableBody = (props) => {
   const headerSet = props.headerSet;
   const data = props.data;
+  const onClick = props.onClick;
   const tableStyle = props.tableStyle;
   const recordLimit = props.recordLimit;
 
@@ -24,7 +25,7 @@ const TableBody = (props) => {
             }
             
             return (
-              <Record key={count} id={count++} headerSet={headerSet} record={record} />
+              <Record key={count} id={count++} headerSet={headerSet} record={record} onClick={onClick} />
             );
           })
         }
