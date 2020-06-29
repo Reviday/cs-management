@@ -87,8 +87,44 @@ module.exports = {
         }
 
     },
-    orderInfoDelte: () => {
+    orderInfoDelete: () => {
 
     },
-    getStatusList: async () => await OrderStatusCode.findAll()
+    getStatusList: async () => await OrderStatusCode.findAll(),
+    getListCount: async (category) => {
+        let result = null;
+        if (category === 'order') {
+            result = Order.findAndCountAll({
+                where: {
+                    order_status: {[Op.lte]: 3}
+                }
+            });
+        } else if (category === 'ship') {
+            result = Order.findAndCountAll({
+                where: {
+                    order_status: {[Op.gt]: 3}
+                }
+            });
+        } else {
+            result = Order.findAndCountAll();
+        }
+        return result;
+    },
+    getDelayOrderList: async (reqParams) => {
+        const query = OrderQuery.delayOrderInfoQuery(reqParams);
+        let result = null;
+        result = await Order.findAll(query);
+        const rows = [];
+        if (result !== null) {
+            result.map(value => {
+                let data = value.dataValues; //  Object
+                data.price = Util.addComma(data.price);
+                rows.push(data);
+            });
+            return Util.setResponseMessage(rows);
+        } else {
+            return false;
+        }
+
+    },
 }

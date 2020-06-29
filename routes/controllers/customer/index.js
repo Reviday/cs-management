@@ -27,8 +27,10 @@ const upload = multer({
         }
     })
 });
-router.all('/insert', upload.array('custom_image'), controller.insert);
 router.all('/select', controller.select);
+router.all('/insert', upload.array('custom_image'), controller.insert);
+router.all('/update', upload.array('custom_image'), controller.update);
+router.all('/delete', upload.array('custom_image'), controller.delete);
 
 router.all('/:fileName', (req,res) => {
     const pathUpload = 'uploads/';

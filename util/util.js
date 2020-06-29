@@ -73,6 +73,9 @@ module.exports.setResponseMessage = (rows) => {
                     col = 'status_name';
                     row['status_name'] = row['order_status_code']['status_name'];
                 }
+                if (col === 'telpno') {
+                    row[col] = this.addDashes(row[col]);
+                }
                 data[col] = this.emptyValueConvert(row[col]);
             }
             result.push(data);
@@ -235,6 +238,12 @@ module.exports.setError = {
 module.exports.addComma = function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+module.exports.addDashes = function (telpno) {
+    telpno = telpno.replace(/\D/g, '');
+    telpno = telpno.slice(0, 3) + "-" + telpno.slice(3, 7) + "-" + telpno.slice(7, 15);
+    return telpno;
+}
 
 module.exports.emptyValueConvert = function (value) {
     if (value === "" || value === null || value === undefined || value === 'null') {

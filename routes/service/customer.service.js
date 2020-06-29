@@ -12,7 +12,7 @@ module.exports = {
             let query = null;
             /************* 고객 관리 게시판 Select Query *************/
             query = CustomerQuery.selectQueryByCustomer(reqParams);
-            result =  await Customer.findAll(query);
+            result = await Customer.findAll(query);
             return Util.setResponseMessageByCustomers(result);
 
         } catch (err) {
@@ -33,20 +33,34 @@ module.exports = {
     },
     customInfoUpdate: async (reqParams) => {
         try {
-            const rows = [];
-            const query = OrderQuery.orderInfoUpdateQuery(reqParams);
-            console.log('query ::: %j', query);
-            const result = await Order.update(query, {where: {id: reqParams.id}});
-            if (result !== null) {
-                return Util.setResponseMessage(true);
-            }
-            return Util.setResponseMessage(false);
+            //const query = CustomerQuery.updateQueryById(reqParams);
+            //console.log('query ::: %j', query);
+            const result = await Customer.update(reqParams, {
+                where: {
+                    name: reqParams.name,
+                    telpno: reqParams.telpno
+                }
+            });
+            return result !== null;
+
         } catch (err) {
             throw err;
         }
 
     },
-    orderInfoDelte: () => {
+    customInfoDelete: async (reqParams) => {
+        try {
+            const result = await Customer.destroy({
+                where: {
+                    name: reqParams.name,
+                    telpno: reqParams.telpno
+                }
+            });
+            return result !== null;
+
+        } catch (err) {
+            throw err;
+        }
 
     }
 };

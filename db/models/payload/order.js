@@ -1,4 +1,5 @@
 const APPROOT = require('app-root-path');
+const moment = require('moment');
 const db = require(`${APPROOT}/db/models`);
 const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
             case 'order' :
                 result = {
                     attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at","order_status","needs","order_status","address","telpno"],
+                        "complete_date", "update_at", "order_status", "needs", "order_status", "address", "telpno"],
                     where: {
                         order_status: {[Op.lte]: 3}
                     },
@@ -32,7 +33,7 @@ module.exports = {
             case 'ship' :
                 result = {
                     attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at","order_status","needs","order_status","address"],
+                        "complete_date", "update_at", "order_status", "needs", "order_status", "address"],
                     where: {
                         order_status: {[Op.gt]: 3}
                     },
@@ -82,5 +83,23 @@ module.exports = {
         }
 
         return result;
+    },
+    delayOrderInfoQuery: function (reqParams) {
+        const date = new Date();
+        const today = moment(date).format('YYYY-MM-DD');
+        console.log(today);
+        return {
+            where: {
+                order_status: {[Op.lte]: 3},
+                complete_date: {[Op.lte]: today}
+            },
+            include: [{
+                model: db.OrderStatusCode,
+                required: false,
+                attributes: ["status_name"]
+            }],
+            limit: 10,
+            offset: (10 * reqParams.start) - 10
+        };
     }
 }

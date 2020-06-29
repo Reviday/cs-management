@@ -12,10 +12,13 @@ module.exports = {
         const name = reqParams.name;
         const telpno = reqParams.telpno;
         return {
-            where : {
-                name : name,
-                telpno : telpno
+            where: {
+                name: name,
+                telpno: telpno
             }
         };
+    },
+    updateQueryById: function (reqParams) {
+
     }
 }

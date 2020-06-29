@@ -3,7 +3,9 @@ const router = express.Router();
 const controller = require('./order.controller');
 
 router.all('/making', controller.making);
-router.get('/making/statuslist', controller.statusList);
+router.all('/making/statuslist', controller.statusList);
+router.all('/making/count', controller.listCount);
+router.all('/making/delay', controller.delayOrder);
 
 
 module.exports = router;

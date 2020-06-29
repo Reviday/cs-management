@@ -110,8 +110,46 @@ module.exports = {
             res.json(Util.res_err(req, res, err));
         }
     },
-    statusList: async (req,res) => {
+    statusList: async (req, res) => {
         const result = await Service.getStatusList();
         res.json(Util.res_ok(result));
+    },
+    listCount: async (req, res) => {
+        try {
+            req.paramStatus = 'listCount';
+            const validateResult = Util.param_check(req, res, fileName, []);
+            if (validateResult.status) return res.status(400).send(validateResult.errMsg);
+
+            const result = await Service.getListCount(req.query.category);
+            console.log(result.count);
+
+            res.json(Util.res_ok({'total' : result.count}));
+
+        } catch (err) {
+            console.log('---------------------------------------', fileName);
+            console.log(`${req.originalUrl} / (method:${req.method})`, fileName);
+            console.log(err);
+            console.log('---------------------------------------', fileName);
+            res.json(Util.res_err(req, res, err));
+        }
+    },
+    delayOrder: async (req, res) => {
+        try {
+            req.paramStatus = 'delayOrderInfo';
+            const validateResult = Util.param_check(req, res, fileName, []);
+            if (validateResult.status) return res.status(400).send(validateResult.errMsg);
+            const setReqParams = {
+                start : req.query.start || 1,
+            }
+            const result = await Service.getDelayOrderList(setReqParams);
+            res.json(Util.res_ok(result));
+
+        } catch (err) {
+            console.log('---------------------------------------', fileName);
+            console.log(`${req.originalUrl} / (method:${req.method})`, fileName);
+            console.log(err);
+            console.log('---------------------------------------', fileName);
+            res.json(Util.res_err(req, res, err));
+        }
     }
 };
