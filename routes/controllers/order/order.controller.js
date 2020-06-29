@@ -40,8 +40,8 @@ module.exports = {
                     needs: req.query.needs,
                     product: req.query.product,
                     price: req.query.price,
-                    price_type : req.query.price_type,
-                    manager : req.query.manager,
+                    price_type: req.query.price_type,
+                    manager: req.query.manager,
                     order_status: 0,
                     order_date: req.query.order_date || today,
                     complete_date: req.query.complete_date || complete_day,
@@ -52,7 +52,7 @@ module.exports = {
             } else if (action === 'u') {
                 // [주문 정보 update]
                 paramCheck = Util.param_check(req, res, fileName, ['id', 'site', 'name', 'telpno', 'address',
-                    'needs', 'product', 'price', 'order_status','price_type','manager']);
+                    'needs', 'product', 'price', 'order_status', 'price_type', 'manager']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
                     id: req.query.id,
@@ -63,8 +63,8 @@ module.exports = {
                     needs: req.query.needs,
                     product: req.query.product,
                     price: req.query.price,
-                    price_type : req.query.price_type,
-                    manager : req.query.manager,
+                    price_type: req.query.price_type,
+                    manager: req.query.manager,
                     order_status: req.query.order_status,
                 };
                 // 주문 정보 update
@@ -72,11 +72,11 @@ module.exports = {
 
             } else if (action === 'status_u') {
                 // [주문 상태 정보 update]
-                paramCheck = Util.param_check(req, res, fileName, ['needs','order_status']);
+                paramCheck = Util.param_check(req, res, fileName, ['needs', 'order_status']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
                     category: req.query.category,
-                    action : req.query.action,
+                    action: req.query.action,
                     id: req.query.id,
                     needs: req.query.needs,
                     order_status: req.query.order_status,
@@ -109,5 +109,9 @@ module.exports = {
             console.log('---------------------------------------', fileName);
             res.json(Util.res_err(req, res, err));
         }
+    },
+    statusList: async (req,res) => {
+        const result = await Service.getStatusList();
+        res.json(Util.res_ok(result));
     }
 };

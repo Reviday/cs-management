@@ -10,7 +10,6 @@ const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 
 module.exports = {
     selectAllList: async (reqParams) => {
-
         try {
             let result = null;
             let query = null;
@@ -34,7 +33,7 @@ module.exports = {
                     /* 상세 조회 */
                     query = OrderQuery.selectQueryById(reqParams);
                     result = await Order.findAll(query);
-                    if(result !== null){
+                    if (result !== null) {
                         result = result[0].dataValues;
                     }
                     return Util.setResponseMessage(result);
@@ -48,10 +47,7 @@ module.exports = {
                     query = CustomerQuery.selectQueryById(reqParams);
                     result = await Customer.findByPk(query);
                 }
-
             }
-
-
         } catch (err) {
             throw err;
         }
@@ -93,5 +89,6 @@ module.exports = {
     },
     orderInfoDelte: () => {
 
-    }
-};
+    },
+    getStatusList: async () => await OrderStatusCode.findAll()
+}

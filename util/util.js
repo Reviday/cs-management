@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const deepcopy = require('deepcopy');
 const runmode = configfile.runmode;
 const moment = require('moment');
+const iconvLite = require('iconv-lite');
 
 /** [SET] response send ERROR */
 module.exports.res_err = function (req, statusCode, err) {
@@ -68,7 +69,7 @@ module.exports.setResponseMessage = (rows) => {
         rows.map(row => {
             const data = {};
             for (let col in row) {
-                if(col === 'order_status_code'){
+                if (col === 'order_status_code') {
                     col = 'status_name';
                     row['status_name'] = row['order_status_code']['status_name'];
                 }
@@ -81,7 +82,7 @@ module.exports.setResponseMessage = (rows) => {
         if (rows.price !== 0 || rows.price !== undefined)
             rows.price = this.addComma(rows.price);
         Object.keys(rows).map((key, idx) => {
-            if(key === 'order_status_code'){
+            if (key === 'order_status_code') {
                 key = 'status_name';
                 rows['status_name'] = rows['order_status_code']['status_name'];
             }
@@ -243,7 +244,7 @@ module.exports.emptyValueConvert = function (value) {
 };
 
 // 입력 받은 계정의 password 암호화
-module.exports.encryptInputPassword = function(password){
+module.exports.encryptInputPassword = function (password) {
     const cipher = crypto.createCipher('aes-256-cbc', 'tailer');
     let result = cipher.update(password, 'utf8', 'base64');
     result += cipher.final('base64');
@@ -252,7 +253,7 @@ module.exports.encryptInputPassword = function(password){
 }
 
 // 사용자 계정 password 복호화 및 확인
-module.exports.encryptPasswd = function(encryptedPassword, inputPassword){
+module.exports.encryptPasswd = function (encryptedPassword, inputPassword) {
     // const decipher = crypto.createDecipher('aes-256-cbc', 'tailer');
     // let decipherPassword = decipher.update(encryptedPassword, 'base64', 'utf8');
     // decipherPassword += decipher.final('utf8');
@@ -261,3 +262,48 @@ module.exports.encryptPasswd = function(encryptedPassword, inputPassword){
     return inputPassword === encryptedPassword;
 }
 
+module.exports.getDownloadFilename = function (req, filename) {
+    const header = req.headers['user-agent'];
+
+    if (header.includes("MSIE") || header.includes("Trident")) {
+        return encodeURIComponent(filename).replace(/\\+/gi, "%20");
+    } else if (header.includes("Chrome")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    } else if (header.includes("Opera")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    } else if (header.includes("Firefox")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    }
+
+    return filename;
+};
+
+module.exports.getFilesPath = function (reqFiles) {
+    let allFilesPath = '';
+    reqFiles.map((value, idx) => {
+        let filepath = value.path;
+        filepath = filepath.split('/');
+        filepath = filepath[1];
+        if (idx === reqFiles.length) {
+            allFilesPath += filepath;
+        } else {
+            allFilesPath += filepath + ',';
+        }
+    });
+    console.log('FilesPath ::: ', allFilesPath);
+    return allFilesPath;
+};
+
+module.exports.splitBySeparator = function (originString, Separator) {
+    return originString.split(Separator);
+}
+
+module.exports.setResponseMessageByCustomers = function (rows) {
+    const result = [];
+    const separator = ','
+    rows.map((obj, idx) => {
+        obj.custom_image = this.splitBySeparator(obj.custom_image, separator);
+        result.push(obj);
+    });
+    return result;
+}

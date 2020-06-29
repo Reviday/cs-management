@@ -7,10 +7,16 @@ module.exports = (sequelize, DataTypes) => {
         name : {
             type : DataTypes.STRING(10),
             allowNull : false,
+            primaryKey: true,
         },
         telpno : {
             type : DataTypes.STRING(14),
             allowNull : false,
+            primaryKey: true,
+        },
+        zipcode : {
+            type : DataTypes.INTEGER,
+            allowNull : true
         },
         address :{
             type : DataTypes.TEXT,
@@ -37,6 +43,14 @@ module.exports = (sequelize, DataTypes) => {
             type: 'TIMESTAMP',
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
             allowNull : false,
+        },
+        memo :{
+            type : DataTypes.TEXT,
+            allowNull : true
+        },
+        custom_image :{
+            type : DataTypes.TEXT,
+            allowNull : true
         }
     },{
         timestamps : false

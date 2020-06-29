@@ -3,17 +3,18 @@ const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 module.exports = {
     selectQueryByCustomer: function (reqParams) {
         const start = reqParams.start;
-
         return {
             limit: 10,
             offset: (10 * start) - 10
         };
     },
     selectQueryById: function (reqParams) {
-        const id = reqParams.id;
+        const name = reqParams.name;
+        const telpno = reqParams.telpno;
         return {
             where : {
-                id : id
+                name : name,
+                telpno : telpno
             }
         };
     }
