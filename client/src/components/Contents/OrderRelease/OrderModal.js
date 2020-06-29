@@ -12,20 +12,25 @@ import Config from 'config';
 import 'common/Modal/Modal.scss';
 
 const ModalContents = (props) => {
-  const [state, setState] = useState(props.data || {
-    list: [],
-    site: '',
-    name: '',
-    telpno: '',
-    zipcode: '',
-    address: '',
-    product: '',
-    price: '',
-    needs: '',
-    price_type: 0,
-    manager: ''
-  });
   const items = props.items;
+  const [state, setState] = useState(
+    items.type === 'insertOrder'
+      ? {
+        list: [],
+        site: '',
+        name: '',
+        telpno: '',
+        zipcode: '',
+        address: '',
+        product: '',
+        price: '',
+        needs: '',
+        price_type: 0,
+        manager: ''
+      }
+      : props.data
+  );
+  
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -152,7 +157,6 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      {console.log(state)}
       <div className="modal_content" style={{ height: '670px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">

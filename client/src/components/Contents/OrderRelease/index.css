@@ -7,79 +7,79 @@
     opacity: 0.5;
 }
 
-.progressBtn.order {
+.progressBtn.type0 {
     border: none;
     background-color: rgb(255, 206, 84);
     color: rgb(80, 80, 80);
     opacity: 0.8;
 }
 
-.progressBtn.order:hover {
+.progressBtn.type0:hover {
     background-color: rgb(255, 206, 84);
     color: rgb(80, 80, 80);
     opacity: 1;
 }
 
-.progressBtn.basting {
+.progressBtn.type1 {
     border: none;
     background-color: rgb(126, 197, 237);
     color: rgb(80, 80, 80);;
     opacity: 0.8;
 }
 
-.progressBtn.basting:hover {
+.progressBtn.type1:hover {
     background-color: rgb(126, 197, 237);
     color: rgb(80, 80, 80);;
     opacity: 1;
 }
 
-.progressBtn.making {
+.progressBtn.type2 {
     border: none;
     background-color: rgb(237, 85, 101);
     color: white;
     opacity: 0.8;
 }
 
-.progressBtn.making:hover {
+.progressBtn.type2:hover {
     background-color: rgb(237, 85, 101);
     color: white;
     opacity: 1;
 }
 
-.progressBtn.repair {
+.progressBtn.type3 {
     border: none;
     background-color: rgb(72, 207, 173);
     color: rgb(80, 80, 80);;
     opacity: 0.8;
 }
 
-.progressBtn.repair:hover {
+.progressBtn.type3:hover {
     background-color: rgb(72, 207, 173);
     color: rgb(80, 80, 80);;
     opacity: 1;
 }
 
-.progressBtn.ready {
+.progressBtn.type4 {
     border: none;
     background-color: rgb(93, 156, 236);
     color: white;
     opacity: 0.8;
 }
 
-.progressBtn.ready:hover {
+.progressBtn.type4:hover {
     background-color: rgb(93, 156, 236);
     color: white;
     opacity: 1;
 }
 
-.progressBtn.complete {
+.progressBtn.type5 {
     border: none;
     background-color: rgb(236, 135, 192);
     color: rgb(80, 80, 80);;
     opacity: 0.8;
 }
 
-.progressBtn.complete:hover {
+.progressBtn.type5:hover {
     background-color: rgb(236, 135, 192);
     color: rgb(80, 80, 80);;
 }
