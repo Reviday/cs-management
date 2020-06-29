@@ -7,69 +7,14 @@ import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
 import Modal from 'common/Modal/ModalCover';
 import OrderModalContent from './OrderModal';
+import ProgressContent from './ProgressModal';
 import Config from 'config';
 
 import './index.css';
 
-// 진행사항 버튼
-const ProgressBtn = (category, id, val) => {
-
-  let name = '';
-  let addClass = '';
-
-  if (category === 'order') {
-    switch (val) {
-
-      case 0:
-        name = '제작';
-        addClass = 'order';
-        break;
-      case 1:
-        name = '가봉완료';
-        addClass = 'basting';
-        break;
-      case 2:
-        name = '제작완료';
-        addClass = 'making';
-        break;
-      case 3:
-        name = '2차 수선';
-        addClass = 'repair';
-        break;
-      default: break;
-    
-    }
-  } else if (category === 'ship') {
-    switch (val) {
-
-      case 4:
-        name = '출고준비';
-        addClass = 'ready';
-        break;
-      case 5:
-        name = '출고완료';
-        addClass = 'complete';
-        break;
-      default: break;
-    
-    }
-  }
-
-  const onHandle = () => {
-    console.log(`onHandle::: ${category} || ${id} || ${val}`);
-  };
-
-  return (
-    <BorderButton
-      addClass={`progressBtn ${addClass}`}
-      onHandle={e => onHandle(e)}
-      name={name}
-    />
-  );
-};
-
 const OrderRelease = (props) => {
 
+  const [progress, setProgress] = useState([]);
   const [receiptData, setReceiptData] = useState([]); // 입고
   const [releaseData, setReleaseData] = useState([]); // 출고
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
@@ -131,10 +76,35 @@ const OrderRelease = (props) => {
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
   ];
 
-  // 수정 버튼
-  const UpdateBtn = (category, id, data) => {
+  // 진행 상황 버튼
+  const ProgressBtn = (data) => {
+    let name = '';
+    let addClass = '';
+    
+    for (let i in progress) {
+      if (progress[i].order_status === data.order_status) {
+        name = progress[i].status_name;
+        addClass = `type${progress[i].order_status}`;
+        break;
+      }
+    }
+
     const onHandle = () => {
-      console.log(`onHandle::: ${category} || ${id}`);
+      viewModal('progress', data);
+    };
+
+    return (
+      <BorderButton
+        addClass={`progressBtn ${addClass}`}
+        onHandle={e => onHandle(e)}
+        name={name}
+      />
+    );
+  };
+
+  // 수정 버튼
+  const UpdateBtn = (data) => {
+    const onHandle = () => {
       viewModal('update', data);
     };
 
@@ -147,6 +117,25 @@ const OrderRelease = (props) => {
     );
   };
 
+  // progress 정보 가져오기
+  const getProgressInfo = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/statuslist`,
+      method: 'get'
+    };
+
+    try {
+      console.log('options:::', options);
+      let setData = await axios(options);
+      console.log('progress setData:::', setData);
+      let result = setData?.data?.data;
+      if (result) setProgress(result);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+  };
+
+  // 주문 리스트 가져오기
   const getOrderList = async (category, start) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
@@ -169,23 +158,25 @@ const OrderRelease = (props) => {
       //   return false;
       // }
 
-      let result = setData.data.data;
+      let result = setData?.data?.data;
       console.log(result);
       let items = [];
-      for (let i in result) {
-        if (Object.prototype.hasOwnProperty.call(result, i)) {
-          let row = result[i];
-
-          let convertData = {
-            ...row,
-            order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
-            complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
-            progressBtn: ProgressBtn(category, row.id, row.order_status),
-            updateBtn: UpdateBtn(category, row.id, row),
-            update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
-          };
-
-          items.push(convertData);
+      if (result) {
+        for (let i in result) {
+          if (Object.prototype.hasOwnProperty.call(result, i)) {
+            let row = result[i];
+  
+            let convertData = {
+              ...row,
+              order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
+              complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
+              progressBtn: ProgressBtn(row),
+              updateBtn: UpdateBtn(row),
+              update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
+            };
+  
+            items.push(convertData);
+          }
         }
       }
 
@@ -209,11 +200,16 @@ const OrderRelease = (props) => {
     });
   };
 
+  // 1. 진행 상황 리스트를 가져온 후,
+  // 2. 주문 리스트를 가져온다.
   useEffect(() => {
-    if (receiptData.length === 0) getOrderList('order');
-    if (releaseData.length === 0) getOrderList('ship');
-  }, []); // [] : Run useEffect only once.
- 
+    if (progress.length === 0) getProgressInfo(); // 진행 상황 리스트
+    else {
+      if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
+      if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
+    }
+  }, [progress]); // [] : Run useEffect only once.
+
   return (
     <React.Fragment>
       <div className="ct_layout">
@@ -349,10 +345,10 @@ const OrderRelease = (props) => {
       <Modal
         set={isModal}
         hide={toggleModal}
-        title={isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
+        title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
         style={{ width: '500px', height: '685px' }}
-        contents={OrderModalContent}
-        items={{ type: isModal.type }}
+        contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
+        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type }}
       />
     </React.Fragment>
   );

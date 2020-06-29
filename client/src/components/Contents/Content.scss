@@ -36,6 +36,7 @@
 .ct_layout{
   position: relative;
   width: calc(100% - 60px);
+  min-width: 1400px;
   height: calc(100% - 65px);
   background-color: #fff;
   margin: 8px;
