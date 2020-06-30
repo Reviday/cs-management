@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import sha512 from 'crypto-js/sha512';
+
+import Util from '../../../../util/util';
 // import logo from 'resources/images/ibricks_img.png';
-import config from 'config';
+import Config from 'config';
 import './Login.css';
 
 // context
@@ -15,24 +17,20 @@ const Login = () => {
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
-  const doLogin = () => {
+  const doLogin = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/login`,
+      method: 'post',
+      data: {
+        id: inputId,
+        password: Util.encryptInputPassword(inputPw)
+      }
+    };
+
     try {
-      // Axios({
-    //   url: 'http://localhost:3001/login',
-    //   method: 'post',
-    //   data: {
-    //     userId: inputId,
-    //     password: inputPw
-    //   }
-    // }).then((response) => {
-    //   let result = JSON.parse(response.request.response).result;
-    //   console.log('result : ', result);
-    //   console.log('result.userId : ', result.userId);
-    //   setUserInfo({
-    //     userId: result.userId,
-    //     userName: result.userName
-    //   });
-    // });
+      let setData = await axios(options);
+      console.log('Login:::', setData);
+
       setUserInfo({
         isLogged: true,
         userId: inputId,

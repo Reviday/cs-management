@@ -14,6 +14,8 @@ function Select(props) {
   const selected = useRef();
   const name = props.name || 'Input'; // name
   const list = props.list || [];
+  const key = props.key; // list의 원소가 object 형식일 때 사용. value 값을 추출할 key값을 사용.
+  const val = props.val; // list의 원소가 object 형식일 때 사용. option에 표기하기 위한 텍스트를 추출할 key값을 사용.
   const setValue = props.setValue;
 
   const onHandle = () => {
@@ -29,6 +31,13 @@ function Select(props) {
         <select ref={selected} onChange={onHandle}>
           {
             list?.map((item, index) => {
+              if (typeof item === 'object') {
+                return (
+                  <option value={item[key]} key={index}>
+                    {item[val]}
+                  </option>
+                );
+              }
               return (
                 <option value={item} key={index}>
                   {item}

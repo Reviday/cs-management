@@ -30,7 +30,6 @@ const ModalContents = (props) => {
       }
       : props.data
   );
-  
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -236,7 +235,9 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20">
                   <Select
                     name="결제상태"
-                    list={[0, 1, 2]} // 표기하는거 좀 고민해보자
+                    list={items.priceType}
+                    key="code"
+                    val="text"
                     setValue={e => setState({ ...state, price_type: e })}
                   />
                 </div>

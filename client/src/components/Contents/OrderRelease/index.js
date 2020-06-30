@@ -53,13 +53,19 @@ const OrderRelease = (props) => {
     });
   };
 
+  const priceType = [
+    { code: 0, text: '미결재' },
+    { code: 1, text: '현금 결재' },
+    { code: 2, text: '카드 결재' }
+  ];
+
   // Receipt Table Header Set
   const receiptHeaderSet = [
     { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
     { field: 'product', text: '품명', sort: '' },
     { field: 'order_date', text: '주문 날짜', sort: '' },
-    { field: 'price_type', text: '결제 상태', sort: '' }, // 추후 price_chk로 변경해야 함.
+    { field: 'price_txt', text: '결제 상태', sort: '' }, // 추후 price_chk로 변경해야 함.
     { field: 'manager', text: '매니저', sort: '' },
     { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
@@ -74,6 +80,18 @@ const OrderRelease = (props) => {
     { field: 'product', text: '품명', sort: '' },
     { field: 'order_date', text: '출고요청 날짜', sort: '' },
     { field: 'complete_date', text: '출고완료 날짜', sort: '' },
+    { field: 'progressBtn', text: '진행사항' },
+    { field: 'updateBtn', text: '업데이트' },
+    { field: 'update_at', text: '업데이트 날짜', sort: '' }
+  ];
+
+  // Delay Receipt Table Header Set
+  const delayReceiptHeaderSet = [
+    { field: 'site', text: '지점', sort: '' },
+    { field: 'name', text: '고객명', sort: '' },
+    { field: 'product', text: '품명', sort: '' },
+    { field: 'order_date', text: '주문 날짜', sort: '' },
+    { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
@@ -189,6 +207,7 @@ const OrderRelease = (props) => {
   
             let convertData = {
               ...row,
+              price_txt: priceType.filter(type => type.code === row.price_type)[0]?.text,
               order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
               complete_date: moment(new Date(row.complete_date)).format('YYYY.MM.DD'),
               progressBtn: ProgressBtn(row),
@@ -322,7 +341,7 @@ const OrderRelease = (props) => {
                     </div>
                   </div>
                 </div>
-                {
+                {/* {
                   more.delay
                     && (
                       <div className="ct_box">
@@ -334,7 +353,7 @@ const OrderRelease = (props) => {
                         />
                       </div>
                     )
-                }
+                } */}
               </div>
             )
         }
@@ -365,8 +384,8 @@ const OrderRelease = (props) => {
       <OrderPage // 입고 지연 제품
         category="delay"
         title="입고 지연 제품"
-        headerSet={releaseHeaderSet}
-        data={releaseData}
+        headerSet={delayReceiptHeaderSet}
+        data={delayReceiptData}
         total={delayTotal}
         more={more}
         onMoreBtn={onMoreBtn}
@@ -379,7 +398,7 @@ const OrderRelease = (props) => {
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
         style={{ width: '500px', height: '685px' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
-        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type }}
+        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type, priceType: priceType }}
       />
     </React.Fragment>
   );
