@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import crypto from 'crypto';
 import sha512 from 'crypto-js/sha512';
 
-import Util from '../../../../util/util';
 // import logo from 'resources/images/ibricks_img.png';
 import Config from 'config';
 import './Login.css';
@@ -18,23 +18,32 @@ const Login = () => {
   const [inputPw, setInputPw] = useState('');
 
   const doLogin = async () => {
+    // 비밀번호 암호화
+    const cipher = crypto.createCipher('aes-256-cbc', 'tailer');
+    let cryptoPassword = cipher.update(inputPw, 'utf8', 'base64');
+    cryptoPassword += cipher.final('base64');
+
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/login`,
       method: 'post',
       data: {
         id: inputId,
-        password: Util.encryptInputPassword(inputPw)
+        password: cryptoPassword
       }
     };
 
     try {
+      console.log('Login:::', options);
       let setData = await axios(options);
       console.log('Login:::', setData);
 
+      let result = setData.data.data;
+
       setUserInfo({
         isLogged: true,
-        userId: inputId,
-        userName: inputId
+        userId: result.id,
+        userName: result.name,
+        site: result.site
       });
 
       // if (response.result === 'ok') {
@@ -42,8 +51,9 @@ const Login = () => {
       // } else {
       //   throw new Error(response.error);
       // }
-      window.sessionStorage.setItem(sha512('id'), inputId);
-      window.sessionStorage.setItem(sha512('name'), inputId);
+
+      window.sessionStorage.setItem(sha512('id'), userInfo.userId);
+      window.sessionStorage.setItem(sha512('name'), userInfo.userName);
 
     } catch (err) {
       alert('로그인에 실패했습니다.' + err);
