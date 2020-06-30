@@ -8,6 +8,9 @@ module.exports = {
         try {
             const result = await Members.findByPk(reqParams.id);
             const encryptedPassword = result.dataValues.pass;
+            if(!encryptedPassword){
+                return false;
+            }
             const checksum = Util.encryptPasswd(encryptedPassword, reqParams.password);
             if(!checksum){
                 return false;

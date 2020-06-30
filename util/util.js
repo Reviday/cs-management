@@ -2,11 +2,12 @@
 const approot = require('app-root-path');
 const path = require('path');
 const filename = path.basename(__filename);
-const config = require(`${approot}/config/config`);
+
 const configfile = require(`${approot}/config/config.json`);
 const crypto = require('crypto');
 const deepcopy = require('deepcopy');
 const runmode = configfile.runmode;
+const config = require(`${approot}/config/config`);
 const moment = require('moment');
 const iconvLite = require('iconv-lite');
 
