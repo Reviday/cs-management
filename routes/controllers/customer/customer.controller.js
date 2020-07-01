@@ -31,6 +31,27 @@ module.exports = {
         }
 
     },
+    selectById : async (req, res) => {
+        let result = null;
+        try {
+            req.paramStatus = 'customerSelectById';
+            const validateResult = Util.param_check(req, res, fileName, ['name', 'telpno']);
+            if (validateResult.status) return res.status(400).send(validateResult.errMsg);
+            const setReqParams = {
+                name : req.query.name,
+                telpno : req.query.telpno,
+            };
+            result = await Service.selectById(setReqParams);
+            res.json(Util.res_ok(result));
+
+        } catch (err) {
+            console.log('---------------------------------------', fileName);
+            console.log(`${req.originalUrl} / (method:${req.method})`, fileName);
+            console.log(err);
+            console.log('---------------------------------------', fileName);
+            res.json(Util.res_err(req, res, err));
+        }
+    },
     insert: async (req, res) => {
         let result = null;
         try {

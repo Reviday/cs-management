@@ -33,6 +33,23 @@ module.exports = {
             res.json(Util.res_err(req, res, err));
         }
 
+    },
+    sitesList : async (req, res) => {
+        try {
+            req.paramStatus = 'sitesList';
+            // 1. ID and Password value validate check
+            // 2. Set Request Parameters
+            // 3. Call DB insert function
+            const result = await Service.selectListBySite();
+
+            res.json(Util.res_ok(result));
+
+        } catch (err) {
+            console.log('---------------------------------------', fileName);
+            console.log(`${req.originalUrl} / (method:${req.method})`, fileName);
+            console.log(err);
+            console.log('---------------------------------------', fileName);
+            res.json(Util.res_err(req, res, err));
+        }
     }
-}
-;
+};

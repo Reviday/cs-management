@@ -305,15 +305,44 @@ module.exports.getFilesPath = function (reqFiles) {
 };
 
 module.exports.splitBySeparator = function (originString, Separator) {
-    return originString.split(Separator);
+    const result = [];
+    const origin = originString.split(Separator);
+    origin.map((text, idx) => {
+        if(text !== '' || text !== null || text !== undefined){
+            result.push(text.trim());
+        }
+    })
+    return result;
+}
+
+module.exports.makeResponseMessage = function (data) {
+    const separator = ','
+    const objData = data.dataValues;
+    Object.keys(objData).map((element, idx) => {
+        objData[element] = this.emptyValueConvert(objData[element]);
+        if (element === 'telpno') {
+            objData[element] = this.addDashes(objData[element]);
+        }
+        if (element === 'custom_image'){
+            objData[element] = this.splitBySeparator(objData[element], separator);
+        }
+    });
+
+    return objData;
 }
 
 module.exports.setResponseMessageByCustomers = function (rows) {
-    const result = [];
-    const separator = ','
-    rows.map((obj, idx) => {
-        obj.custom_image = this.splitBySeparator(obj.custom_image, separator);
-        result.push(obj);
-    });
+    let result = [];
+    let data = null;
+    if (Array.isArray(rows)) {
+        rows.map((obj, idx) => {
+            data = this.makeResponseMessage(obj);
+            result.push(data);
+        });
+    } else {
+        data = this.makeResponseMessage(rows);
+        result.push(data);
+    }
+
     return result;
 }

@@ -24,6 +24,7 @@ db.Order = require('./order')(sequelize, Sequelize);
 db.OrderStatusCode = require('./order_status_code')(sequelize, Sequelize);
 db.Customer = require('./customer')(sequelize, Sequelize);
 db.Members = require('./members')(sequelize, Sequelize);
+db.Sites = require('./sites')(sequelize, Sequelize);
 
 //OrderStatusCode.hasOne(Order, {foreignKey : 'order_status'});
 // ON `p_order`.`order_status` = `order_status_code`.`order_status`

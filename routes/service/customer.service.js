@@ -19,6 +19,19 @@ module.exports = {
             throw err;
         }
     },
+    selectById : async (reqParams) => {
+        let result = null;
+        try {
+            let query = null;
+            query = CustomerQuery.selectQueryById(reqParams);
+            result = await Customer.findAll(query);
+            return Util.setResponseMessageByCustomers(result);
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
     /*
     * customInfoInsert()
     * @param requestParam : 고객 정보(DB에 저장할 데이터)

@@ -28,6 +28,7 @@ const upload = multer({
     })
 });
 router.all('/select', controller.select);
+router.all('/selectbyid', controller.selectById);
 router.all('/insert', upload.array('custom_image'), controller.insert);
 router.all('/update', upload.array('custom_image'), controller.update);
 router.all('/delete', upload.array('custom_image'), controller.delete);

@@ -1,6 +1,7 @@
 const APPROOT = require('app-root-path');
 const Util = require(`${APPROOT}/util/util`);
 const Members = require(`${APPROOT}/db/models`).Members;
+const Sites = require(`${APPROOT}/db/models`).Sites;
 
 
 module.exports = {
@@ -19,5 +20,13 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    selectListBySite : async () => {
+        try {
+            return await Sites.findAll();
+        } catch (err) {
+            throw err;
+        }
+
     }
 };
