@@ -13,10 +13,10 @@ import 'common/Modal/Modal.scss';
 
 const ModalContents = (props) => {
   const items = props.items;
+  const siteList = items.siteList;
   const [state, setState] = useState(
     items.type === 'insertOrder'
       ? {
-        list: [],
         site: '',
         name: '',
         telpno: '',
@@ -26,6 +26,7 @@ const ModalContents = (props) => {
         price: '',
         needs: '',
         price_type: 0,
+        order_status: 0,
         manager: ''
       }
       : props.data
@@ -101,6 +102,8 @@ const ModalContents = (props) => {
       product: state.product,
       price: state.price,
       order_status: state.order_status,
+      price_type: state.price_type,
+      manager: state.manager,
       // order_date: state.order_date,
       // complete_date: state.complete_date
     };
@@ -164,7 +167,9 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20">
                   <Select
                     name="지점"
-                    list={state.list}
+                    setKey="s_code"
+                    setVal="site"
+                    list={siteList}
                     setValue={e => setState({ ...state, site: e })}
                   />
                 </div>
@@ -236,8 +241,8 @@ const ModalContents = (props) => {
                   <Select
                     name="결제상태"
                     list={items.priceType}
-                    key="code"
-                    val="text"
+                    setKey="code"
+                    setVal="text"
                     setValue={e => setState({ ...state, price_type: e })}
                   />
                 </div>
@@ -326,7 +331,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={executeOrder(confirmModal.type, confirmModal?.id)}
+        execute={() => executeOrder(confirmModal.type, confirmModal?.id)}
       />
       <Alert
         view={alertModal.show}

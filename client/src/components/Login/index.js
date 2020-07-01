@@ -33,9 +33,8 @@ const Login = () => {
     };
 
     try {
-      console.log('Login:::', options);
       let setData = await axios(options);
-      console.log('Login:::', setData);
+      console.log('Login result :::', setData);
 
       let result = setData.data.data;
 
@@ -43,7 +42,8 @@ const Login = () => {
         isLogged: true,
         userId: result.id,
         userName: result.name,
-        site: result.site
+        site: result.site,
+        auth: result.auth
       });
 
       // if (response.result === 'ok') {
@@ -52,8 +52,8 @@ const Login = () => {
       //   throw new Error(response.error);
       // }
 
-      window.sessionStorage.setItem(sha512('id'), userInfo.userId);
-      window.sessionStorage.setItem(sha512('name'), userInfo.userName);
+      window.sessionStorage.setItem(sha512('id'), result.id);
+      window.sessionStorage.setItem(sha512('name'), result.name);
 
     } catch (err) {
       alert('로그인에 실패했습니다.' + err);
