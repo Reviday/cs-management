@@ -14,9 +14,10 @@ function Select(props) {
   const selected = useRef();
   const name = props.name || 'Input'; // name
   const list = props.list || [];
-  const key = props.key; // list의 원소가 object 형식일 때 사용. value 값을 추출할 key값을 사용.
-  const val = props.val; // list의 원소가 object 형식일 때 사용. option에 표기하기 위한 텍스트를 추출할 key값을 사용.
+  const setKey = props.setKey; // list의 원소가 object 형식일 때 사용. value 값을 추출할 key값을 사용.
+  const setVal = props.setVal; // list의 원소가 object 형식일 때 사용. option에 표기하기 위한 텍스트를 추출할 key값을 사용.
   const setValue = props.setValue;
+  // const defaultValue = props.defaultValue; // Select의 기본 값 설정
 
   const onHandle = () => {
     setValue(list.find(e => e._id === selected.current.value));
@@ -28,13 +29,13 @@ function Select(props) {
         {name}
       </div>
       <div className="row_input">
-        <select ref={selected} onChange={onHandle}>
+        <select ref={selected} value={list[0][setKey] || ''} onChange={onHandle}>
           {
             list?.map((item, index) => {
               if (typeof item === 'object') {
                 return (
-                  <option value={item[key]} key={index}>
-                    {item[val]}
+                  <option value={item[setKey]} key={index}>
+                    {item[setVal]}
                   </option>
                 );
               }

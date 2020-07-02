@@ -23,13 +23,22 @@ function InputCustom(props) {
   const bottomObj = props.bottomObj || {}; // 하단 input에 설정할 값
   const btnObj = props.btnObj || {}; // 버튼 input에 설정할 값
 
-  const onHandle = (e) => {
+  const onHandle = (e, type) => {
     e.preventDefault();
-    if (setReg && setReg.test(e.target.value)) {
-      setValue(e.target.value);
-    } else if (!setReg) {
-      setValue(e.target.value);
+    if (type === 'top') {
+      if (topObj.setReg && topObj.setReg.test(e.target.value)) {
+        topObj.setValue(e.target.value);
+      } else if (!topObj.setReg) {
+        topObj.setValue(e.target.value);
+      }
+    } else if (type === 'bottom') {
+      if (bottomObj.setReg && bottomObj.setReg.test(e.target.value)) {
+        bottomObj.setValue(e.target.value);
+      } else if (!bottomObj.setReg) {
+        bottomObj.setValue(e.target.value);
+      }
     }
+    
   };
 
   return (
@@ -42,7 +51,7 @@ function InputCustom(props) {
           type={topObj?.type || 'text'}
           value={topObj?.value}
           placeholder={topObj?.placeholder}
-          onChange={topObj?.setValue}
+          onChange={e => onHandle(e, 'top')}
           style={topObj?.style}
           disabled={topObj?.disabled}
         />
@@ -56,7 +65,7 @@ function InputCustom(props) {
           type={bottomObj?.type || 'text'}
           value={bottomObj?.value}
           placeholder={bottomObj?.placeholder}
-          onChange={bottomObj?.setValue}
+          onChange={e => onHandle(e, 'bottom')}
           style={bottomObj?.style}
           disabled={bottomObj?.disabled}
         />

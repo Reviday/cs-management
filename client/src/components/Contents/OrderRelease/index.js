@@ -14,7 +14,8 @@ import './index.css';
 
 const OrderRelease = (props) => {
 
-  const [progress, setProgress] = useState([]);
+  const [siteList, setSiteList] = useState([]); // 지점 리스트
+  const [progress, setProgress] = useState([]); // 진행상황 리스트
   const [receiptData, setReceiptData] = useState([]); // 입고
   const [releaseData, setReleaseData] = useState([]); // 출고
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
@@ -138,6 +139,23 @@ const OrderRelease = (props) => {
     );
   };
 
+  // Site List 정보 가져오기
+  const getSiteList = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/siteslist`,
+      method: 'post'
+    };
+
+    try {
+      let setData = await axios(options);
+      let result = setData?.data?.data;
+      if (result) setSiteList(result);
+      console.log(result);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+  };
+
   // progress 정보 가져오기
   const getProgressInfo = async () => {
     let options = {
@@ -251,6 +269,7 @@ const OrderRelease = (props) => {
   useEffect(() => {
     if (progress.length === 0) getProgressInfo(); // 진행 상황 리스트
     else {
+      if (siteList.length === 0) getSiteList(); // 지점 리스트
       if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
       if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
       if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
@@ -398,7 +417,7 @@ const OrderRelease = (props) => {
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
         style={{ width: '500px', height: '685px' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
-        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type, priceType: priceType }}
+        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type, siteList: siteList, priceType: priceType }}
       />
     </React.Fragment>
   );
