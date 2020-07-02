@@ -20,8 +20,6 @@ const upload = multer({
             callback(null, 'uploads/');
         },
         filename(req, file, callback){
-            console.log(req.body);
-            console.log(file.originalname)
            const ext = path.extname(file.originalname);
             callback(null, path.basename(file.originalname, ext) + ext);
         }
@@ -56,8 +54,6 @@ router.all('/:fileName', (req,res) => {
         res.send('파일을 다운로드하는 중에 에러가 발생하였습니다.');
     }
 })
-//router.all('/update', controller.update);
-//router.all('/update', controller.select);
 
 
 module.exports = router;

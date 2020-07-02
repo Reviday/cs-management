@@ -29,15 +29,16 @@ module.exports = {
                 query = OrderQuery.selectQueryById(reqParams);
                 result = await Order.findAll(query);
                 if (result !== null) {
-                    result = result[0].dataValues;
+                    return Util.setResponseMessage(result[0]);
                 }
-                return Util.setResponseMessage(result);
+
             }
 
         } catch (err) {
             throw err;
         }
     },
+
     /**
      * 입/출고 게시판 주문 등록
      *
@@ -66,9 +67,9 @@ module.exports = {
             console.log('query ::: %j', query);
             const result = await Order.update(query, {where: {id: reqParams.id}});
             if (result !== null) {
-                return Util.setResponseMessage(true);
+                return true;
             }
-            return Util.setResponseMessage(false);
+            return false;
         } catch (err) {
             throw err;
         }
@@ -83,6 +84,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     getStatusList: async () => await OrderStatusCode.findAll(),
+
     /**
      * 입고 상품 전체 목록 조회 API
      *
@@ -108,6 +110,7 @@ module.exports = {
         }
         return result;
     },
+
     /**
      * 입고 지연 상품 조회 함수
      *
@@ -120,12 +123,7 @@ module.exports = {
         result = await Order.findAll(query);
         const rows = [];
         if (result !== null) {
-            result.map(value => {
-                let data = value.dataValues; //  Object
-                data.price = Util.addComma(data.price);
-                rows.push(data);
-            });
-            return Util.setResponseMessage(rows);
+            return Util.setResponseMessage(result);
         } else {
             return false;
         }

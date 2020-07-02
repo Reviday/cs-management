@@ -71,7 +71,6 @@ module.exports = function () {
     ].join(' ')));
   }
 
-  app.use(bodyParser());
   app.use(bodyParser.raw({
     extended: true,
     parameterLimit: 100000,

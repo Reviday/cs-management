@@ -36,7 +36,7 @@ module.exports.res_param_err = function (req, statusCode, err) {
 module.exports.param_check = (req, res, fileName, param) => {
     this.reqParam(`[${req.paramStatus}]Info`, req, fileName);
     if (req.method === 'POST') req.query = req.body;
-    console.log(req.body.mode);
+    console.log(req.body);
 
     const errStatus = {status: false, errMsg: ''};
     param.forEach((item, idx) => {

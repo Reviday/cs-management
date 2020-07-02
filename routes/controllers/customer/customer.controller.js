@@ -89,8 +89,8 @@ module.exports = {
         }
     },
     update: async (req, res) => {
-        //console.log(req.body);
-        //console.log(req.query);
+        console.log(req.body);
+        console.log(req.query);
         //console.log(req.files);
         let result = null;
         try {
