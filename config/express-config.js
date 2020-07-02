@@ -71,7 +71,7 @@ module.exports = function () {
     ].join(' ')));
   }
 
-  /** * setting body-Parser */
+  app.use(bodyParser());
   app.use(bodyParser.raw({
     extended: true,
     parameterLimit: 100000,

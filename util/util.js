@@ -7,7 +7,6 @@ const configfile = require(`${approot}/config/config.json`);
 const crypto = require('crypto');
 const deepcopy = require('deepcopy');
 const runmode = configfile.runmode;
-const config = require(`${approot}/config/config`);
 const moment = require('moment');
 const iconvLite = require('iconv-lite');
 
@@ -63,39 +62,7 @@ module.exports.res_ok = function (data) {
     };
 };
 
-module.exports.setResponseMessage = (rows) => {
-    let result = null;
-    if (Array.isArray(rows)) {
-        result = [];
-        rows.map(row => {
-            const data = {};
-            for (let col in row) {
-                if (col === 'order_status_code') {
-                    col = 'status_name';
-                    row['status_name'] = row['order_status_code']['status_name'];
-                }
-                if (col === 'telpno') {
-                    row[col] = this.addDashes(row[col]);
-                }
-                data[col] = this.emptyValueConvert(row[col]);
-            }
-            result.push(data);
-        });
-    } else {
-        result = {};
-        if (rows.price !== 0 || rows.price !== undefined)
-            rows.price = this.addComma(rows.price);
-        Object.keys(rows).map((key, idx) => {
-            if (key === 'order_status_code') {
-                key = 'status_name';
-                rows['status_name'] = rows['order_status_code']['status_name'];
-            }
-            result[key] = this.emptyValueConvert(rows[key]);
 
-        })
-    }
-    return result;
-};
 
 
 /** [LOG] Request Parameter */
@@ -235,17 +202,34 @@ module.exports.setError = {
     }
 };
 
-
+/**
+ * Add commas in price
+ *
+ * @param x
+ * @returns {string}
+ */
 module.exports.addComma = function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+/**
+ * Add dashes in telephone number
+ *
+ * @param telpno
+ * @returns {string}
+ */
 module.exports.addDashes = function (telpno) {
     telpno = telpno.replace(/\D/g, '');
     telpno = telpno.slice(0, 3) + "-" + telpno.slice(3, 7) + "-" + telpno.slice(7, 15);
     return telpno;
 }
 
+/**
+ * 빈 값 확인 후, 공백 처리.
+ *
+ * @param value
+ * @returns {string}
+ */
 module.exports.emptyValueConvert = function (value) {
     if (value === "" || value === null || value === undefined || value === 'null') {
         value = "";
@@ -253,7 +237,12 @@ module.exports.emptyValueConvert = function (value) {
     return value;
 };
 
-// 입력 받은 계정의 password 암호화
+/**
+ * 입력 받은 계정의 password 암호화
+ *
+ * @param password
+ * @returns {string}
+ */
 module.exports.encryptInputPassword = function (password) {
     const cipher = crypto.createCipher('aes-256-cbc', 'tailer');
     let result = cipher.update(password, 'utf8', 'base64');
@@ -262,7 +251,13 @@ module.exports.encryptInputPassword = function (password) {
     return result;
 }
 
-// 사용자 계정 password 복호화 및 확인
+/**
+ * 사용자 계정 password 복호화 및 확인
+ *
+ * @param encryptedPassword
+ * @param inputPassword
+ * @returns {boolean}
+ */
 module.exports.encryptPasswd = function (encryptedPassword, inputPassword) {
     // const decipher = crypto.createDecipher('aes-256-cbc', 'tailer');
     // let decipherPassword = decipher.update(encryptedPassword, 'base64', 'utf8');
@@ -272,6 +267,13 @@ module.exports.encryptPasswd = function (encryptedPassword, inputPassword) {
     return inputPassword === encryptedPassword;
 }
 
+/**
+ * Download FileName 확인
+ *
+ * @param req
+ * @param filename
+ * @returns {string|*}
+ */
 module.exports.getDownloadFilename = function (req, filename) {
     const header = req.headers['user-agent'];
 
@@ -288,6 +290,12 @@ module.exports.getDownloadFilename = function (req, filename) {
     return filename;
 };
 
+/**
+ * Download File path 가져 오기
+ *
+ * @param reqFiles
+ * @returns {string}
+ */
 module.exports.getFilesPath = function (reqFiles) {
     let allFilesPath = '';
     reqFiles.map((value, idx) => {
@@ -300,10 +308,16 @@ module.exports.getFilesPath = function (reqFiles) {
             allFilesPath += filepath + ',';
         }
     });
-    console.log('FilesPath ::: ', allFilesPath);
     return allFilesPath;
 };
 
+/**
+ * 첨부 파일 배열 형태로 split
+ *
+ * @param {string} originString
+ * @param {string} Separator
+ * @returns {[]}
+ */
 module.exports.splitBySeparator = function (originString, Separator) {
     const result = [];
     const origin = originString.split(Separator);
@@ -315,6 +329,12 @@ module.exports.splitBySeparator = function (originString, Separator) {
     return result;
 }
 
+/**
+ * DB 조회 결과 중 하나의 Row의 Element의 값을 적절하게 가공하는 함수.
+ *
+ * @param {object} data
+ * @returns {*}
+ */
 module.exports.makeResponseMessage = function (data) {
     const separator = ','
     const objData = data.dataValues;
@@ -326,12 +346,24 @@ module.exports.makeResponseMessage = function (data) {
         if (element === 'custom_image'){
             objData[element] = this.splitBySeparator(objData[element], separator);
         }
+        if (element === 'order_status_code') {
+            objData[element] = objData[element]['status_name'];
+        }
+        if (element === 'price'){
+            objData[element] = this.addComma(objData[element]);
+        }
     });
 
     return objData;
 }
 
-module.exports.setResponseMessageByCustomers = function (rows) {
+/**
+ *  DB 조회 결과 메시지를 적절한 형태로 반환하는 함수.
+ *
+ * @param {Array || Object} rows
+ * @returns {[]}
+ */
+module.exports.setResponseMessage = function (rows) {
     let result = [];
     let data = null;
     if (Array.isArray(rows)) {
@@ -345,4 +377,4 @@ module.exports.setResponseMessageByCustomers = function (rows) {
     }
 
     return result;
-}
+};

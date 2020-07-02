@@ -13,7 +13,7 @@ module.exports = {
             /************* 고객 관리 게시판 Select Query *************/
             query = CustomerQuery.selectQueryByCustomer(reqParams);
             result = await Customer.findAll(query);
-            return Util.setResponseMessageByCustomers(result);
+            return Util.setResponseMessage(result);
 
         } catch (err) {
             throw err;
@@ -25,7 +25,7 @@ module.exports = {
             let query = null;
             query = CustomerQuery.selectQueryById(reqParams);
             result = await Customer.findAll(query);
-            return Util.setResponseMessageByCustomers(result);
+            return Util.setResponseMessage(result);
 
         } catch (err) {
             throw err;

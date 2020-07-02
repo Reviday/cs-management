@@ -1,15 +1,24 @@
 /**
- * API ORDER
+ * API ORDER Controller
  * */
 const APPROOT = require('app-root-path');
 const path = require('path');
 const fileName = path.basename(__filename);
 const Util = require(`${APPROOT}/util/util.js`);
-const Service = require(`${APPROOT}/routes/service/db.service`);
+const Service = require(`${APPROOT}/routes/service/order.service`);
 const moment = require('moment');
 
 
 module.exports = {
+    /**
+     * 입/출고 게시판 CRUD(Create, Read Update, Delete)
+     *
+     * @param req
+     * - req.query.category : order(입고), ship(출고)
+     * - req.query.action : i(insert),u(update),s(select),d(delete)
+     * @param res
+     * @returns {Promise<*>}
+     */
     making: async (req, res) => {
         let result = null;
         const date = new Date();
@@ -110,10 +119,24 @@ module.exports = {
             res.json(Util.res_err(req, res, err));
         }
     },
+    /**
+     * 입/출고 상태 목록 조회
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<void>}
+     */
     statusList: async (req, res) => {
         const result = await Service.getStatusList();
         res.json(Util.res_ok(result));
     },
+    /**
+     * 입/출고 전체 목록 count
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
     listCount: async (req, res) => {
         try {
             req.paramStatus = 'listCount';
@@ -133,6 +156,13 @@ module.exports = {
             res.json(Util.res_err(req, res, err));
         }
     },
+    /**
+     * 입고 지연 상품 목록 조회 API
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
     delayOrder: async (req, res) => {
         try {
             req.paramStatus = 'delayOrderInfo';

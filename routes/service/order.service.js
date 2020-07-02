@@ -9,55 +9,42 @@ const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 
 
 module.exports = {
+    /**
+     * 입/출고 전체 목록 조회 및 상세 조회
+     *
+     * @param reqParams
+     * @returns {Promise<*[]|*>}
+     */
     selectAllList: async (reqParams) => {
         try {
             let result = null;
             let query = null;
-            const category = reqParams.category;
-            if (category === 'order' || category === 'ship') {
-                /************* 입출고 관리 게시판 Select Query *************/
-                if (reqParams.id === null || reqParams.id === undefined) {
-                    /* 전체 조회 */
-                    query = OrderQuery.selectQueryByOrder(reqParams);
-                    result = await Order.findAll(query);
-                    const rows = [];
-                    if (result !== null) {
-                        result.map(value => {
-                            let data = value.dataValues; //  Object
-                            data.price = Util.addComma(data.price);
-                            rows.push(data);
-                        });
-                    }
-                    return Util.setResponseMessage(rows);
-                } else {
-                    /* 상세 조회 */
-                    query = OrderQuery.selectQueryById(reqParams);
-                    result = await Order.findAll(query);
-                    if (result !== null) {
-                        result = result[0].dataValues;
-                    }
-                    return Util.setResponseMessage(result);
-                }
+            if (reqParams.id === null || reqParams.id === undefined) {
+                /* 전체 조회 */
+                query = OrderQuery.selectQueryByOrder(reqParams);
+                result = await Order.findAll(query);
+                return Util.setResponseMessage(result);
             } else {
-                /************* 고객 관리 게시판 Select Query *************/
-                if (reqParams.id === null) {
-                    query = CustomerQuery.selectQueryByCustomer(reqParams);
-                    result = await Customer.findAll(query);
-                } else {
-                    query = CustomerQuery.selectQueryById(reqParams);
-                    result = await Customer.findByPk(query);
+                /* 상세 조회 */
+                query = OrderQuery.selectQueryById(reqParams);
+                result = await Order.findAll(query);
+                if (result !== null) {
+                    result = result[0].dataValues;
                 }
+                return Util.setResponseMessage(result);
             }
+
         } catch (err) {
             throw err;
         }
     },
-    /*
-    * rowInsertAction()
-    * @param requestParam : 사용자 데이터(DB에 저장할 데이터)
-    * @param category : 게시판 카테고리 종류
-    * @param tableName : Insert TableName
-    * */
+    /**
+     * 입/출고 게시판 주문 등록
+     *
+     * @param requestParam : user_data
+     * @param category : board_category
+     * @returns {Promise<*[]|*>}
+     */
     orderInfoInsert: async (requestParam, category) => {
         let result = null;
         try {
@@ -67,7 +54,7 @@ module.exports = {
                 result = await Customer.create(requestParam);
             }
 
-            return Util.setResponseMessage(result._options.isNewRecord);
+            return result._options.isNewRecord;
         } catch (err) {
             throw err;
         }
@@ -90,7 +77,18 @@ module.exports = {
     orderInfoDelete: () => {
 
     },
+    /**
+     * 입/출고 상태 목록 값 조회 API
+     *
+     * @returns {Promise<*>}
+     */
     getStatusList: async () => await OrderStatusCode.findAll(),
+    /**
+     * 입고 상품 전체 목록 조회 API
+     *
+     * @param category
+     * @returns {Promise<<{rows: Model[]; count: number}>>}
+     */
     getListCount: async (category) => {
         let result = null;
         if (category === 'order') {
@@ -110,6 +108,12 @@ module.exports = {
         }
         return result;
     },
+    /**
+     * 입고 지연 상품 조회 함수
+     *
+     * @param {object} reqParams
+     * @returns {Promise<*[]|*|boolean>}
+     */
     getDelayOrderList: async (reqParams) => {
         const query = OrderQuery.delayOrderInfoQuery(reqParams);
         let result = null;
