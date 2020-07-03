@@ -17,7 +17,7 @@ const ModalContents = (props) => {
   const [state, setState] = useState(
     items.type === 'insertOrder'
       ? {
-        site: '',
+        site: siteList[0].site,
         name: '',
         telpno: '',
         zipcode: '',
@@ -31,6 +31,12 @@ const ModalContents = (props) => {
       }
       : props.data
   );
+
+  const priceType = [
+    { code: 0, text: '미결재' },
+    { code: 1, text: '현금 결재' },
+    { code: 2, text: '카드 결재' }
+  ];
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -137,7 +143,10 @@ const ModalContents = (props) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
       method: 'post',
-      data: data
+      data: data,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     };
 
     try {
@@ -165,13 +174,29 @@ const ModalContents = (props) => {
             <div className="_content fx_h_380">
               <div className="grid_box">
                 <div className="rows-mb-20">
-                  <Select
-                    name="지점"
-                    setKey="s_code"
-                    setVal="site"
-                    list={siteList}
-                    setValue={e => setState({ ...state, site: e })}
-                  />
+                  {
+                    // siteList가 존재하지 않거나, 개수가 0개이면
+                    // input 스타일로 처리. 있으면 select 스타일로 처리.
+                    siteList && siteList.length > 0
+                      ? (
+                        <Select
+                          name="지점"
+                          setKey="s_code"
+                          setVal="site"
+                          list={siteList}
+                          setValue={e => setState({ ...state, site: e })}
+                        />
+                      )
+                      : (
+                        <Input
+                          name="지점"
+                          value={state.site}
+                          setValue={() => {}} // 값을 바꾸지 않음.
+                          style={{ width: '120px' }}
+                          disabled
+                        />
+                      )
+                  }
                 </div>
                 <div className="rows-mb-20">
                   <Input
@@ -238,13 +263,30 @@ const ModalContents = (props) => {
                   />
                 </div>
                 <div className="rows-mb-20">
-                  <Select
-                    name="결제상태"
-                    list={items.priceType}
-                    setKey="code"
-                    setVal="text"
-                    setValue={e => setState({ ...state, price_type: e })}
-                  />
+                  {
+                    // siteList가 존재하지 않거나, 개수가 0개이면
+                    // input 스타일로 처리. 있으면 select 스타일로 처리.
+                    // siteList를 넘기지 않는건, 수정 기능을 제공하지 않기 때문에 input으로 출력
+                    siteList && siteList.length > 0
+                      ? (
+                        <Select
+                          name="결제상태"
+                          list={priceType}
+                          setKey="code"
+                          setVal="text"
+                          setValue={e => setState({ ...state, price_type: e })}
+                        />
+                      )
+                      : (
+                        <Input
+                          name="결제상태"
+                          value={priceType.filter(item => item.code === state.price_type)[0].text}
+                          setValue={() => {}} // 값을 바꾸지 않음.
+                          style={{ width: '120px' }}
+                          disabled
+                        />
+                      )
+                    }
                 </div>
                 <div className="rows-mb-20">
                   <Input

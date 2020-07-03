@@ -263,7 +263,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={executeCustomer(confirmModal.type, confirmModal?.id)}
+        execute={() => executeCustomer(confirmModal.type, confirmModal?.id)}
       />
       <Alert
         view={alertModal.show}

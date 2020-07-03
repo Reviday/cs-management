@@ -20,7 +20,13 @@ function Select(props) {
   // const defaultValue = props.defaultValue; // Select의 기본 값 설정
 
   const onHandle = () => {
-    setValue(list.find(e => e._id === selected.current.value));
+    // list의 원소가 Object 형식일 때의 처리되는 로직.
+    let findData = list.find(e => e[setKey] === selected.current.value);
+    console.log(findData);
+    // list의 원소가 단일 값일 경우 처리되는 로직.
+    if (!findData) findData = list.find(e => e === selected.current.value);
+    console.log(findData);
+    setValue(findData);
   };
 
   return (
