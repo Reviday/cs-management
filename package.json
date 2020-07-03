@@ -39,6 +39,7 @@
     "moment-timezone": "^0.5.26",
     "morgan": "~1.9.0",
     "mysql2": "^2.1.0",
+    "qs": "^6.9.4",
     "react-beforeunload": "^2.1.0",
     "react-cookie": "^4.0.3",
     "react-scripts": "^3.4.1",

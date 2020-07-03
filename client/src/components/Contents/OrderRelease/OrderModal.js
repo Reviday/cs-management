@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import qs from 'qs';
 import moment from 'moment';
 
 import Input from 'common/Input/Input';
@@ -143,9 +144,9 @@ const ModalContents = (props) => {
     let options = {
       url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
       method: 'post',
-      data: data,
+      data: qs.stringify(data),
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'content-type': 'application/x-www-form-urlencoded'
       }
     };
 
