@@ -103,11 +103,11 @@ const ModalContents = (props) => {
       action: '',
       site: state.site,
       name: state.name,
-      telpno: state.telpno,
+      telpno: state.telpno.replace(/[^0-9]/g, ''),
       address: state.address,
       needs: state.needs,
       product: state.product,
-      price: state.price,
+      price: state.price.replace(/[^0-9]/g, ''),
       order_status: state.order_status,
       price_type: state.price_type,
       manager: state.manager,
@@ -166,8 +166,8 @@ const ModalContents = (props) => {
         });
         // 모달창 종료 및 데이터 다시 가져오기.
         props.hide();
-        props.getOrderList('order');
-        props.getOrderList('ship');
+        items.getOrderList('order');
+        items.getOrderList('ship');
       // 정상적으로 처리되었고, type이 update일 때
       } else if (result && type === 'update') {
         setAlertModal({
@@ -177,8 +177,8 @@ const ModalContents = (props) => {
         });
         // 모달창 종료 및 데이터 다시 가져오기.
         props.hide();
-        props.getOrderList('order');
-        props.getOrderList('ship');
+        items.getOrderList('order');
+        items.getOrderList('ship');
       // 정상적으로 처리되었고, type이 delete일 때
       } else if (result && type === 'delete') {
         setAlertModal({
@@ -188,8 +188,8 @@ const ModalContents = (props) => {
         });
         // 모달창 종료 및 데이터 다시 가져오기.
         props.hide();
-        props.getOrderList('order');
-        props.getOrderList('ship');
+        items.getOrderList('order');
+        items.getOrderList('ship');
       // 그 외, result가 true가 아닐 경우.
       // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
       } else {
