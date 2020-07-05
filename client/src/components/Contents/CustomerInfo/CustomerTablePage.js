@@ -4,13 +4,14 @@ import Paging from 'common/Paging';
 
 const CustomerTablePage = (props) => {
   const data = props.data || [];
+  const setSelectCustomer = props.setSelectCustomer;
   const getCustomerList = props.getCustomerList;
   
 
   const customerHeaderSet = [
     { field: 'id', text: '번호', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
-    { field: 'join_date', text: '가입 날짜', sort: '' },
+    { field: 'create_at', text: '가입 날짜', sort: '' },
     { field: 'last_order_date', text: '최근 주문날짜', sort: '' }
   ];
     
@@ -26,6 +27,7 @@ const CustomerTablePage = (props) => {
           headerSet={customerHeaderSet}
           data={data}
           recordLimit={5}
+          onClick={data => setSelectCustomer(data)}
           tableStyle={{ marginTop: '10px' }}
         />
         <div className="ct_box_footer">

@@ -7,6 +7,7 @@ import CustomerInfoPage from './CustomerInfoPage';
 import BorderButton from 'common/Button/BorderButton';
 import Modal from 'common/Modal/ModalCover';
 import CustomerModalContent from './CustomerModal';
+import OrderModalContent from 'components/Contents/OrderRelease/OrderModal';
 import Config from 'config';
 
 import './index.css';
@@ -14,6 +15,7 @@ import './index.css';
 const CustomerInfo = (props) => {
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
+  const [customerOrderList, setCustomerOrderList] = useState({});
 
   // Modal State
   const [isModal, setIsModal] = useState({
@@ -31,12 +33,12 @@ const CustomerInfo = (props) => {
     });
   };
 
-  const viewModal = async (type) => {
+  const viewModal = async (type, data) => {
     setIsModal({
       ...isModal,
       view: !isModal.view,
       type: type,
-      data: {}
+      data: data || {}
     });
   };
 
@@ -48,35 +50,37 @@ const CustomerInfo = (props) => {
     { id: 5, name: '홍길동5', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' }
   ];
   
-  const addCostomer = () => {
+  const addCustomer = () => {
     console.log('btn click');
   };
 
   const getCustomerList = async (start) => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/select`,
       method: 'post',
       data: {
-        category: 'customer',
-        action: 's',
         start: start || 1
       }
     };
 
     try {
-      console.log('options:::', options);
       let setData = await axios(options);
 
-      // tempData
-      setCustomerData(tempData);
-      setSelectCustomer(tempData[0]);
+      let result = setData.data.data;
+      console.log('customer:::', result);
+      setCustomerData(result);
+      // 데이터가 존재하면 첫번째 요소를 자동으로 선택
+      if (result?.length > 0) setSelectCustomer(result[0]);
     } catch (e) {
       console.log('ERROR', e);
     }
   };
 
+  const getCustomerById = async () => {
+
+  };
+
   useEffect(() => {
-    console.log(customerData);
     if (customerData.length === 0) getCustomerList();
   }, [customerData]);
     
@@ -92,8 +96,8 @@ const CustomerInfo = (props) => {
           <div className="_rt">
             <div className="_more">
               <BorderButton
-                addClass="addCostomerBtn"
-                onHandle={e => viewModal('insertCustomer')}
+                addClass="addCustomerBtn"
+                onHandle={() => viewModal('insertCustomer')}
                 name="고객등록"
               />
             </div>
@@ -102,18 +106,21 @@ const CustomerInfo = (props) => {
         <div className="ct_flex">
           <CustomerTablePage
             data={customerData}
+            setSelectCustomer={setSelectCustomer}
             getCustomerList={getCustomerList}
           />
           <CustomerInfoPage
             selectCustomer={selectCustomer}
+            orderList={customerOrderList}
+            viewModal={data => viewModal('showCustomer', data)}
           />
         </div>
         <Modal
           set={isModal}
           hide={toggleModal}
-          title="Customer Card"
-          style={{ width: '500px', height: '565px' }}
-          contents={CustomerModalContent}
+          title={isModal.type === 'showOrder' ? '주문 정보' : 'Customer Card'}
+          style={isModal.type === 'showOrder' ? { width: '500px', height: '685px' } : { width: '500px', height: '565px' }}
+          contents={isModal.type === 'showOrder' ? OrderModalContent : CustomerModalContent}
           items={{ type: isModal.type }}
         />
       </div>

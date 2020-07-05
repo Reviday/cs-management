@@ -18,7 +18,7 @@ const ModalContents = (props) => {
                 {
                     progress.map((item) => {
                       let name = item.status_name;
-                      let addClass = `type${item.order_status}`;
+                      let addClass = `type${item.order_status} ${item.order_status === state.order_status && 'on'}`;
 
                       const onHandle = () => {
                         setState({
