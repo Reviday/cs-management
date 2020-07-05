@@ -4,7 +4,7 @@ import Paging from 'common/Paging';
 
 const CustomerInfoPage = (props) => {
   const selectCustomer = props.selectCustomer;
-  const orderList = props.orderList;
+  const orderList = props.orderList || [];
   const orderTotal = props.orderTotal || 0;
 
   // Order Table Header Set
@@ -46,7 +46,7 @@ const CustomerInfoPage = (props) => {
                   연락처
                 </td>
                 <td className="td_data">
-                  {selectCustomer?.telno}
+                  {selectCustomer?.telpno}
                 </td>
               </tr>
               <tr>
@@ -55,14 +55,6 @@ const CustomerInfoPage = (props) => {
                 </td>
                 <td className="td_data" colSpan="3">
                   {selectCustomer?.address}
-                </td>
-              </tr>
-              <tr>
-                <td className="td_title">
-                  고객 성향
-                </td>
-                <td className="td_data" colSpan="3">
-                  {selectCustomer?.tendency}
                 </td>
               </tr>
               <tr>
@@ -94,36 +86,47 @@ const CustomerInfoPage = (props) => {
         <div className="name_title" style={{ marginTop: '50px' }}>
           고객 구매 내역
         </div>
+        
         <div className="ct_box">
-          <Table
-            headerSet={orderHeaderSet}
-            data={orderList}
-            onClick={orderData => viewModal('showOrder', orderData)}
-            recordLimit="none"
-          />
-          <div className="ct_box_footer">
-            <div className="rows_flex">
-              <Paging
-                onClick={start => getOrderList(category, start)}
-                totalCount={orderTotal}
-                listCount={10}
-                displayCount={10}
-                current={1}
-              />
-            </div>
-            <div className="rows_flex">
-              <div className="search_field">
-                <select name="sel_field" defaultValue="default">
-                  <option value="default" disabled hidden>검색영역</option>
-                  <option value="site">지점</option>
-                  <option value="name">고객명</option>
-                  <option value="product">품명</option>
-                </select>
-                <input type="text" className="search" placeholder="Search" />
-                <button type="button" className="search_btn" />
-              </div>
-            </div>
-          </div>
+          {
+            orderList.length > 0
+              ? (
+                <React.Fragment>
+                  <Table
+                    headerSet={orderHeaderSet}
+                    data={orderList}
+                    onClick={orderData => viewModal('showOrder', orderData)}
+                    recordLimit="none"
+                  />
+                  <div className="ct_box_footer">
+                    <div className="rows_flex">
+                      <Paging
+                        onClick={start => getOrderList(category, start)}
+                        totalCount={orderTotal}
+                        listCount={10}
+                        displayCount={10}
+                        current={1}
+                      />
+                    </div>
+                    <div className="rows_flex">
+                      <div className="search_field">
+                        <select name="sel_field" defaultValue="default">
+                          <option value="default" disabled hidden>검색영역</option>
+                          <option value="site">지점</option>
+                          <option value="name">고객명</option>
+                          <option value="product">품명</option>
+                        </select>
+                        <input type="text" className="search" placeholder="Search" />
+                        <button type="button" className="search_btn" />
+                      </div>
+                    </div>
+                  </div>
+                </React.Fragment>
+              )
+              : (
+                <div>주문 정보가 없습니다.</div>
+              )
+          }
         </div>
       </div>
     </div>

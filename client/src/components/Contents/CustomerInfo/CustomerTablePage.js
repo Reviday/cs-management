@@ -9,7 +9,6 @@ const CustomerTablePage = (props) => {
   
 
   const customerHeaderSet = [
-    { field: 'id', text: '번호', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
     { field: 'create_at', text: '가입 날짜', sort: '' },
     { field: 'last_order_date', text: '최근 주문날짜', sort: '' }

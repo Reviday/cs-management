@@ -3,7 +3,7 @@ import Record from './TableRecord';
 
 const TableBody = (props) => {
   const headerSet = props.headerSet;
-  const data = props.data;
+  const data = props.data || [];
   const onClick = props.onClick;
   const tableStyle = props.tableStyle;
   const recordLimit = props.recordLimit;
@@ -13,13 +13,13 @@ const TableBody = (props) => {
   return (
     <React.Fragment>
       <tbody className="_tbody">
-        {data.length === 0
+        {data?.length === 0
           ? (
             <tr>
               <td className="none-data" colSpan={headerSet.length}>결과 목록이 없습니다.</td>
             </tr>
           )
-          : data.map((record) => {
+          : data?.map((record) => {
             if (recordLimit !== 'none' && count >= recordLimit) {
               return;
             }

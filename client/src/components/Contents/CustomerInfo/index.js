@@ -42,14 +42,6 @@ const CustomerInfo = (props) => {
     });
   };
 
-  const tempData = [
-    { id: 1, name: '홍길동', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' },
-    { id: 2, name: '홍길동2', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' },
-    { id: 3, name: '홍길동3', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' },
-    { id: 4, name: '홍길동4', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' },
-    { id: 5, name: '홍길동5', join_date: '2010-10-10', last_order_date: '2010-10-10', phone: '010-1234-5678', address: '경기도 성남시 분당구 판교로 255번길 62, 크루셜텍빌딩 8층', tendency: '', memo: '' }
-  ];
-  
   const addCustomer = () => {
     console.log('btn click');
   };
@@ -67,8 +59,25 @@ const CustomerInfo = (props) => {
       let setData = await axios(options);
 
       let result = setData.data.data;
+
+      let items = [];
+      if (result) {
+        for (let i in result) {
+          if (Object.prototype.hasOwnProperty.call(result, i)) {
+            let row = result[i];
+  
+            let convertData = {
+              ...row,
+              create_at: moment(new Date(row.create_at)).format('YYYY.MM.DD'),
+            };
+  
+            items.push(convertData);
+          }
+        }
+      }
+
       console.log('customer:::', result);
-      setCustomerData(result);
+      setCustomerData(items);
       // 데이터가 존재하면 첫번째 요소를 자동으로 선택
       if (result?.length > 0) setSelectCustomer(result[0]);
     } catch (e) {
@@ -76,8 +85,26 @@ const CustomerInfo = (props) => {
     }
   };
 
-  const getCustomerById = async () => {
+  const getCustomerById = async (data) => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/selectbyid`,
+      method: 'post',
+      data: {
+        name: data.name,
+        telpno: data.telpno.replace(/[^0-9]/g, '')
+      }
+    };
 
+    try {
+      console.log(options);
+      let setData = await axios(options);
+
+      let result = setData.data.data;
+      console.log('selec', result);
+
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   };
 
   useEffect(() => {
@@ -106,7 +133,7 @@ const CustomerInfo = (props) => {
         <div className="ct_flex">
           <CustomerTablePage
             data={customerData}
-            setSelectCustomer={setSelectCustomer}
+            setSelectCustomer={getCustomerById}
             getCustomerList={getCustomerList}
           />
           <CustomerInfoPage
@@ -119,7 +146,7 @@ const CustomerInfo = (props) => {
           set={isModal}
           hide={toggleModal}
           title={isModal.type === 'showOrder' ? '주문 정보' : 'Customer Card'}
-          style={isModal.type === 'showOrder' ? { width: '500px', height: '685px' } : { width: '500px', height: '565px' }}
+          style={isModal.type === 'showOrder' ? { width: '500px', height: '685px' } : { width: '500px', height: 'fit-content' }}
           contents={isModal.type === 'showOrder' ? OrderModalContent : CustomerModalContent}
           items={{ type: isModal.type }}
         />
