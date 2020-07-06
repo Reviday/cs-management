@@ -224,7 +224,7 @@ const ModalContents = (props) => {
                   {
                     // siteList가 존재하지 않거나, 개수가 0개이면
                     // input 스타일로 처리. 있으면 select 스타일로 처리.
-                    siteList && siteList.length > 0
+                    siteList && siteList.length > 0 && items.type !== 'showOrder'
                       ? (
                         <Select
                           name="지점"
@@ -259,6 +259,7 @@ const ModalContents = (props) => {
                     value={state.name}
                     setValue={e => setState({ ...state, name: e })}
                     style={{ width: '150px' }}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -268,6 +269,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
                     setReg={/[^0-9]/gi}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -285,11 +287,13 @@ const ModalContents = (props) => {
                       setValue: e => setState({ ...state, address: e }),
                       placeholder: '상세주소',
                       style: { width: '300px' },
+                      disabled: items.type === 'showOrder'
                     }}
                     btnObj={{
                       addClass: 'addr_searchBtn',
                       value: '주소 검색',
-                      onClick: addrSearch
+                      onClick: addrSearch,
+                      disabled: items.type === 'showOrder'
                     }}
                   />
                 </div>
@@ -299,6 +303,7 @@ const ModalContents = (props) => {
                     value={state.product}
                     setValue={e => setState({ ...state, product: e })}
                     style={{ width: '300px' }}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -307,6 +312,7 @@ const ModalContents = (props) => {
                     value={state.price}
                     setValue={e => setState({ ...state, price: e })}
                     style={{ width: '300px' }}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -315,6 +321,7 @@ const ModalContents = (props) => {
                     value={state.needs}
                     setValue={e => setState({ ...state, needs: e })}
                     style={{ width: '300px' }}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -322,7 +329,7 @@ const ModalContents = (props) => {
                     // siteList가 존재하지 않거나, 개수가 0개이면
                     // input 스타일로 처리. 있으면 select 스타일로 처리.
                     // siteList를 넘기지 않는건, 수정 기능을 제공하지 않기 때문에 input으로 출력
-                    siteList && siteList.length > 0
+                    siteList && siteList.length > 0 && items.type !== 'showOrder'
                       ? (
                         <Select
                           name="결제상태"
@@ -350,6 +357,7 @@ const ModalContents = (props) => {
                     value={state.manager}
                     setValue={e => setState({ ...state, manager: e })}
                     style={{ width: '300px' }}
+                    disabled={items.type === 'showOrder'}
                   />
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
