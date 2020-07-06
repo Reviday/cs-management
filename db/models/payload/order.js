@@ -11,6 +11,8 @@ module.exports = {
     selectQueryByOrder: function (reqParams) {
         const category = reqParams.category;
         const start = reqParams.start;
+        const searchWord = reqParams.search_word;
+        const searchField = reqParams.search_field;
 
         let result = null;
         switch (category) {
@@ -47,7 +49,11 @@ module.exports = {
                 };
                 break;
         }
-
+        if ((searchField !== null || undefined) && (searchField !== null || undefined)) {
+            result.where[searchField] = {
+                [Op.like]: "%" + searchWord + "%"
+            };
+        }
         return result;
     },
     selectQueryById: function (reqParams) {

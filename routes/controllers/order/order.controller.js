@@ -54,6 +54,7 @@ module.exports = {
                     order_status: 0,
                     order_date: req.query.order_date || today,
                     complete_date: req.query.complete_date || complete_day,
+
                 };
                 // 3. Call DB insert function
                 result = await Service.orderInfoInsert(setReqParams, category);
@@ -98,6 +99,8 @@ module.exports = {
                 setReqParams = {
                     category: req.query.category,
                     start: req.query.start || 1,
+                    search_word : req.query.search_word || '',
+                    search_field : req.query.search_field || '',
                 };
                 const id = req.query.id
                 if (id !== null || id !== '' || id !== undefined) {
