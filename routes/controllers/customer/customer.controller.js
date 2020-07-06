@@ -16,7 +16,9 @@ module.exports = {
         try {
             req.paramStatus = 'customerSelect';
             const setReqParams = {
-                start: req.query.start || req.body.start || 1
+                start: req.query.start || req.body.start || 1,
+                search_word : req.query.search_word || req.body.search_word || '',
+                search_field: req.query.search_field || req.body.search_field || '',
             };
             result = await Service.selectAllList(setReqParams);
             res.json(Util.res_ok(result));
