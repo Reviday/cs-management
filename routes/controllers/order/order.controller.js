@@ -149,7 +149,8 @@ module.exports = {
             const validateResult = Util.param_check(req, res, fileName, []);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
 
-            const result = await Service.getListCount(req.query.category);
+            const category = req.query.category || '';
+            const result = await Service.getListCount(category);
             console.log(result.count);
 
             res.json(Util.res_ok({'total' : result.count}));

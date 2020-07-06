@@ -86,29 +86,20 @@ module.exports = {
     getStatusList: async () => await OrderStatusCode.findAll(),
 
     /**
-     * 입고 상품 전체 목록 조회 API
+     * 모든 테이블 COUNT(*) 조회 함수
      *
      * @param category
      * @returns {Promise<<{rows: Model[]; count: number}>>}
      */
     getListCount: async (category) => {
-        let result = null;
-        if (category === 'order') {
-            result = Order.findAndCountAll({
-                where: {
-                    order_status: {[Op.lte]: 3}
-                }
-            });
-        } else if (category === 'ship') {
-            result = Order.findAndCountAll({
-                where: {
-                    order_status: {[Op.gt]: 3}
-                }
-            });
-        } else {
-            result = Order.findAndCountAll();
+        if(category === 'customer'){
+            return Customer.findAndCountAll();
+
+        }else {
+            let query = OrderQuery.orderInfoListCountQuery(category);
+            return Order.findAndCountAll(query);
         }
-        return result;
+
     },
 
     /**

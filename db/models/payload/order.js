@@ -8,13 +8,13 @@ module.exports = {
      * @param reqParams - category : 입고(order) 또는 출고(ship) ,start : 시작 페이지
      * @returns {null}
      * @example {Parameters}
-        category:order
-        action:l
-        start:2 (페이지 처리 파라미터)
-        id:7 (상세보기 시, 필수 파라미터)
-        search_word:유진호(검색 시, 검색어)
-        search_field:name(검색 시, 적용할 컬럼명)
-        search_telpno:01036257342(고객 전화 번호)
+     category:order
+     action:l
+     start:2 (페이지 처리 파라미터)
+     id:7 (상세보기 시, 필수 파라미터)
+     search_word:유진호(검색 시, 검색어)
+     search_field:name(검색 시, 적용할 컬럼명)
+     search_telpno:01036257342(고객 전화 번호)
      */
     selectQueryByOrder: function (reqParams) {
         const category = reqParams.category;
@@ -40,8 +40,8 @@ module.exports = {
                     }],
                     limit: 10,
                     offset: (10 * start) - 10,
-                    order : [
-                        ['create_at','DESC']
+                    order: [
+                        ['create_at', 'DESC']
                     ]
 
                 };
@@ -132,5 +132,32 @@ module.exports = {
             limit: 10,
             offset: (10 * reqParams.start) - 10
         };
+    },
+    orderInfoListCountQuery: function (category) {
+        let query = {};
+        const date = new Date();
+        const today = moment(date).format('YYYY-MM-DD');
+        if (category === 'order') {
+            query = {
+                where: {
+                    order_status: {[Op.lte]: 3}
+                }
+            };
+        } else if (category === 'ship') {
+            query = {
+                where: {
+                    order_status: {[Op.gt]: 3}
+                }
+            };
+        } else if (category === 'delay') {
+            query = {
+                where: {
+                    order_status: {[Op.lte]: 3},
+                    complete_date: {[Op.lte]: today}
+                }
+            };
+        }
+
+        return query;
     }
 }
