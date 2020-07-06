@@ -417,7 +417,7 @@ const OrderRelease = (props) => {
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
         style={{ width: '500px', height: '685px' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
-        items={isModal.type === 'progress' ? { progress: progress } : { type: isModal.type, siteList: siteList }}
+        items={isModal.type === 'progress' ? { progress: progress, getOrderList: getOrderList } : { type: isModal.type, siteList: siteList, getOrderList: getOrderList }}
       />
     </React.Fragment>
   );

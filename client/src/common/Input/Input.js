@@ -12,6 +12,7 @@ function Input(props) {
     setValue    ─ useState의 setValue로, 입력 시 state값을 변경시키기 위해 필요 : required
     placeholder ─ 표기할 placeholder가 필요한 경우 지정 : (default : 'Input [name]')
     style       ─ input 스타일 조정이 필요할 시 사용
+    titleStyle  ─ title div 스타일 조정이 필요할 시 사용
     setReg      ─ 입력 값의 정규식이 필요할 경우 사용
     disabled    ─ 해당 input에 입력 제한을 설정할 경우 사용
   */
@@ -22,21 +23,24 @@ function Input(props) {
   const setValue = props.setValue;
   const placeholder = props.placeholder;
   const style = props.style || {};
+  const titleStyle = props.titleStyle || {};
   const setReg = props.setReg; // 입력 정규식 설정
   const disabled = props.disabled || false;
 
   const onHandle = (e) => {
     e.preventDefault();
-    if (setReg && setReg.test(e.target.value)) {
+    if (setReg && setReg.test(e.target.value) && e.target.value !== '') {
       setValue(e.target.value);
     } else if (!setReg) {
+      setValue(e.target.value);
+    } else if (e.target.value === '') {
       setValue(e.target.value);
     }
   };
 
   return (
     <React.Fragment>
-      <div className="row_title">
+      <div className="row_title" style={titleStyle}>
         {name}
       </div>
       <div className="row_input">

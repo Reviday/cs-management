@@ -103,11 +103,11 @@ const ModalContents = (props) => {
       action: '',
       site: state.site,
       name: state.name,
-      telpno: state.telpno,
+      telpno: state.telpno.replace(/[^0-9]/g, ''),
       address: state.address,
       needs: state.needs,
       product: state.product,
-      price: state.price,
+      price: state.price.replace(/[^0-9]/g, ''),
       order_status: state.order_status,
       price_type: state.price_type,
       manager: state.manager,
@@ -155,7 +155,50 @@ const ModalContents = (props) => {
       let setData = await axios(options);
       console.log('setData:::', setData);
 
-      let result = setData.data.data;
+      let result = setData.data.data; // true
+
+      // 정상적으로 처리되었고, type이 insert일 때
+      if (result && type === 'insert') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '주문 등록이 완료되었습니다.'
+        });
+        // 모달창 종료 및 데이터 다시 가져오기.
+        props.hide();
+        items.getOrderList('order');
+        items.getOrderList('ship');
+      // 정상적으로 처리되었고, type이 update일 때
+      } else if (result && type === 'update') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '주문 수정이 완료되었습니다.'
+        });
+        // 모달창 종료 및 데이터 다시 가져오기.
+        props.hide();
+        items.getOrderList('order');
+        items.getOrderList('ship');
+      // 정상적으로 처리되었고, type이 delete일 때
+      } else if (result && type === 'delete') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '주문 삭제가 완료되었습니다.'
+        });
+        // 모달창 종료 및 데이터 다시 가져오기.
+        props.hide();
+        items.getOrderList('order');
+        items.getOrderList('ship');
+      // 그 외, result가 true가 아닐 경우.
+      // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
+      } else {
+        setAlertModal({
+          show: true,
+          title: '오류 메시지',
+          content: '문제가 발생하였습니다. 잠시 후 다시 시도해주시기 바랍니다.'
+        });
+      }
       console.log(result);
     } catch (e) {
       console.log('ERROR', e);

@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
+import Input from 'common/Input/Input';
+import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import BorderButton from 'common/Button/BorderButton';
@@ -124,62 +126,92 @@ const ModalContents = (props) => {
     }
   };
 
+  // 주소 검색
+  const addrSearch = () => {
+
+  };
+
   return (
     <React.Fragment>
-      <div className="modal_content" style={{ height: '550px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
-        <div className="box_div">
+      <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
+        <div className="box_div" style={{ minHeight: '515px', height: 'fit-content' }}>
           <div className="box_layout noshadow">
-            <div className="_content fx_h_380">
+            <div className="_content">
               <div className="grid_box">
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    고객명
-                  </div>
-                  <div className="customer_row_input">
-                    <input type="text" placeholder="고객명" style={{ width: '150px' }} />
-                  </div>
+                  <Input
+                    name="고객명"
+                    value={state.name}
+                    setValue={e => setState({ ...state, name: e })}
+                    style={{ width: '150px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    연락처
-                  </div>
-                  <div className="customer_row_input">
-                    <input type="text" placeholder="연락처" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="연락처"
+                    value={state.telpno}
+                    setValue={e => setState({ ...state, telpno: e })}
+                    style={{ width: '300px' }}
+                    setReg={/^[0-9\b]+$/}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    주소
-                  </div>
-                  <div className="customer_row_input" style={{ width: '360px' }}>
-                    <input type="text" placeholder="우편번호" style={{ width: '100px' }} />
-                    <input className="addr_searchBtn" type="button" value="주소 검색" />
-                    <input type="text" placeholder="상세주소" style={{ width: '300px' }} />
-                  </div>
+                  <InputCustom
+                    name="주소"
+                    topObj={{
+                      value: state.zipcode,
+                      setValue: e => setState({ ...state, zipcode: e }),
+                      placeholder: '우편번호',
+                      style: { width: '100px' },
+                      disabled: true
+                    }}
+                    bottomObj={{
+                      value: state.address,
+                      setValue: e => setState({ ...state, address: e }),
+                      placeholder: '상세주소',
+                      style: { width: '300px' },
+                    }}
+                    btnObj={{
+                      addClass: 'addr_searchBtn',
+                      value: '주소 검색',
+                      onClick: addrSearch
+                    }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    고객 성향
-                  </div>
-                  <div className="customer_row_input">
-                    <input type="text" placeholder="고객 정보" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="고객선호 스타일"
+                    value={state.any}
+                    setValue={e => setState({ ...state, any: e })}
+                    style={{ width: '300px', marginTop: '7px' }}
+                    titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    메모
-                  </div>
-                  <div className="customer_row_input">
-                    <input type="text" placeholder="특이사항" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="고객선호 원단"
+                    value={state.any}
+                    setValue={e => setState({ ...state, any: e })}
+                    style={{ width: '300px', marginTop: '7px' }}
+                    titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
+                  />
                 </div>
                 <div className="rows-mb-20">
-                  <div className="customer_row_title">
-                    사진등록
-                  </div>
-                  <div className="customer_row_input">
-                    <input type="text" placeholder="사진첨부" style={{ width: '300px' }} />
-                  </div>
+                  <Input
+                    name="메모"
+                    value={state.memo}
+                    setValue={e => setState({ ...state, memo: e })}
+                    style={{ width: '300px' }}
+                  />
+                </div>
+                <div className="rows-mb-20">
+                  {/* 수정해야함 틀만 만들어놓은거 */}
+                  <Input
+                    name="사진등록"
+                    value={state.memo}
+                    setValue={e => setState({ ...state, memo: e })}
+                    style={{ width: '300px' }}
+                  />
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
@@ -203,7 +235,7 @@ const ModalContents = (props) => {
                           />
                           <BorderButton
                             addClass="cancelBtn"
-                            onHandle={() => executeOrder('cancel')}
+                            onHandle={() => executeCustomer('cancel')}
                             name="취소"
                             style={{ width: '80px' }}
                           />
@@ -245,7 +277,7 @@ const ModalContents = (props) => {
                           />
                           <BorderButton
                             addClass="cancelBtn"
-                            onHandle={() => executeOrder('cancel')}
+                            onHandle={() => executeCustomer('cancel')}
                             name="취소"
                             style={{ width: '80px' }}
                           />
