@@ -60,6 +60,7 @@ function InputCustom(props) {
           type="button"
           value={btnObj.value}
           onClick={btnObj.onClick}
+          disabled={btnObj.disabled}
         />
         <input
           type={bottomObj?.type || 'text'}
