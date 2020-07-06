@@ -1,4 +1,5 @@
 const APPROOT = require('app-root-path');
+const moment = require('moment');
 const Util = require(`${APPROOT}/util/util`);
 const Customer = require(`${APPROOT}/db/models`).Customer;
 const CustomerQuery = require(`${APPROOT}/db/models/payload/customer`);
@@ -70,6 +71,32 @@ module.exports = {
                 }
             });
             return result !== null;
+
+        } catch (err) {
+            throw err;
+        }
+    },
+    existCustomerInfo : async (reqParams) => {
+        let result = null;
+        try {
+            let query = null;
+            query = CustomerQuery.selectQueryById(reqParams);
+            result = await Customer.findAndCountAll(query);
+            return result;
+
+        } catch (err) {
+            throw err;
+        }
+    },
+    updateLastOrderDateInfo : async (reqParams) => {
+        let result = null;
+        const date = new Date();
+        const today = moment(date).format('YYYY-MM-DD');
+        try {
+            const query = {lastorder : today, update_at : date}
+            const whereQuery = CustomerQuery.selectQueryById(reqParams);
+            result = await Customer.update(query, whereQuery);
+            return result;
 
         } catch (err) {
             throw err;

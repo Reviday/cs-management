@@ -6,6 +6,7 @@ const path = require('path');
 const fileName = path.basename(__filename);
 const Util = require(`${APPROOT}/util/util.js`);
 const Service = require(`${APPROOT}/routes/service/order.service`);
+const CustomerService = require(`${APPROOT}/routes/service/customer.service`);
 const moment = require('moment');
 
 
@@ -58,6 +59,16 @@ module.exports = {
                 };
                 // 3. Call DB insert function
                 result = await Service.orderInfoInsert(setReqParams, category);
+
+                // 4. Customer 테이블에 정보가 존재할 경우, lastorder{DATE}만 update
+                if(result !== null){
+                    const existedInfoFlag = await CustomerService.existCustomerInfo(setReqParams);
+                    const resultCount = existedInfoFlag.count;
+                    if(resultCount > 0){
+                        const updateResult = await CustomerService.updateLastOrderDateInfo(setReqParams);
+                        console.log('Result UpdateQuery ::: %j', updateResult);
+                    }
+                }
 
             } else if (action === 'u') {
                 // [주문 정보 update]

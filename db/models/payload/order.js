@@ -59,7 +59,10 @@ module.exports = {
                         attributes: ["status_name"]
                     }],
                     limit: 10,
-                    offset: (10 * start) - 10
+                    offset: (10 * start) - 10,
+                    order: [
+                        ['create_at', 'DESC']
+                    ]
                 };
                 break;
         }

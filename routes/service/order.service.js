@@ -42,7 +42,7 @@ module.exports = {
     /**
      * 입/출고 게시판 주문 등록
      *
-     * @param requestParam : user_data
+     * @param requestParam : {needs, telpno: *, product: ({allowNull: boolean, type: *}|string|string), address: *, manager, start: (*|number), complete_date: *, order_status: number, order_date: *, site: *, price, name: *, price_type, category: *}
      * @param category : board_category
      * @returns {Promise<*[]|*>}
      */

@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.DATE,
             allowNull : true
         },
+        lastorder : {
+            type : DataTypes.DATE,
+            allowNull : true
+        },
         create_at : {
             type: 'TIMESTAMP',
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),

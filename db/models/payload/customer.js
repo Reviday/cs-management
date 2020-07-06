@@ -5,7 +5,10 @@ module.exports = {
         const start = reqParams.start;
         return {
             limit: 10,
-            offset: (10 * start) - 10
+            offset: (10 * start) - 10,
+            order: [
+                ['create_at', 'DESC']
+            ]
         };
     },
     selectQueryById: function (reqParams) {
@@ -21,4 +24,5 @@ module.exports = {
     updateQueryById: function (reqParams) {
 
     }
+
 }
