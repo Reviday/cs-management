@@ -1,70 +1,127 @@
 div.ct_flex {
-    display: flex;
-    height: calc(100% - 80px);
+  display: flex;
+  height: calc(100% - 80px);
 }
 
 div.ct_flex div.flex_box {
-    margin: 20px;
-    width: 50%;
-    height: calc(100% - 10px);
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    overflow: auto;
+  margin: 20px;
+  width: 50%;
+  height: calc(100% - 10px);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  overflow: auto;
 }
 
 div.name_title {
-    font-size: 25px;
-    font-weight: 600;
-    border-left: 3px solid black;
-    padding-left: 10px;
-    margin-top: 10px;
+  font-size: 25px;
+  font-weight: 600;
+  border-left: 3px solid black;
+  padding-left: 10px;
+  margin-top: 10px;
 }
 
 div.name_text {
-    font-size: 25px;
-    font-weight: 300;
-    color: #aaa;
-    margin: 10px 0;
-    padding-left: 13px;
+  font-size: 25px;
+  font-weight: 300;
+  color: #aaa;
+  margin: 10px 0;
+  padding-left: 13px;
 }
 
 div.rows ._rt {
-    float: right;
-    height: 20px;
-    font-size: 14px;
-    font-weight: 600;
+  float: right;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 div.customer_info_table > table {
-    width: calc(100% - 100px);
-    margin: 30px;
-    margin-bottom: 15px;
-    text-align: left;
-    /* 한 줄 효과 */
-    /* white-space: nowrap;
+  width: calc(100% - 100px);
+  margin: 30px;
+  margin-bottom: 15px;
+  text-align: left;
+  /* 한 줄 효과 */
+  /* white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; */
 }
 
 table tr.tr_top {
-    border-top: 2px solid black;
+  border-top: 2px solid black;
 }
 
 table tr.tr_bottom {
-    border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
 }
 
 table td.td_title {
-    width: 25%;
-    background-color: rgb(251, 244, 231);
-    padding: 10px;
-    font-size: 15px;
-    font-weight: 300;
+  width: 25%;
+  background-color: rgb(251, 244, 231);
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 300;
 }
 
 table td.td_data {
-    width: 25%;
-    background-color: white;
-    padding: 10px;
-    font-size: 15px;
+  width: 25%;
+  background-color: white;
+  padding: 10px;
+  font-size: 15px;
+}
+
+/* Modal Contents CSS */
+input[type="button"].img_upload {
+  float: right;
+  margin: 0px 10px 7px 0px;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 25px;
+  background-color: rgb(0, 176, 80);
+  color: white;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+input[type="button"].img_upload:hover {
+  opacity: 1;
+}
+
+input[type="button"].img_upload:active {
+  opacity: 0.5;
+}
+
+div.img_list {
+  display: inherit;
+  width: 210px;
+  min-height: 17px;
+  border: 1px solid #aaa;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 0px 10px;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+div.img_list.on {
+  border-color: rgb(59, 59, 59);
+}
+
+div.img_list span {
+  width: 195px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.removeBtn {
+  font-family: "Ionicons";
+  display: inline-block;
+  cursor: pointer;
+}
+
+div.removeBtn::before {
+  content: "\f128";
 }

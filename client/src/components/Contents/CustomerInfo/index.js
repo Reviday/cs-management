@@ -13,6 +13,7 @@ import Config from 'config';
 import './index.css';
 
 const CustomerInfo = (props) => {
+  const [siteList, setSiteList] = useState([]); // 지점 리스트
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
   const [customerOrderList, setCustomerOrderList] = useState({});
@@ -44,6 +45,23 @@ const CustomerInfo = (props) => {
 
   const addCustomer = () => {
     console.log('btn click');
+  };
+
+  // Site List 정보 가져오기
+  const getSiteList = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/siteslist`,
+      method: 'post'
+    };
+
+    try {
+      let setData = await axios(options);
+      let result = setData?.data?.data;
+      if (result) setSiteList(result);
+      console.log(result);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   };
 
   const getCustomerList = async (start) => {
@@ -108,8 +126,9 @@ const CustomerInfo = (props) => {
   };
 
   useEffect(() => {
+    if (siteList.length === 0) getSiteList(); // 지점 리스트
     if (customerData.length === 0) getCustomerList();
-  }, [customerData]);
+  }, [siteList, customerData]);
     
   return (
     <React.Fragment>
@@ -148,7 +167,7 @@ const CustomerInfo = (props) => {
           title={isModal.type === 'showOrder' ? '주문 정보' : 'Customer Card'}
           style={isModal.type === 'showOrder' ? { width: '500px', height: '685px' } : { width: '500px', height: 'fit-content' }}
           contents={isModal.type === 'showOrder' ? OrderModalContent : CustomerModalContent}
-          items={{ type: isModal.type }}
+          items={{ type: isModal.type, siteList: siteList }}
         />
       </div>
     </React.Fragment>
