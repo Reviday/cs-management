@@ -7,6 +7,12 @@ const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 
 
 module.exports = {
+    /**
+     * 고객정보 전체 조회
+     *
+     * @param reqParams
+     * @returns {Promise<*[]>}
+     */
     selectAllList: async (reqParams) => {
         let result = null;
         try {
@@ -20,6 +26,12 @@ module.exports = {
             throw err;
         }
     },
+    /**
+     * 고객정보 상세보기
+     *
+     * @param reqParams
+     * @returns {Promise<*[]>}
+     */
     selectById : async (reqParams) => {
         let result = null;
         try {
@@ -31,12 +43,13 @@ module.exports = {
         } catch (err) {
             throw err;
         }
-
     },
-    /*
-    * customInfoInsert()
-    * @param requestParam : 고객 정보(DB에 저장할 데이터)
-    * */
+    /**
+     * 고객정보 등록
+     *
+     * @param requestParam
+     * @returns {Boolean} Result Flag Query Action
+     */
     customInfoInsert: async (requestParam) => {
         try {
             let result = await Customer.create(requestParam);
@@ -45,10 +58,17 @@ module.exports = {
             throw err;
         }
     },
+    /**
+     * 고객정보 업데이트
+     *
+     * @param reqParams
+     * @returns {Promise<boolean>}
+     */
     customInfoUpdate: async (reqParams) => {
+        /*TODO 2020.07.06
+        * 첨부파일 upsert 추가 필요
+        * */
         try {
-            //const query = CustomerQuery.updateQueryById(reqParams);
-            //console.log('query ::: %j', query);
             const result = await Customer.update(reqParams, {
                 where: {
                     name: reqParams.name,
@@ -62,6 +82,12 @@ module.exports = {
         }
 
     },
+    /**
+     * 고객정보 삭제
+     *
+     * @param reqParams
+     * @returns {Promise<boolean>}
+     */
     customInfoDelete: async (reqParams) => {
         try {
             const result = await Customer.destroy({
@@ -76,11 +102,16 @@ module.exports = {
             throw err;
         }
     },
+    /**
+     * 고객정보 유무 확인
+     *
+     * @param reqParams
+     * @returns {Int} Count
+     */
     existCustomerInfo : async (reqParams) => {
         let result = null;
         try {
-            let query = null;
-            query = CustomerQuery.selectQueryById(reqParams);
+            const query = CustomerQuery.selectQueryById(reqParams);
             result = await Customer.findAndCountAll(query);
             return result;
 
@@ -88,6 +119,12 @@ module.exports = {
             throw err;
         }
     },
+    /**
+     * 입/출고 게시판에서 '주문등록'시, 고객정보의 lastorder update
+     *
+     * @param reqParams
+     * @returns {Promise<*>}
+     */
     updateLastOrderDateInfo : async (reqParams) => {
         let result = null;
         const date = new Date();

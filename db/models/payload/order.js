@@ -96,6 +96,12 @@ module.exports = {
             }]
         };
     },
+    /**
+     * 입/출고 주문 등록
+     *
+     * @param reqParams
+     * @returns {{}}
+     */
     orderInfoUpdateQuery: function (reqParams) {
         // title에 따라서 Query 적용
         const result = {};
@@ -118,6 +124,12 @@ module.exports = {
 
         return result;
     },
+    /**
+     * 입고지연 목록 조회
+     *
+     * @param reqParams
+     * @returns {{include: [{model: *, attributes: [string], required: boolean}], offset: number, limit: number, where: {order_status: {}, complete_date: {}}}}
+     */
     delayOrderInfoQuery: function (reqParams) {
         const date = new Date();
         const today = moment(date).format('YYYY-MM-DD');
@@ -136,6 +148,12 @@ module.exports = {
             offset: (10 * reqParams.start) - 10
         };
     },
+    /**
+     * DB의 모든 테이블의 COUNT(*) API
+     *
+     * @param category
+     * @returns {{}}
+     */
     orderInfoListCountQuery: function (category) {
         let query = {};
         const date = new Date();

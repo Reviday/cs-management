@@ -31,15 +31,15 @@ module.exports = {
         }
 
     },
-    selectById : async (req, res) => {
+    selectById: async (req, res) => {
         let result = null;
         try {
             req.paramStatus = 'customerSelectById';
             const validateResult = Util.param_check(req, res, fileName, ['name', 'telpno']);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
             const setReqParams = {
-                name : req.query.name,
-                telpno : req.query.telpno,
+                name: req.query.name,
+                telpno: req.query.telpno,
             };
             result = await Service.selectById(setReqParams);
             res.json(Util.res_ok(result));
@@ -148,6 +148,39 @@ module.exports = {
 
             // 5. Send Executed Query Result
             res.json(Util.res_ok(result));
+
+        } catch (err) {
+            console.log('---------------------------------------', fileName);
+            console.log(`${req.originalUrl} / (method:${req.method})`, fileName);
+            console.log(err);
+            console.log('---------------------------------------', fileName);
+            res.json(Util.res_err(req, res, err));
+        }
+    },
+    check: async (req, res) => {
+        let result = null;
+        let existedFlag = null;
+        try {
+            req.paramStatus = 'customerIdCheck';
+            // 1. Check Validator 최초 필수 Parameters.
+            const validateResult = Util.param_check(req, res, fileName, ['name', 'telpno']);
+            if (validateResult.status) return res.status(400).send(validateResult.errMsg);
+            // 2. Set Query Object
+            const setReqParams = {
+                name: req.query.name,
+                telpno: req.query.telpno,
+            };
+
+            // 3. Execute Insert Query
+            result = await Service.existCustomerInfo(setReqParams);
+            if (result.count > 0) {
+                // 4. Send Executed Query Result
+                existedFlag = false;
+            } else {
+                existedFlag = true;
+            }
+            res.json(Util.res_ok(existedFlag));
+
 
         } catch (err) {
             console.log('---------------------------------------', fileName);

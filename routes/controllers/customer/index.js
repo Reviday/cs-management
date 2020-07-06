@@ -30,7 +30,7 @@ router.all('/selectbyid', controller.selectById);
 router.all('/insert', upload.array('custom_image'), controller.insert);
 router.all('/update', upload.array('custom_image'), controller.update);
 router.all('/delete', upload.array('custom_image'), controller.delete);
-
+router.all('/check', controller.check);
 router.all('/:fileName', (req,res) => {
     const pathUpload = 'uploads/';
     const downloadFileName = pathUpload + req.params.fileName;
