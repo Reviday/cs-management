@@ -7,13 +7,23 @@ module.exports = {
      * 입출고 게시판 조회 쿼리
      * @param reqParams - category : 입고(order) 또는 출고(ship) ,start : 시작 페이지
      * @returns {null}
+     * @example {Parameters}
+        category:order
+        action:l
+        start:2 (페이지 처리 파라미터)
+        id:7 (상세보기 시, 필수 파라미터)
+        search_word:유진호(검색 시, 검색어)
+        search_field:name(검색 시, 적용할 컬럼명)
+        search_telpno:01036257342(고객 전화 번호)
      */
     selectQueryByOrder: function (reqParams) {
         const category = reqParams.category;
         const start = reqParams.start;
         const searchWord = reqParams.search_word;
         const searchField = reqParams.search_field;
+        const searchTelpno = reqParams.search_telpno;
 
+        // 1. 기본 검색 Query 구성
         let result = null;
         switch (category) {
             case 'order' :
@@ -29,7 +39,11 @@ module.exports = {
                         attributes: ["status_name"]
                     }],
                     limit: 10,
-                    offset: (10 * start) - 10
+                    offset: (10 * start) - 10,
+                    order : [
+                        ['create_at','DESC']
+                    ]
+
                 };
                 break;
             case 'ship' :
@@ -49,11 +63,20 @@ module.exports = {
                 };
                 break;
         }
-        if ((searchField !== null || undefined) && (searchField !== null || undefined)) {
+
+        // 2. Order 게시판에서 검색하는 경우, Like SQL 추가
+        if (searchField !== '' && searchField !== '') {
             result.where[searchField] = {
                 [Op.like]: "%" + searchWord + "%"
             };
         }
+
+        // 3. Customer 게시판에서 고객정보 상세 보기 하는 경우, pk : name, telpno로
+        //   고객 최근 주문 데이터 조회
+        if (searchTelpno !== '' && searchField === 'name') {
+            result.where['telpno'] = searchTelpno;
+        }
+
         return result;
     },
     selectQueryById: function (reqParams) {
@@ -82,6 +105,8 @@ module.exports = {
             result.address = reqParams.address;
             result.needs = reqParams.needs;
             result.price = reqParams.price;
+            result.manager = reqParams.manager;
+            result.price_type = reqParams.price_type;
 
         } else {
             result.order_status = reqParams.order_status;

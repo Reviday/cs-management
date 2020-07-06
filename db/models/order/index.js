@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        price_type: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         order_status: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -35,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         order_date: {
             type: DataTypes.DATE,
+            allowNull: false,
+        },
+        manager: {
+            type: DataTypes.STRING(10),
             allowNull: false,
         },
         complete_date: {

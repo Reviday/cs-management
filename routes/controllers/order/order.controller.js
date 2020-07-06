@@ -65,6 +65,8 @@ module.exports = {
                     'needs', 'product', 'price', 'order_status', 'price_type', 'manager']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
+                    category: req.query.category,
+                    action: req.query.action,
                     id: req.query.id,
                     site: req.query.site,
                     name: req.query.name,
@@ -101,6 +103,7 @@ module.exports = {
                     start: req.query.start || 1,
                     search_word : req.query.search_word || '',
                     search_field : req.query.search_field || '',
+                    search_telpno : req.query.search_telpno || ''
                 };
                 const id = req.query.id
                 if (id !== null || id !== '' || id !== undefined) {
