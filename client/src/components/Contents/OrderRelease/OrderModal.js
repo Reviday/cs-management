@@ -22,7 +22,7 @@ const ModalContents = (props) => {
         s_code: siteList[0].s_code,
         name: '',
         telpno: '',
-        zipcode: '',
+        zipcode: 0,
         address: '',
         product: '',
         price: '',

@@ -77,7 +77,7 @@ const ModalContents = (props) => {
       data: qs.stringify({
         ...state,
         category: category,
-        action: 'u'
+        action: 'status_u'
       }),
       headers: {
         'content-type': 'application/x-www-form-urlencoded'

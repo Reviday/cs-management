@@ -21,7 +21,10 @@ const OrderRelease = (props) => {
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
   const [receiptTotal, setReceiptTotal] = useState(0);
   const [releaseTotal, setReleaseTotal] = useState(0);
-  const [delayTotal, setdelayTotal] = useState(0);
+  const [delayTotal, setDelayTotal] = useState(0);
+  const [searchData, setSearchData] = useState({ // 검색 시 사용될 데이터
+    tpye: '',
+  });
 
   const [more, setMore] = useState({
     order: false,
@@ -46,8 +49,8 @@ const OrderRelease = (props) => {
   };
 
   const viewModal = async (type, data) => {
+    console.log(type, data);
     setIsModal({
-      ...isModal,
       view: !isModal.view,
       type: type,
       data: data
@@ -175,7 +178,13 @@ const OrderRelease = (props) => {
   // 주문 리스트 가져오기
   const getOrderList = async (category, start) => {
     let options = {};
-    let countOption = {};
+    let countOption = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
+      method: 'post',
+      data: {
+        category: category,
+      }
+    };
 
     if (category === 'delay') {
       options = {
@@ -195,17 +204,19 @@ const OrderRelease = (props) => {
           start: start || 1
         }
       };
-      countOption = {
-        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
-        method: 'post',
-        data: {
-          category: category,
-        }
-      };
     }
     try {
+      // 데이터 reset
+      if (category === 'order') {
+        setReceiptData([]);
+      } else if (category === 'ship') {
+        setReleaseData([]);
+      } else if (category === 'delay') {
+        setDelayReceiptData([]);
+      }
+
       let listSetData = await axios(options);
-      let countSetData = category === 'delay' ? 0 : await axios(countOption); // 아직 delay 로직은 없는 관계로
+      let countSetData = await axios(countOption);
       // if (setData.data.status === 400) {
       //   setAlertModal({
       //     show: true,
@@ -217,6 +228,7 @@ const OrderRelease = (props) => {
 
       let result = listSetData?.data?.data; // list result
       let count = countSetData?.data?.data?.total; // count result
+      console.log(category, result, count);
       let items = [];
       if (result) {
         for (let i in result) {
@@ -247,7 +259,7 @@ const OrderRelease = (props) => {
         setReleaseTotal(count);
       } else if (category === 'delay') {
         setDelayReceiptData(items);
-        // setdelayTotal(count);
+        setDelayTotal(count);
       }
       
     } catch (e) {

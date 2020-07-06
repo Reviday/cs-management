@@ -189,3 +189,13 @@ div.needs_area {
 .needs_area > textarea::placeholder {
   font-size: inherit;
 }
+
+._count {
+  text-align: right;
+  width: calc(100% - 100px);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 15px;
+  height: 15px;
+  color: rgb(80, 80, 80);
+}

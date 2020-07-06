@@ -14,6 +14,7 @@ import './index.css';
 
 const CustomerInfo = (props) => {
   const [siteList, setSiteList] = useState([]); // 지점 리스트
+  const [customerTotal, setCustomerTotal] = useState(0); // 고객 수
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
   const [customerOrderList, setCustomerOrderList] = useState({});
@@ -73,10 +74,21 @@ const CustomerInfo = (props) => {
       }
     };
 
-    try {
-      let setData = await axios(options);
+    let countOption = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
+      method: 'post',
+      data: {
+        category: 'customer',
+      }
+    };
 
-      let result = setData.data.data;
+    try {
+      setCustomerData([]);
+      let listSetData = await axios(options);
+      let countSetData = await axios(countOption);
+
+      let result = listSetData?.data?.data; // list result
+      let count = countSetData?.data?.data?.total; // count result
 
       let items = [];
       if (result) {
@@ -87,6 +99,7 @@ const CustomerInfo = (props) => {
             let convertData = {
               ...row,
               create_at: moment(new Date(row.create_at)).format('YYYY.MM.DD'),
+              lastorder: row.lastorder ? moment(new Date(row.lastorder)).format('YYYY.MM.DD') : '최근 주문 내역이 없습니다.'
             };
   
             items.push(convertData);
@@ -96,6 +109,7 @@ const CustomerInfo = (props) => {
 
       console.log('customer:::', result);
       setCustomerData(items);
+      setCustomerTotal(count);
       // 데이터가 존재하면 첫번째 요소를 자동으로 선택
       if (result?.length > 0) setSelectCustomer(result[0]);
     } catch (e) {
@@ -119,7 +133,7 @@ const CustomerInfo = (props) => {
 
       let result = setData.data.data;
       console.log('selec', result);
-
+      
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -128,7 +142,7 @@ const CustomerInfo = (props) => {
   useEffect(() => {
     if (siteList.length === 0) getSiteList(); // 지점 리스트
     if (customerData.length === 0) getCustomerList();
-  }, [siteList, customerData]);
+  }, [siteList]);
     
   return (
     <React.Fragment>
@@ -152,7 +166,8 @@ const CustomerInfo = (props) => {
         <div className="ct_flex">
           <CustomerTablePage
             data={customerData}
-            setSelectCustomer={getCustomerById}
+            total={customerTotal}
+            setSelectCustomer={setSelectCustomer}
             getCustomerList={getCustomerList}
           />
           <CustomerInfoPage

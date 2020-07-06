@@ -4,14 +4,16 @@ import Paging from 'common/Paging';
 
 const CustomerTablePage = (props) => {
   const data = props.data || [];
+  const total = props.total || 0;
   const setSelectCustomer = props.setSelectCustomer;
   const getCustomerList = props.getCustomerList;
   
 
   const customerHeaderSet = [
+    { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
     { field: 'create_at', text: '가입 날짜', sort: '' },
-    { field: 'last_order_date', text: '최근 주문날짜', sort: '' }
+    { field: 'lastorder', text: '최근 주문날짜', sort: '' }
   ];
     
   return (
@@ -19,7 +21,7 @@ const CustomerTablePage = (props) => {
       <div className="ct_box">
         <div className="rows" style={{ width: 'calc(100% - 100px)' }}>
           <div className="_rt">
-            총 고객: 00명
+            {`총 고객: ${total}명`}
           </div>
         </div>
         <Table
@@ -33,7 +35,7 @@ const CustomerTablePage = (props) => {
           <div className="rows_flex">
             <Paging
               onClick={start => getCustomerList(start)}
-              totalCount={100} // total 가져오는 로직 필요.
+              totalCount={total} // total 가져오는 로직 필요.
               listCount={10}
               displayCount={10}
               current={1}

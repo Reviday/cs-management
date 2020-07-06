@@ -68,7 +68,11 @@ const OrderPage = (props) => {
         
       </div>
       <div className="ct_box">
+        <div className="rows _count">
+          {`${category === 'order' ? `입고 ${total} 건` : category === 'ship' ? `출고 ${total} 건` : ''}`}
+        </div>
         <Table
+          tableStyle={{ margin: '10px 50px' }}
           headerSet={headerSet}
           data={data}
           onClick={data => viewModal('showOrder', data)}

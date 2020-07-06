@@ -144,8 +144,8 @@ const Paging = (props) => {
       setState({ ...state, current: item });
     }
     let retCount = item * state.listCount - state.listCount;
-    console.log(retCount);
-    props.onClick(retCount);
+    // 임시로 수정.
+    props.onClick(item);
   };
 
 

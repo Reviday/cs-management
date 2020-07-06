@@ -12,11 +12,31 @@ import 'common/Modal/Modal.scss';
 import Config from 'config';
 
 const ModalContents = (props) => {
-  const [state, setState] = useState(props.data || {});
-  const [img, setImg] = useState([]);
   const items = props.items;
   const siteList = items.siteList || [];
+  const [state, setState] = useState(
+    items.type === 'insertCustomer'
+      ? {
+        site: siteList[0].site,
+        s_code: siteList[0].s_code,
+        name: '',
+        telpno: '',
+        zipcode: 0,
+        address: '',
+        product: '',
+        interest_style: '',
+        interest_skin: '',
+        birth: '',
+        customer_memo: ''
+      }
+      : {
+        ...props.data,
+        customer_memo: props.data.memo
+      }
+  );
+  const [img, setImg] = useState([]);
   const upload = useRef('');
+  
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -50,6 +70,30 @@ const ModalContents = (props) => {
     });
   };
 
+  // 고객 정보 중복 체크
+  const duplCheck = async () => {
+    // set options
+    let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/check`,
+      method: 'post',
+      data: {
+        name: state.name,
+        telpno: state.telpno
+      },
+    };
+
+    try {
+      let setData = await axios(options);
+
+      let result = setData.data.data; // true or false
+      console.log('중복체크:', state.name, state.telpno, result);
+
+      return result;
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+  };
+
   const checkValidate = () => {
     let validation = true;
     let message = '';
@@ -58,6 +102,26 @@ const ModalContents = (props) => {
     /**
      * check validate
      */
+
+    // 1. 각 data 별로 빈 값이 존재하는지 체크
+    if (validation) {
+      let checkList = ['site', 'name', 'zipcode', 'address', 'telpno'];
+      for (let key in state) {
+        if (Object.prototype.hasOwnProperty.call(state, key) && checkList.indexOf(key) > 0) {
+          if (state[key] === undefined || state[key] === '') {
+            console.log(state[key]);
+            validation = false;
+            message = '비어있는 필수항목이 있습니다. (필수항목 : 지점, 이름, 우편번호, 주소, 연락처)';
+          }
+        }
+      }
+    }
+
+    // 2. 고객 정보 중복 체크 (name, telpno)
+    if (validation && !duplCheck()) {
+      validation = false;
+      message = '이미 등록된 고객 정보입니다. 고객 이름과, 연락처를 확인해주시기 바랍니다.';
+    }
 
 
     // validation에서 체크되지 않은 항목이 존재하면 alert창 출력
@@ -78,31 +142,35 @@ const ModalContents = (props) => {
     if (type === 'cancel') {
       // state값 초기화 후, modal 닫기
       setState({});
+      setImg([]);
       props.hide();
     }
 
     // check validate
     // if (checkValidate()) return false;
 
-    // set options
-    let url = `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/${type}`;
     const formData = new FormData();
-    formData.append('files', img);
+    console.log(img[0]);
+    formData.append('file', img);
     for (let key in state) {
       if (Object.prototype.hasOwnProperty.call(state, key)) {
         formData.append(key, state[key]);
       }
     }
 
+    // set options
     let options = {
+      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/${type}`,
+      method: 'post',
+      data: formData,
       headers: {
         'content-type': 'multipart/form-data'
       }
     };
 
     try {
-      console.log('options:::', formData.getAll());
-      let setData = await axios.post(url, formData, options);
+      console.log(options);
+      let setData = await axios(options);
       console.log('setData:::', setData);
 
       let result = setData.data.data;
@@ -121,12 +189,12 @@ const ModalContents = (props) => {
   const uploadImg = (files = []) => {
     let fileList = [];
     if (files.length > 0) {
-      for (let i in files) {
-        if (Object.prototype.hasOwnProperty.call(files, i)) {
-          fileList.push(files[i]);
-        }
-      }
-      setImg(img.concat(fileList));
+      // for (let i in files) {
+      //   if (Object.prototype.hasOwnProperty.call(files, i)) {
+      //     fileList.push(files[i]);
+      //   }
+      // }
+      setImg(img.concat(files[0]));
     }
   };
 
