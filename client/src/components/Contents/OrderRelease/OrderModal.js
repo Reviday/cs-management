@@ -19,6 +19,7 @@ const ModalContents = (props) => {
     items.type === 'insertOrder'
       ? {
         site: siteList[0].site,
+        s_code: siteList[0].s_code,
         name: '',
         telpno: '',
         zipcode: '',
@@ -99,6 +100,7 @@ const ModalContents = (props) => {
 
     // data default setting
     let data = {
+      ...state,
       category: 'order',
       action: '',
       site: state.site,
@@ -212,6 +214,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
+      {console.log(state)}
       <div className="modal_content" style={{ height: '670px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
@@ -228,7 +231,15 @@ const ModalContents = (props) => {
                           setKey="s_code"
                           setVal="site"
                           list={siteList}
-                          setValue={e => setState({ ...state, site: e })}
+                          value={state.s_code}
+                          setValue={(e) => {
+                            let selectSite = siteList.filter(item => item.s_code === e);
+                            setState({
+                              ...state,
+                              site: selectSite[0].site,
+                              s_code: e
+                            });
+                          }}
                         />
                       )
                       : (
@@ -256,7 +267,7 @@ const ModalContents = (props) => {
                     value={state.telpno}
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
-                    setReg={/^[0-9\b]+$/}
+                    setReg={/[^0-9]/gi}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -318,6 +329,7 @@ const ModalContents = (props) => {
                           list={priceType}
                           setKey="code"
                           setVal="text"
+                          value={state.price_type}
                           setValue={e => setState({ ...state, price_type: e })}
                         />
                       )

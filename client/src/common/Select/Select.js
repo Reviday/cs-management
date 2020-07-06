@@ -19,14 +19,15 @@ function Select(props) {
   const setValue = props.setValue;
   // const defaultValue = props.defaultValue; // Select의 기본 값 설정
 
-  const onHandle = () => {
-    // list의 원소가 Object 형식일 때의 처리되는 로직.
-    let findData = list.find(e => e[setKey] === selected.current.value);
-    console.log(findData);
+  const onHandle = (e) => {
+    let findData = list.find(e => String(e[setKey].toString()) === String(selected.current.value));
     // list의 원소가 단일 값일 경우 처리되는 로직.
-    if (!findData) findData = list.find(e => e === selected.current.value);
-    console.log(findData);
-    setValue(findData);
+    if (!findData) {
+      findData = list.find(e => e === selected.current.value);
+      setValue(findData);
+    } else {
+      setValue(findData[setKey]);
+    }
   };
 
   return (
@@ -35,7 +36,7 @@ function Select(props) {
         {name}
       </div>
       <div className="row_input">
-        <select ref={selected} value={list[0][setKey] || ''} onChange={onHandle}>
+        <select ref={selected} onChange={e => onHandle(e)}>
           {
             list?.map((item, index) => {
               if (typeof item === 'object') {

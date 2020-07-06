@@ -13,7 +13,7 @@ function Input(props) {
     placeholder ─ 표기할 placeholder가 필요한 경우 지정 : (default : 'Input [name]')
     style       ─ input 스타일 조정이 필요할 시 사용
     titleStyle  ─ title div 스타일 조정이 필요할 시 사용
-    setReg      ─ 입력 값의 정규식이 필요할 경우 사용
+    setReg      ─ 입력 값 필터링을 위한 정규식. (입력 제한할 대상의 정규식을 사용 - replace 대상)
     disabled    ─ 해당 input에 입력 제한을 설정할 경우 사용
   */
 
@@ -27,15 +27,22 @@ function Input(props) {
   const setReg = props.setReg; // 입력 정규식 설정
   const disabled = props.disabled || false;
 
+  const filterKey = (e) => {
+    if (setReg) {
+      let strKey = String.fromCharCode(e.keyCode);
+      console.log(e.keyCode, strKey, setReg.test(strKey));
+      if (!setReg.test(strKey)) e.returnValue = '';
+    }
+  };
+
   const onHandle = (e) => {
     e.preventDefault();
-    if (setReg && setReg.test(e.target.value) && e.target.value !== '') {
-      setValue(e.target.value);
-    } else if (!setReg) {
-      setValue(e.target.value);
-    } else if (e.target.value === '') {
+    if (setReg) {
+      setValue(e.target.value.replace(setReg, ''));
+    } else {
       setValue(e.target.value);
     }
+    
   };
 
   return (

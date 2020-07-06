@@ -2,16 +2,21 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
+import Select from 'common/Select/Select';
 import Input from 'common/Input/Input';
 import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import BorderButton from 'common/Button/BorderButton';
 import 'common/Modal/Modal.scss';
+import Config from 'config';
 
 const ModalContents = (props) => {
-  const [state, setState] = useState(props.data);
+  const [state, setState] = useState(props.data || {});
+  const [img, setImg] = useState([]);
   const items = props.items;
+  const siteList = items.siteList || [];
+  const upload = useRef('');
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -69,54 +74,35 @@ const ModalContents = (props) => {
 
 
   // 일괄 처리 함수
-  const executeCustomer = async (type, id) => {
-    // check validate
-    if (checkValidate()) return false;
-
-    // data setting
-    let data = {
-      category: 'order',
-      action: '',
-      /**
-       * 고객 테이블 인터페이스 정리 후 작업.
-       */
-    };
-
-    switch (type) {
-
-      case 'insert':
-        data.action = 'i';
-        break;
-      case 'update':
-        data.id = id;
-        data.action = 'u';
-        break;
-      case 'delete':
-        data = {
-          category: 'order',
-          id: id,
-          action: 'd',
-        };
-        break;
-      case 'cancel':
-        // state값 초기화 후, modal 닫기
-        setState({});
-        props.hide();
-        break;
-      default: return false;
-
+  const executeCustomer = async (type) => {
+    if (type === 'cancel') {
+      // state값 초기화 후, modal 닫기
+      setState({});
+      props.hide();
     }
 
+    // check validate
+    // if (checkValidate()) return false;
+
     // set options
+    let url = `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/${type}`;
+    const formData = new FormData();
+    formData.append('files', img);
+    for (let key in state) {
+      if (Object.prototype.hasOwnProperty.call(state, key)) {
+        formData.append(key, state[key]);
+      }
+    }
+
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
-      method: 'post',
-      data: data
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
     };
 
     try {
-      console.log('options:::', options);
-      let setData = await axios(options);
+      console.log('options:::', formData.getAll());
+      let setData = await axios.post(url, formData, options);
       console.log('setData:::', setData);
 
       let result = setData.data.data;
@@ -131,6 +117,19 @@ const ModalContents = (props) => {
 
   };
 
+  // 이미지 업로드용 함수
+  const uploadImg = (files = []) => {
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i in files) {
+        if (Object.prototype.hasOwnProperty.call(files, i)) {
+          fileList.push(files[i]);
+        }
+      }
+      setImg(img.concat(fileList));
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
@@ -138,6 +137,31 @@ const ModalContents = (props) => {
           <div className="box_layout noshadow">
             <div className="_content">
               <div className="grid_box">
+                <div className="rows-mb-20">
+                  {
+                    // siteList가 존재하지 않거나, 개수가 0개이면
+                    // input 스타일로 처리. 있으면 select 스타일로 처리.
+                    siteList && siteList.length > 0
+                      ? (
+                        <Select
+                          name="지점"
+                          setKey="s_code"
+                          setVal="site"
+                          list={siteList}
+                          setValue={e => setState({ ...state, site: e })}
+                        />
+                      )
+                      : (
+                        <Input
+                          name="지점"
+                          value={state.site}
+                          setValue={() => {}} // 값을 바꾸지 않음.
+                          style={{ width: '120px' }}
+                          disabled
+                        />
+                      )
+                  }
+                </div>
                 <div className="rows-mb-20">
                   <Input
                     name="고객명"
@@ -152,7 +176,7 @@ const ModalContents = (props) => {
                     value={state.telpno}
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
-                    setReg={/^[0-9\b]+$/}
+                    setReg={/[^0-9]/gi}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -181,8 +205,8 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20">
                   <Input
                     name="고객선호 스타일"
-                    value={state.any}
-                    setValue={e => setState({ ...state, any: e })}
+                    value={state.interest_style}
+                    setValue={e => setState({ ...state, interest_style: e })}
                     style={{ width: '300px', marginTop: '7px' }}
                     titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
                   />
@@ -190,8 +214,8 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20">
                   <Input
                     name="고객선호 원단"
-                    value={state.any}
-                    setValue={e => setState({ ...state, any: e })}
+                    value={state.interest_skin}
+                    setValue={e => setState({ ...state, interest_skin: e })}
                     style={{ width: '300px', marginTop: '7px' }}
                     titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
                   />
@@ -205,13 +229,46 @@ const ModalContents = (props) => {
                   />
                 </div>
                 <div className="rows-mb-20">
-                  {/* 수정해야함 틀만 만들어놓은거 */}
-                  <Input
-                    name="사진등록"
-                    value={state.memo}
-                    setValue={e => setState({ ...state, memo: e })}
-                    style={{ width: '300px' }}
-                  />
+                  <div className="row_title">
+                    사진등록
+                  </div>
+                  <div className="row_input" style={{ width: '360px' }}>
+                    <div className={`img_list${img.length > 0 ? ' on' : ''}`}>
+                      {
+                        img.map((item, index) => {
+                          let key = `${index}_${item.name}`;
+                          return (
+                            <div key={key}>
+                              <span>{item.name}</span>
+                              <div
+                                className="removeBtn"
+                                onClick={() => {
+                                  setImg(
+                                    img.filter(target => target !== item)
+                                  );
+                                  console.log(upload.current);
+                                }}
+                              />
+                            </div>
+                          );
+                        })
+                      }
+                    </div>
+                    <input
+                      className="img_upload"
+                      type="button"
+                      value="사진첨부"
+                      onClick={() => upload.current.click()}
+                    />
+                    <input
+                      ref={upload}
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={e => uploadImg(e.target.files)}
+                      style={{ display: 'none' }}
+                    />
+                  </div>
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
@@ -252,8 +309,7 @@ const ModalContents = (props) => {
                                 show: true,
                                 title: '확인 메시지',
                                 content: '고객 정보를 수정하시겠습니까?',
-                                type: 'update',
-                                id: state?.id
+                                type: 'update'
                               });
                             }}
                             name="수정"
@@ -268,8 +324,7 @@ const ModalContents = (props) => {
                                 show: true,
                                 title: '확인 메시지',
                                 content: '고객 정보를 삭제하시겠습니까?',
-                                type: 'delete',
-                                id: state?.id
+                                type: 'delete'
                               });
                             }}
                             name="삭제"
@@ -295,7 +350,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={() => executeCustomer(confirmModal.type, confirmModal?.id)}
+        execute={() => executeCustomer(confirmModal.type)}
       />
       <Alert
         view={alertModal.show}
