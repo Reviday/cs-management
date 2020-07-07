@@ -19,6 +19,7 @@ module.exports = {
     selectQueryByOrder: function (reqParams) {
         const category = reqParams.category;
         const start = reqParams.start;
+        const mySite = reqParams.site;
         const searchWord = reqParams.search_word;
         const searchField = reqParams.search_field;
         const searchTelpno = reqParams.search_telpno;
@@ -33,7 +34,6 @@ module.exports = {
                         "complete_date", "update_at", "order_status", "needs", "order_status", "address",
                         "telpno","zipcode", "detail_addr"
                     ],
-
                     include: [{
                         model: db.OrderStatusCode,
                         required: false,
@@ -104,6 +104,10 @@ module.exports = {
         if (searchTelpno !== '' && searchField === 'name') {
             result.where['telpno'] = searchTelpno;
         }
+
+        // 2020.07.07 추가
+        // 주문정보 조회 시, 계정 별 지점 데이터를 이용한 특정 지점만 조회.
+        if((mySite !== '') && (category === 'order' || category === 'ship')) result.where['site'] = mySite;
 
         return result;
     },

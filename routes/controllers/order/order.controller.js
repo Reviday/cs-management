@@ -125,6 +125,7 @@ module.exports = {
                 setReqParams = {
                     category: req.query.category,
                     start: req.query.start || 1,
+                    site : req.query.site || '',
                     search_word: req.query.search_word || '',
                     search_field: req.query.search_field || '',
                     search_telpno: req.query.search_telpno || ''
