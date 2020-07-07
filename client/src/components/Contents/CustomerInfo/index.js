@@ -51,11 +51,7 @@ const CustomerInfo = (props) => {
   // Site List 정보 가져오기
   const getSiteList = async () => {
     let options = {
-<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/account/siteslist`,
-=======
-      url: `http://${Config.URI}/api/account/siteslist`,
->>>>>>> Rebase Test Commit
       method: 'post'
     };
 
@@ -71,11 +67,7 @@ const CustomerInfo = (props) => {
 
   const getCustomerList = async (start) => {
     let options = {
-<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/customer/select`,
-=======
-      url: `http://${Config.URI}/api/customer/select`,
->>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         start: start || 1
@@ -83,11 +75,7 @@ const CustomerInfo = (props) => {
     };
 
     let countOption = {
-<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
-=======
-      url: `http://${Config.URI}/api/order/making/count`,
->>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         category: 'customer',
@@ -150,12 +138,6 @@ const CustomerInfo = (props) => {
       let result = setData.data.data;
       console.log('selec', result);
 
-<<<<<<< HEAD
-=======
-      setCustomerOrderList(result);
-      setSelectCustomer(data);
-      
->>>>>>> Rebase Test Commit
     } catch (e) {
       console.log('ERROR', e);
     }

@@ -164,11 +164,7 @@ const ModalContents = (props) => {
 
     // set options
     let options = {
-<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making`,
-=======
-      url: `http://${Config.URI}/api/order/making`,
->>>>>>> Rebase Test Commit
       method: 'post',
       data: qs.stringify(data),
       headers: {

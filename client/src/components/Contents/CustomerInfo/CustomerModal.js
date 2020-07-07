@@ -93,11 +93,7 @@ const ModalContents = (props) => {
   const duplCheck = async () => {
     // set options
     let options = {
-<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/customer/check`,
-=======
-      url: `http://${Config.URI}/api/customer/check`,
->>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         name: state.name,
