@@ -7,6 +7,7 @@ import Input from 'common/Input/Input';
 import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
+import Postcode from 'common/Modal/ModalPostcode';
 import BorderButton from 'common/Button/BorderButton';
 import 'common/Modal/Modal.scss';
 import Config from 'config';
@@ -67,6 +68,24 @@ const ModalContents = (props) => {
       title: '',
       content: '',
       type: ''
+    });
+  };
+
+  // Postcode State
+  const [isPostcode, setIsPostcode] = useState({
+    view: false
+  });
+
+  // close postcode
+  const togglePostcode = () => {
+    setIsPostcode({
+      view: !isPostcode.view
+    });
+  };
+
+  const viewPostcode = async () => {
+    setIsPostcode({
+      view: !isPostcode.view
     });
   };
 
@@ -181,8 +200,13 @@ const ModalContents = (props) => {
   };
 
   // 주소 검색
-  const addrSearch = () => {
-
+  const setAddress = (data) => {
+    // data 요소 중 fullAddress와 zonecode만 가져올 것
+    setState({
+      ...state,
+      zipcode: data.zonecode,
+      address: data.fullAddress
+    });
   };
 
   // 이미지 업로드용 함수
@@ -266,7 +290,7 @@ const ModalContents = (props) => {
                     btnObj={{
                       addClass: 'addr_searchBtn',
                       value: '주소 검색',
-                      onClick: addrSearch
+                      onClick: viewPostcode
                     }}
                   />
                 </div>
@@ -425,6 +449,12 @@ const ModalContents = (props) => {
         title={alertModal.title}
         content={alertModal.content}
         hide={toggleAlert}
+      />
+      <Postcode
+        set={isPostcode}
+        hide={togglePostcode}
+        title="우편번호 검색"
+        setAddress={setAddress}
       />
     </React.Fragment>
   );
