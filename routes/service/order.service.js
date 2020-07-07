@@ -49,12 +49,7 @@ module.exports = {
     orderInfoInsert: async (requestParam, category) => {
         let result = null;
         try {
-            if (category === 'order') {
-                result = await Order.create(requestParam);
-            } else if (category === 'customer') {
-                result = await Customer.create(requestParam);
-            }
-
+            result = await Order.create(requestParam);
             return result._options.isNewRecord;
         } catch (err) {
             throw err;
@@ -75,7 +70,18 @@ module.exports = {
         }
 
     },
-    orderInfoDelete: () => {
+    orderInfoDelete: async(reqParams) => {
+        try {
+            const result = await Order.destroy({
+                where: {
+                    id: reqParams.id
+                }
+            });
+            return result !== null;
+
+        } catch (err) {
+            throw err;
+        }
 
     },
     /**
@@ -92,10 +98,10 @@ module.exports = {
      * @returns {Promise<<{rows: Model[]; count: number}>>}
      */
     getListCount: async (category) => {
-        if(category === 'customer'){
+        if (category === 'customer') {
             return Customer.findAndCountAll();
 
-        }else {
+        } else {
             let query = OrderQuery.orderInfoListCountQuery(category);
             return Order.findAndCountAll(query);
         }

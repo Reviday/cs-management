@@ -55,16 +55,15 @@ module.exports = {
                     order_status: 0,
                     order_date: req.query.order_date || today,
                     complete_date: req.query.complete_date || complete_day,
-
                 };
                 // 3. Call DB insert function
                 result = await Service.orderInfoInsert(setReqParams, category);
 
                 // 4. Customer 테이블에 정보가 존재할 경우, lastorder{DATE}만 update
-                if(result !== null){
+                if (result !== null) {
                     const existedInfoFlag = await CustomerService.existCustomerInfo(setReqParams);
                     const resultCount = existedInfoFlag.count;
-                    if(resultCount > 0){
+                    if (resultCount > 0) {
                         const updateResult = await CustomerService.updateLastOrderDateInfo(setReqParams);
                         console.log('Result UpdateQuery ::: %j', updateResult);
                     }
@@ -89,6 +88,8 @@ module.exports = {
                     price_type: req.query.price_type,
                     manager: req.query.manager,
                     order_status: req.query.order_status,
+                    order_date: req.query.order_date || today,
+                    complete_date: req.query.complete_date || complete_day,
                 };
                 // 주문 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
@@ -107,14 +108,22 @@ module.exports = {
                 // 주문 상태 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
 
+            } else if (action === 'd') {
+                // [주문 상태 정보 delete]
+                paramCheck = Util.param_check(req, res, fileName, ['id']);
+                if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
+                setReqParams = {
+                    id: req.query.id
+                };
+                result = await Service.orderInfoDelete(setReqParams);
             } else {
                 // 전체 목록 및 상세 조회
                 setReqParams = {
                     category: req.query.category,
                     start: req.query.start || 1,
-                    search_word : req.query.search_word || '',
-                    search_field : req.query.search_field || '',
-                    search_telpno : req.query.search_telpno || ''
+                    search_word: req.query.search_word || '',
+                    search_field: req.query.search_field || '',
+                    search_telpno: req.query.search_telpno || ''
                 };
                 const id = req.query.id
                 if (id !== null || id !== '' || id !== undefined) {
@@ -164,7 +173,7 @@ module.exports = {
             const result = await Service.getListCount(category);
             console.log(result.count);
 
-            res.json(Util.res_ok({'total' : result.count}));
+            res.json(Util.res_ok({'total': result.count}));
 
         } catch (err) {
             console.log('---------------------------------------', fileName);
@@ -187,7 +196,7 @@ module.exports = {
             const validateResult = Util.param_check(req, res, fileName, []);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
             const setReqParams = {
-                start : req.query.start || 1,
+                start: req.query.start || 1,
             }
             const result = await Service.getDelayOrderList(setReqParams);
             res.json(Util.res_ok(result));
