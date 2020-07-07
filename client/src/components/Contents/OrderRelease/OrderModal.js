@@ -163,7 +163,7 @@ const ModalContents = (props) => {
 
     // set options
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+      url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
       data: qs.stringify(data),
       headers: {

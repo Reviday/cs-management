@@ -72,7 +72,7 @@ const ModalContents = (props) => {
 
     // set options
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+      url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
       data: qs.stringify({
         ...state,
@@ -131,7 +131,7 @@ const ModalContents = (props) => {
                           status_name: name
                         });
                       };
-                        
+
                       return (
                         <div className="rows-mb-20" key={`${item.order_status}-${item.status_name}`}>
                           <BorderButton

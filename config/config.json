@@ -2,14 +2,24 @@
   "runmode": "dev",
   "dev": {
     "DEBUG_LEVEL": "debug",
-    "API_HOST": {"IP":"127.0.0.1","PORT":"4000"},
-    "APP_HOST": {"IP":"127.0.0.1","PORT":"4000"},
+    "API_HOST": {
+      "IP": "127.0.0.1:4000"
+    },
+    "APP_HOST": {
+      "IP": "127.0.0.1",
+      "PORT": "4000"
+    },
     "SESSION_EXPIRE": 3600000
   },
   "ops": {
     "DEBUG_LEVEL": "debug",
-    "API_HOST": {"IP":"211.47.75.53","PORT":"4000"},
-    "APP_HOST": {"IP":"211.47.75.53","PORT":"4000"},
+    "API_HOST": {
+      "IP": "formentera.work"
+    },
+    "APP_HOST": {
+      "IP": "formentera.work",
+      "PORT": "4000"
+    },
     "SESSION_EXPIRE": 3600000
   },
   "timezoneoffset_value": 60000

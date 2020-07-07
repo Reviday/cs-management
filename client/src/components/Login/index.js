@@ -24,7 +24,7 @@ const Login = () => {
     cryptoPassword += cipher.final('base64');
 
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/login`,
+      url: `http://${Config.API_HOST.IP}/api/account/login`,
       method: 'post',
       data: {
         id: inputId,
@@ -61,7 +61,7 @@ const Login = () => {
       setInputPw('');
       console.error('login error', err);
     }
-    
+
   };
 
   const handleKeyPress = (event) => {

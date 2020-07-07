@@ -51,7 +51,7 @@ const CustomerInfo = (props) => {
   // Site List 정보 가져오기
   const getSiteList = async () => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/siteslist`,
+      url: `http://${Config.API_HOST.IP}/api/account/siteslist`,
       method: 'post'
     };
 
@@ -67,7 +67,7 @@ const CustomerInfo = (props) => {
 
   const getCustomerList = async (start) => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/select`,
+      url: `http://${Config.API_HOST.IP}/api/customer/select`,
       method: 'post',
       data: {
         start: start || 1
@@ -75,7 +75,7 @@ const CustomerInfo = (props) => {
     };
 
     let countOption = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
+      url: `http://${Config.API_HOST.IP}/api/order/making/count`,
       method: 'post',
       data: {
         category: 'customer',
@@ -95,13 +95,13 @@ const CustomerInfo = (props) => {
         for (let i in result) {
           if (Object.prototype.hasOwnProperty.call(result, i)) {
             let row = result[i];
-  
+
             let convertData = {
               ...row,
               create_at: moment(new Date(row.create_at)).format('YYYY.MM.DD'),
               lastorder: row.lastorder ? moment(new Date(row.lastorder)).format('YYYY.MM.DD') : '최근 주문 내역이 없습니다.'
             };
-  
+
             items.push(convertData);
           }
         }
@@ -133,7 +133,7 @@ const CustomerInfo = (props) => {
 
       let result = setData.data.data;
       console.log('selec', result);
-      
+
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -143,7 +143,7 @@ const CustomerInfo = (props) => {
     if (siteList.length === 0) getSiteList(); // 지점 리스트
     if (customerData.length === 0) getCustomerList();
   }, [siteList]);
-    
+
   return (
     <React.Fragment>
       <div className="ct_layout">

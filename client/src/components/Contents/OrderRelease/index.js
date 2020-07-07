@@ -105,7 +105,7 @@ const OrderRelease = (props) => {
   const ProgressBtn = (data) => {
     let name = '';
     let addClass = '';
-    
+
     for (let i in progress) {
       if (progress[i].order_status === data.order_status) {
         name = progress[i].status_name;
@@ -145,7 +145,7 @@ const OrderRelease = (props) => {
   // Site List 정보 가져오기
   const getSiteList = async () => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/account/siteslist`,
+      url: `http://${Config.API_HOST.IP}/api/account/siteslist`,
       method: 'post'
     };
 
@@ -162,7 +162,7 @@ const OrderRelease = (props) => {
   // progress 정보 가져오기
   const getProgressInfo = async () => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/statuslist`,
+      url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,
       method: 'post'
     };
 
@@ -179,7 +179,7 @@ const OrderRelease = (props) => {
   const getOrderList = async (category, start) => {
     let options = {};
     let countOption = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/count`,
+      url: `http://${Config.API_HOST.IP}/api/order/making/count`,
       method: 'post',
       data: {
         category: category,
@@ -188,7 +188,7 @@ const OrderRelease = (props) => {
 
     if (category === 'delay') {
       options = {
-        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making/delay`,
+        url: `http://${Config.API_HOST.IP}/api/order/making/delay`,
         method: 'post',
         data: {
           start: start || 1
@@ -196,7 +196,7 @@ const OrderRelease = (props) => {
       };
     } else {
       options = {
-        url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/order/making`,
+        url: `http://${Config.API_HOST.IP}/api/order/making`,
         method: 'post',
         data: {
           category: category,
@@ -234,7 +234,7 @@ const OrderRelease = (props) => {
         for (let i in result) {
           if (Object.prototype.hasOwnProperty.call(result, i)) {
             let row = result[i];
-  
+
             let convertData = {
               ...row,
               price_txt: priceType.filter(type => type.code === row.price_type)[0]?.text,
@@ -244,7 +244,7 @@ const OrderRelease = (props) => {
               updateBtn: UpdateBtn(row),
               update_at: moment(new Date(row.update_at)).format('YYYY.MM.DD')
             };
-  
+
             items.push(convertData);
           }
         }
@@ -261,7 +261,7 @@ const OrderRelease = (props) => {
         setDelayReceiptData(items);
         setDelayTotal(count);
       }
-      
+
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -297,7 +297,7 @@ const OrderRelease = (props) => {
               입고 일정
             </div>
           </div>
-          
+
           <div className="_rt">
             <div className="_more">
               <BorderButton

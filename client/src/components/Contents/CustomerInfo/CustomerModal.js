@@ -37,7 +37,7 @@ const ModalContents = (props) => {
   );
   const [img, setImg] = useState([]);
   const upload = useRef('');
-  
+
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -93,7 +93,7 @@ const ModalContents = (props) => {
   const duplCheck = async () => {
     // set options
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/check`,
+      url: `http://${Config.API_HOST.IP}/api/customer/check`,
       method: 'post',
       data: {
         name: state.name,
@@ -179,7 +179,7 @@ const ModalContents = (props) => {
 
     // set options
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/${type}`,
+      url: `http://${Config.API_HOST.IP}/api/customer/${type}`,
       method: 'post',
       data: formData,
       headers: {
