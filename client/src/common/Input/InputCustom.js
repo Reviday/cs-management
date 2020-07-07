@@ -20,6 +20,7 @@ function InputCustom(props) {
   // 각각의 top, bottom Object는 위의 요소를 갖는다.
   const name = props.name || 'Input'; // name
   const topObj = props.topObj || {}; // 상단 input에 설정할 값
+  const middleObj = props.middleObj || {}; // 중단 input에 설정할 값
   const bottomObj = props.bottomObj || {}; // 하단 input에 설정할 값
   const btnObj = props.btnObj || {}; // 버튼 input에 설정할 값
 
@@ -30,6 +31,12 @@ function InputCustom(props) {
         topObj.setValue(e.target.value);
       } else if (!topObj.setReg) {
         topObj.setValue(e.target.value);
+      }
+    } else if (type === 'middle') {
+      if (middleObj.setReg && middleObj.setReg.test(e.target.value)) {
+        middleObj.setValue(e.target.value);
+      } else if (!middleObj.setReg) {
+        middleObj.setValue(e.target.value);
       }
     } else if (type === 'bottom') {
       if (bottomObj.setReg && bottomObj.setReg.test(e.target.value)) {
@@ -61,6 +68,14 @@ function InputCustom(props) {
           value={btnObj.value}
           onClick={btnObj.onClick}
           disabled={btnObj.disabled}
+        />
+        <input
+          type={middleObj?.type || 'text'}
+          value={middleObj?.value}
+          placeholder={middleObj?.placeholder}
+          onChange={e => onHandle(e, 'middle')}
+          style={middleObj?.style}
+          disabled={middleObj?.disabled}
         />
         <input
           type={bottomObj?.type || 'text'}

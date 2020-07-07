@@ -145,7 +145,11 @@ const OrderRelease = (props) => {
   // Site List 정보 가져오기
   const getSiteList = async () => {
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/account/siteslist`,
+=======
+      url: `http://${Config.URI}/api/account/siteslist`,
+>>>>>>> Rebase Test Commit
       method: 'post'
     };
 
@@ -162,7 +166,11 @@ const OrderRelease = (props) => {
   // progress 정보 가져오기
   const getProgressInfo = async () => {
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,
+=======
+      url: `http://${Config.URI}/api/order/making/statuslist`,
+>>>>>>> Rebase Test Commit
       method: 'post'
     };
 
@@ -179,7 +187,11 @@ const OrderRelease = (props) => {
   const getOrderList = async (category, start) => {
     let options = {};
     let countOption = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
+=======
+      url: `http://${Config.URI}/api/order/making/count`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         category: category,
@@ -188,7 +200,11 @@ const OrderRelease = (props) => {
 
     if (category === 'delay') {
       options = {
+<<<<<<< HEAD
         url: `http://${Config.API_HOST.IP}/api/order/making/delay`,
+=======
+        url: `http://${Config.URI}/api/order/making/delay`,
+>>>>>>> Rebase Test Commit
         method: 'post',
         data: {
           start: start || 1
@@ -196,7 +212,11 @@ const OrderRelease = (props) => {
       };
     } else {
       options = {
+<<<<<<< HEAD
         url: `http://${Config.API_HOST.IP}/api/order/making`,
+=======
+        url: `http://${Config.URI}/api/order/making`,
+>>>>>>> Rebase Test Commit
         method: 'post',
         data: {
           category: category,
@@ -429,7 +449,7 @@ const OrderRelease = (props) => {
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
         style={{ width: '500px', height: '685px' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
-        items={isModal.type === 'progress' ? { progress: progress, getOrderList: getOrderList } : { type: isModal.type, siteList: siteList, getOrderList: getOrderList }}
+        items={isModal.type === 'progress' ? { type: isModal.type, progress: progress, getOrderList: getOrderList } : { type: isModal.type, siteList: siteList, getOrderList: getOrderList }}
       />
     </React.Fragment>
   );

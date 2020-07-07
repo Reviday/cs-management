@@ -67,16 +67,17 @@ const ModalContents = (props) => {
   };
 
   const updateProgress = async () => {
-    // 이전 order_status 값에 따라 category 분리
-    let category = props.data.order_status < 3 ? 'order' : 'ship';
-
     // set options
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making`,
+=======
+      url: `http://${Config.URI}/api/order/making`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: qs.stringify({
         ...state,
-        category: category,
+        category: items.type,
         action: 'status_u'
       }),
       headers: {

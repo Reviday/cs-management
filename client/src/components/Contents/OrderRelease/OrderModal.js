@@ -25,6 +25,7 @@ const ModalContents = (props) => {
         telpno: '',
         zipcode: 0,
         address: '',
+        detail: '',
         product: '',
         price: '',
         needs: '',
@@ -120,7 +121,7 @@ const ModalContents = (props) => {
     // data default setting
     let data = {
       ...state,
-      category: 'order',
+      category: items.type,
       action: '',
       site: state.site,
       name: state.name,
@@ -147,7 +148,7 @@ const ModalContents = (props) => {
         break;
       case 'delete':
         data = {
-          category: 'order',
+          category: items.type,
           id: id,
           action: 'd',
         };
@@ -163,7 +164,11 @@ const ModalContents = (props) => {
 
     // set options
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making`,
+=======
+      url: `http://${Config.URI}/api/order/making`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: qs.stringify(data),
       headers: {
@@ -306,9 +311,16 @@ const ModalContents = (props) => {
                       style: { width: '100px' },
                       disabled: true
                     }}
-                    bottomObj={{
+                    middleObj={{
                       value: state.address,
                       setValue: e => setState({ ...state, address: e }),
+                      placeholder: '주소',
+                      style: { width: '300px' },
+                      disabled: true
+                    }}
+                    bottomObj={{
+                      value: state.detail,
+                      setValue: e => setState({ ...state, detail: e }),
                       placeholder: '상세주소',
                       style: { width: '300px' },
                       disabled: items.type === 'showOrder'
@@ -425,7 +437,9 @@ const ModalContents = (props) => {
                             name="수정"
                             style={{ width: '80px' }}
                           />
-                          <BorderButton
+
+                          {/* 삭제기능은 아직 넣지 않는다고 함 */}
+                          {/* <BorderButton
                             addClass="deleteBtn"
                             onHandle={() => {
                               // check validate
@@ -440,7 +454,7 @@ const ModalContents = (props) => {
                             }}
                             name="삭제"
                             style={{ width: '80px' }}
-                          />
+                          /> */}
                         </React.Fragment>
                       )
                   }

@@ -51,7 +51,11 @@ const CustomerInfo = (props) => {
   // Site List 정보 가져오기
   const getSiteList = async () => {
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/account/siteslist`,
+=======
+      url: `http://${Config.URI}/api/account/siteslist`,
+>>>>>>> Rebase Test Commit
       method: 'post'
     };
 
@@ -67,7 +71,11 @@ const CustomerInfo = (props) => {
 
   const getCustomerList = async (start) => {
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/customer/select`,
+=======
+      url: `http://${Config.URI}/api/customer/select`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         start: start || 1
@@ -75,7 +83,11 @@ const CustomerInfo = (props) => {
     };
 
     let countOption = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
+=======
+      url: `http://${Config.URI}/api/order/making/count`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         category: 'customer',
@@ -117,23 +129,33 @@ const CustomerInfo = (props) => {
     }
   };
 
-  const getCustomerById = async (data) => {
+  const getOrderListByCustomer = async (data, start) => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/selectbyid`,
+      url: `http://${Config.URI}/api/order/making`,
       method: 'post',
       data: {
-        name: data.name,
-        telpno: data.telpno.replace(/[^0-9]/g, '')
+        category: 'order',
+        action: 's',
+        start: start || 1,
+        search_field: 'name',
+        search_word: data.name,
+        search_telpno: data.telpno.replace(/[^0-9]/g, '')
       }
     };
 
     try {
-      console.log(options);
+      console.log('orderlsit:::', options);
       let setData = await axios(options);
 
       let result = setData.data.data;
       console.log('selec', result);
 
+<<<<<<< HEAD
+=======
+      setCustomerOrderList(result);
+      setSelectCustomer(data);
+      
+>>>>>>> Rebase Test Commit
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -167,7 +189,7 @@ const CustomerInfo = (props) => {
           <CustomerTablePage
             data={customerData}
             total={customerTotal}
-            setSelectCustomer={setSelectCustomer}
+            setSelectCustomer={getOrderListByCustomer}
             getCustomerList={getCustomerList}
           />
           <CustomerInfoPage

@@ -93,7 +93,11 @@ const ModalContents = (props) => {
   const duplCheck = async () => {
     // set options
     let options = {
+<<<<<<< HEAD
       url: `http://${Config.API_HOST.IP}/api/customer/check`,
+=======
+      url: `http://${Config.URI}/api/customer/check`,
+>>>>>>> Rebase Test Commit
       method: 'post',
       data: {
         name: state.name,
@@ -260,6 +264,7 @@ const ModalContents = (props) => {
                     value={state.name}
                     setValue={e => setState({ ...state, name: e })}
                     style={{ width: '150px' }}
+                    disabled={items.type === 'showCustomer'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -269,6 +274,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
                     setReg={/[^0-9]/gi}
+                    disabled={items.type === 'showCustomer'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -281,16 +287,25 @@ const ModalContents = (props) => {
                       style: { width: '100px' },
                       disabled: true
                     }}
-                    bottomObj={{
+                    middleObj={{
                       value: state.address,
                       setValue: e => setState({ ...state, address: e }),
+                      placeholder: '주소',
+                      style: { width: '300px' },
+                      disabled: true
+                    }}
+                    bottomObj={{
+                      value: state.detail,
+                      setValue: e => setState({ ...state, detail: e }),
                       placeholder: '상세주소',
                       style: { width: '300px' },
+                      disabled: items.type === 'showCustomer'
                     }}
                     btnObj={{
                       addClass: 'addr_searchBtn',
                       value: '주소 검색',
-                      onClick: viewPostcode
+                      onClick: viewPostcode,
+                      disabled: items.type === 'showCustomer'
                     }}
                   />
                 </div>
@@ -301,6 +316,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, interest_style: e })}
                     style={{ width: '300px', marginTop: '7px' }}
                     titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
+                    disabled={items.type === 'showCustomer'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -310,6 +326,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, interest_skin: e })}
                     style={{ width: '300px', marginTop: '7px' }}
                     titleStyle={{ fontSize: '15px', lineHeight: '16px' }}
+                    disabled={items.type === 'showCustomer'}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -318,9 +335,11 @@ const ModalContents = (props) => {
                     value={state.memo}
                     setValue={e => setState({ ...state, memo: e })}
                     style={{ width: '300px' }}
+                    disabled={items.type === 'showCustomer'}
                   />
                 </div>
                 <div className="rows-mb-20">
+                  {/* TO-DO: showCustomer에 대한 처리 필요 */}
                   <div className="row_title">
                     사진등록
                   </div>
@@ -346,26 +365,35 @@ const ModalContents = (props) => {
                         })
                       }
                     </div>
-                    <input
-                      className="img_upload"
-                      type="button"
-                      value="사진첨부"
-                      onClick={() => upload.current.click()}
-                    />
-                    <input
-                      ref={upload}
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={e => uploadImg(e.target.files)}
-                      style={{ display: 'none' }}
-                    />
+                    {
+                      items.type !== 'showCustomer'
+                        && (
+                          <React.Fragment>
+                            <input
+                              className="img_upload"
+                              type="button"
+                              value="사진첨부"
+                              onClick={() => upload.current.click()}
+                              disabled={items.type === 'showCustomer'}
+                            />
+                            <input
+                              ref={upload}
+                              type="file"
+                              multiple
+                              accept="image/*"
+                              onChange={e => uploadImg(e.target.files)}
+                              style={{ display: 'none' }}
+                              disabled={items.type === 'showCustomer'}
+                            />
+                          </React.Fragment>
+                        )
+                    }
                   </div>
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
                     items.type === 'insertCustomer'
-                      ? (
+                      && (
                         <React.Fragment>
                           <BorderButton
                             addClass="insertBtn"
@@ -382,15 +410,12 @@ const ModalContents = (props) => {
                             name="등록"
                             style={{ width: '80px' }}
                           />
-                          <BorderButton
-                            addClass="cancelBtn"
-                            onHandle={() => executeCustomer('cancel')}
-                            name="취소"
-                            style={{ width: '80px' }}
-                          />
                         </React.Fragment>
                       )
-                      : (
+                  }
+                  {
+                    items.type === 'update'
+                      && (
                         <React.Fragment>
                           <BorderButton
                             addClass="updateBtn"
@@ -422,15 +447,15 @@ const ModalContents = (props) => {
                             name="삭제"
                             style={{ width: '80px' }}
                           />
-                          <BorderButton
-                            addClass="cancelBtn"
-                            onHandle={() => executeCustomer('cancel')}
-                            name="취소"
-                            style={{ width: '80px' }}
-                          />
                         </React.Fragment>
                       )
                   }
+                  <BorderButton
+                    addClass="cancelBtn"
+                    onHandle={() => executeCustomer('cancel')}
+                    name="취소"
+                    style={{ width: '80px' }}
+                  />
                 </div>
               </div>
             </div>
