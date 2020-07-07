@@ -117,18 +117,22 @@ const CustomerInfo = (props) => {
     }
   };
 
-  const getCustomerById = async (data) => {
+  const getOrderListByCustomer = async (data, start) => {
     let options = {
-      url: `http://${Config.API_HOST.IP}:${Config.API_HOST.PORT}/api/customer/selectbyid`,
+      url: `http://${Config.URI}/api/order/making`,
       method: 'post',
       data: {
-        name: data.name,
-        telpno: data.telpno.replace(/[^0-9]/g, '')
+        category: 'order',
+        action: 's',
+        start: start || 1,
+        search_field: 'name',
+        search_word: data.name,
+        search_telpno: data.telpno.replace(/[^0-9]/g, '')
       }
     };
 
     try {
-      console.log(options);
+      console.log('orderlsit:::', options);
       let setData = await axios(options);
 
       let result = setData.data.data;
@@ -167,7 +171,7 @@ const CustomerInfo = (props) => {
           <CustomerTablePage
             data={customerData}
             total={customerTotal}
-            setSelectCustomer={setSelectCustomer}
+            setSelectCustomer={getOrderListByCustomer}
             getCustomerList={getCustomerList}
           />
           <CustomerInfoPage

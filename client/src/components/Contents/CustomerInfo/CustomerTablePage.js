@@ -27,7 +27,7 @@ const CustomerTablePage = (props) => {
         <Table
           headerSet={customerHeaderSet}
           data={data}
-          recordLimit={5}
+          recordLimit={10}
           onClick={data => setSelectCustomer(data)}
           tableStyle={{ marginTop: '10px' }}
         />
