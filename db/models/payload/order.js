@@ -28,8 +28,11 @@ module.exports = {
         switch (category) {
             case 'all' :
                 result = {
-                    attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at", "order_status", "needs", "order_status", "address", "telpno"],
+                    attributes: [
+                        "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
+                        "complete_date", "update_at", "order_status", "needs", "order_status", "address",
+                        "telpno","zipcode", "detail_addr"
+                    ],
 
                     include: [{
                         model: db.OrderStatusCode,
@@ -46,8 +49,11 @@ module.exports = {
                 break;
             case 'order' :
                 result = {
-                    attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
-                        "complete_date", "update_at", "order_status", "needs", "order_status", "address", "telpno"],
+                    attributes: [
+                        "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
+                        "complete_date", "update_at", "order_status", "needs", "order_status", "address",
+                        "telpno","zipcode", "detail_addr"
+                    ],
                     where: {
                         order_status: {[Op.lte]: 3}
                     },
@@ -69,7 +75,8 @@ module.exports = {
                     attributes: ["id", "site", "name", "product", "price", "order_date", "price_type", "manager",
                         "complete_date", "update_at", "order_status", "needs", "order_status", "address"],
                     where: {
-                        order_status: {[Op.gt]: 3}
+                        //order_status: {[Op.gt]: 3}
+                        order_status: 4
                     },
                     include: [{
                         model: db.OrderStatusCode,
@@ -129,7 +136,9 @@ module.exports = {
             result.telpno = reqParams.telpno;
             result.product = reqParams.product;
             result.price = reqParams.price;
+            result.zipcode = reqParams.zipcode;
             result.address = reqParams.address;
+            result.detail_addr = reqParams.detail_addr;
             result.needs = reqParams.needs;
             result.price = reqParams.price;
             result.manager = reqParams.manager;
