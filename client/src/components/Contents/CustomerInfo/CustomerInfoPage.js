@@ -54,7 +54,11 @@ const CustomerInfoPage = (props) => {
                   주소
                 </td>
                 <td className="td_data" colSpan="3">
-                  {selectCustomer?.address}
+                  {
+                    !selectCustomer.detail_addr
+                      ? selectCustomer?.address
+                      : (`${selectCustomer?.address}, ${selectCustomer.detail_addr}`)
+                  }
                 </td>
               </tr>
               <tr>

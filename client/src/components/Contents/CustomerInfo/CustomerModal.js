@@ -22,8 +22,9 @@ const ModalContents = (props) => {
         s_code: siteList[0].s_code,
         name: '',
         telpno: '',
-        zipcode: 0,
+        zipcode: '',
         address: '',
+        detail_addr: '',
         product: '',
         interest_style: '',
         interest_skin: '',
@@ -287,12 +288,12 @@ const ModalContents = (props) => {
                       value: state.address,
                       setValue: e => setState({ ...state, address: e }),
                       placeholder: '주소',
-                      style: { width: '300px' },
+                      style: { width: '300px', marginBottom: '7px' },
                       disabled: true
                     }}
                     bottomObj={{
-                      value: state.detail,
-                      setValue: e => setState({ ...state, detail: e }),
+                      value: state.detail_addr,
+                      setValue: e => setState({ ...state, detail_addr: e }),
                       placeholder: '상세주소',
                       style: { width: '300px' },
                       disabled: items.type === 'showCustomer'
@@ -386,7 +387,7 @@ const ModalContents = (props) => {
                     }
                   </div>
                 </div>
-                <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
+                <div className="rows" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
                     items.type === 'insertCustomer'
                       && (

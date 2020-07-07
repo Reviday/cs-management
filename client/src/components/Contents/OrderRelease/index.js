@@ -58,9 +58,9 @@ const OrderRelease = (props) => {
   };
 
   const priceType = [
-    { code: 0, text: '미결재' },
-    { code: 1, text: '현금 결재' },
-    { code: 2, text: '카드 결재' }
+    { code: 0, text: '미결제' },
+    { code: 1, text: '현금 결제' },
+    { code: 2, text: '카드 결제' }
   ];
 
   // Receipt Table Header Set
@@ -68,9 +68,9 @@ const OrderRelease = (props) => {
     { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
     { field: 'product', text: '품명', sort: '' },
-    { field: 'order_date', text: '주문 날짜', sort: '' },
-    { field: 'price_txt', text: '결제 상태', sort: '' }, // 추후 price_chk로 변경해야 함.
+    { field: 'price_txt', text: '결제 상태', sort: '' },
     { field: 'manager', text: '매니저', sort: '' },
+    { field: 'order_date', text: '주문 날짜', sort: '' },
     { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
@@ -82,6 +82,8 @@ const OrderRelease = (props) => {
     { field: 'site', text: '지점', sort: '' },
     { field: 'name', text: '고객명', sort: '' },
     { field: 'product', text: '품명', sort: '' },
+    { field: 'price_txt', text: '결제 상태', sort: '' },
+    { field: 'manager', text: '매니저', sort: '' },
     { field: 'order_date', text: '출고요청 날짜', sort: '' },
     { field: 'complete_date', text: '출고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
@@ -427,7 +429,7 @@ const OrderRelease = (props) => {
         set={isModal}
         hide={toggleModal}
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
-        style={{ width: '500px', height: '685px' }}
+        style={{ width: '500px', height: 'fit-content' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
         items={isModal.type === 'progress' ? { type: isModal.type, progress: progress, getOrderList: getOrderList } : { type: isModal.type, siteList: siteList, getOrderList: getOrderList }}
       />

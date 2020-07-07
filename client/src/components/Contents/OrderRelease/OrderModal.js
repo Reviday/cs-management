@@ -23,9 +23,9 @@ const ModalContents = (props) => {
         s_code: siteList[0].s_code,
         name: '',
         telpno: '',
-        zipcode: 0,
+        zipcode: '',
         address: '',
-        detail: '',
+        detail_addr: '',
         product: '',
         price: '',
         needs: '',
@@ -37,9 +37,9 @@ const ModalContents = (props) => {
   );
 
   const priceType = [
-    { code: 0, text: '미결재' },
-    { code: 1, text: '현금 결재' },
-    { code: 2, text: '카드 결재' }
+    { code: 0, text: '미결제' },
+    { code: 1, text: '현금 결제' },
+    { code: 2, text: '카드 결제' }
   ];
 
   // alertModal State
@@ -240,10 +240,10 @@ const ModalContents = (props) => {
   return (
     <React.Fragment>
       {console.log(state)}
-      <div className="modal_content" style={{ height: '670px', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
+      <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
-            <div className="_content fx_h_380">
+            <div className="_content">
               <div className="grid_box">
                 <div className="rows-mb-20">
                   {
@@ -311,12 +311,12 @@ const ModalContents = (props) => {
                       value: state.address,
                       setValue: e => setState({ ...state, address: e }),
                       placeholder: '주소',
-                      style: { width: '300px' },
+                      style: { width: '300px', marginBottom: '7px' },
                       disabled: true
                     }}
                     bottomObj={{
-                      value: state.detail,
-                      setValue: e => setState({ ...state, detail: e }),
+                      value: state.detail_addr,
+                      setValue: e => setState({ ...state, detail_addr: e }),
                       placeholder: '상세주소',
                       style: { width: '300px' },
                       disabled: items.type === 'showOrder'
@@ -344,6 +344,7 @@ const ModalContents = (props) => {
                     value={state.price}
                     setValue={e => setState({ ...state, price: e })}
                     style={{ width: '300px' }}
+                    setReg={/[^0-9]/gi}
                     disabled={items.type === 'showOrder'}
                   />
                 </div>
@@ -392,7 +393,7 @@ const ModalContents = (props) => {
                     disabled={items.type === 'showOrder'}
                   />
                 </div>
-                <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
+                <div className="rows" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
                     items.type === 'insertOrder'
                       && (
@@ -433,9 +434,7 @@ const ModalContents = (props) => {
                             name="수정"
                             style={{ width: '80px' }}
                           />
-
-                          {/* 삭제기능은 아직 넣지 않는다고 함 */}
-                          {/* <BorderButton
+                          <BorderButton
                             addClass="deleteBtn"
                             onHandle={() => {
                               // check validate
@@ -450,7 +449,7 @@ const ModalContents = (props) => {
                             }}
                             name="삭제"
                             style={{ width: '80px' }}
-                          /> */}
+                          />
                         </React.Fragment>
                       )
                   }

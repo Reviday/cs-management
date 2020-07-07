@@ -74,6 +74,7 @@ const Postcode = (props) => {
               </div>
               <DaumPostcode
                 onComplete={handleComplete}
+                height="450"
                 autoClose
               />
             </div>
