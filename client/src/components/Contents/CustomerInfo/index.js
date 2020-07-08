@@ -119,7 +119,7 @@ const CustomerInfo = (props) => {
 
   const getOrderListByCustomer = async (data, start) => {
     let options = {
-      url: `http://${Config.URI}/api/order/making`,
+      url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
       data: {
         category: 'order',
