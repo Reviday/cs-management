@@ -21,8 +21,8 @@ button.BorderButton:active {
     opacity: 0.6;
 }
 
-button.BorderButton:disabled {
+/* button.BorderButton:disabled {
     opacity: 0.5;
     cursor: default;
     background: white;
-}
+} */

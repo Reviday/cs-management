@@ -27,6 +27,7 @@ function BorderButton(props) {
       className={!addClass ? 'BorderButton' : `BorderButton ${addClass}`}
       onClick={e => onHandle(e)}
       style={style}
+      disabled={props.disabled}
     >
       {name}
     </button>

@@ -125,3 +125,86 @@ div.removeBtn {
 div.removeBtn::before {
   content: "\f128";
 }
+
+/* BorderButton Custom CSS */
+.progress {
+  width: 80px !important;
+  cursor: default;
+}
+
+.progress.type0 {
+  border: none;
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type0:hover {
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type1 {
+  border: none;
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type1:hover {
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type2 {
+  border: none;
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 1;
+}
+
+.progress.type2:hover {
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 1;
+}
+
+.progress.type3 {
+  border: none;
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type3:hover {
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type4 {
+  border: none;
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 1;
+}
+
+.progress.type4:hover {
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 1;
+}
+
+.progress.type5 {
+  border: none;
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.progress.type5:hover {
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+}

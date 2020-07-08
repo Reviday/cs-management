@@ -165,7 +165,6 @@ const OrderRelease = (props) => {
   };
 
   // progress 정보 가져오기
-  // 2020.07.08 ${Config.API_HOST.PORT} 제거
   const getProgressInfo = async () => {
     let options = {
       url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,

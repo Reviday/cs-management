@@ -99,8 +99,8 @@ const CustomerInfoPage = (props) => {
                   <Table
                     headerSet={orderHeaderSet}
                     data={orderList}
-                    onClick={orderData => viewModal('showOrder', orderData)}
                     recordLimit="none"
+                    tableStyle={{ margin: '0' }}
                   />
                   <div className="ct_box_footer">
                     <div className="rows_flex">
@@ -111,18 +111,6 @@ const CustomerInfoPage = (props) => {
                         displayCount={10}
                         current={1}
                       />
-                    </div>
-                    <div className="rows_flex">
-                      <div className="search_field">
-                        <select name="sel_field" defaultValue="default">
-                          <option value="default" disabled hidden>검색영역</option>
-                          <option value="site">지점</option>
-                          <option value="name">고객명</option>
-                          <option value="product">품명</option>
-                        </select>
-                        <input type="text" className="search" placeholder="Search" />
-                        <button type="button" className="search_btn" />
-                      </div>
                     </div>
                   </div>
                 </React.Fragment>
