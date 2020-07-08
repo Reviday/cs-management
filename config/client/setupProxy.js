@@ -5,7 +5,7 @@ const config = configfile[runmode];
 
 module.exports = function (app) {
 
-  const API_HOST = 'http://' + config.API_HOST.IP + ':' + config.API_HOST.PORT + '/';
+  const API_HOST = 'http://' + config.API_HOST.IP + '/';
   app.use(
     proxy('/api', {
       target: API_HOST,
