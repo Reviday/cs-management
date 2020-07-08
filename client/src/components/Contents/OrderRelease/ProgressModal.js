@@ -111,7 +111,7 @@ const ModalContents = (props) => {
       <div className="modal_content" style={{}}>
         <div className="box_div">
           <div className="box_layout noshadow">
-            <div className="_content fx_h_380">
+            <div className="_content">
               <div className="grid_box">
                 <div className="rows-mb-20 pro_title">
                   진행 절차 업데이트
