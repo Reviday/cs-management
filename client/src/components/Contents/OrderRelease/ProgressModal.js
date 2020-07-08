@@ -68,6 +68,7 @@ const ModalContents = (props) => {
 
   const updateProgress = async () => {
     // set options
+    // 2020.07.08 ${Config.API_HOST.PORT} 제거
     let options = {
       url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
