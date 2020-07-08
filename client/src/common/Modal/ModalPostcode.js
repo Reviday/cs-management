@@ -30,6 +30,7 @@ const Postcode = (props) => {
      *
      * ### 자세한 API 데이터 항목 관련하여 아래 사이트 참조 ###
      * url: http://postcode.map.daum.net/guide#info
+     * npm: https://www.npmjs.com/package/react-daum-postcode
      */
 
     let fullAddress = data.address; // 건물명 포함 주소
@@ -74,7 +75,9 @@ const Postcode = (props) => {
               </div>
               <DaumPostcode
                 onComplete={handleComplete}
+                scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
                 height="450"
+                animation
                 autoClose
               />
             </div>

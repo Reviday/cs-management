@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -9,11 +9,14 @@ import Modal from 'common/Modal/ModalCover';
 import OrderModalContent from './OrderModal';
 import ProgressContent from './ProgressModal';
 import Config from 'config';
-
 import './index.css';
+
+import { UserInfoContext } from 'contexts/UserInfoContext';
+
 
 const OrderRelease = (props) => {
 
+  const [userInfo] = useContext(UserInfoContext);
   const [siteList, setSiteList] = useState([]); // 지점 리스트
   const [progress, setProgress] = useState([]); // 진행상황 리스트
   const [receiptData, setReceiptData] = useState([]); // 입고
@@ -185,6 +188,7 @@ const OrderRelease = (props) => {
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
       method: 'post',
       data: {
+        site: userInfo.site,
         category: category,
       }
     };
@@ -194,6 +198,7 @@ const OrderRelease = (props) => {
         url: `http://${Config.API_HOST.IP}/api/order/making/delay`,
         method: 'post',
         data: {
+          site: userInfo.site,
           start: start || 1
         }
       };
@@ -202,6 +207,7 @@ const OrderRelease = (props) => {
         url: `http://${Config.API_HOST.IP}/api/order/making`,
         method: 'post',
         data: {
+          site: userInfo.site,
           category: category,
           action: 's',
           start: start || 1
