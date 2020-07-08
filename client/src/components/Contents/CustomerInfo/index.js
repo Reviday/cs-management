@@ -138,6 +138,7 @@ const CustomerInfo = (props) => {
       let result = setData.data.data;
       console.log('selec', result);
 
+      setSelectCustomer(data);
     } catch (e) {
       console.log('ERROR', e);
     }
