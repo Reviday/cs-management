@@ -14,6 +14,7 @@ import './index.css';
 
 const CustomerInfo = (props) => {
   const [siteList, setSiteList] = useState([]); // 지점 리스트
+  const [progress, setProgress] = useState([]); // 진행상황 리스트
   const [customerTotal, setCustomerTotal] = useState(0); // 고객 수
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
@@ -44,8 +45,57 @@ const CustomerInfo = (props) => {
     });
   };
 
+  const priceType = [
+    { code: 0, text: '미결제' },
+    { code: 1, text: '현금 결제' },
+    { code: 2, text: '카드 결제' }
+  ];
+
   const addCustomer = () => {
     console.log('btn click');
+  };
+
+  // 진행 상황 버튼
+  const ProgressBtn = (data) => {
+    let name = '';
+    let addClass = '';
+
+    for (let i in progress) {
+      if (progress[i].order_status === data.order_status) {
+        name = progress[i].status_name;
+        addClass = `type${progress[i].order_status}`;
+        break;
+      }
+    }
+
+    const onHandle = () => {
+      viewModal('progress', data);
+    };
+
+    return (
+      <BorderButton
+        addClass={`progress ${addClass}`}
+        onHandle={e => onHandle(e)}
+        name={name}
+        disabled
+      />
+    );
+  };
+
+  // progress 정보 가져오기
+  const getProgressInfo = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,
+      method: 'post'
+    };
+
+    try {
+      let setData = await axios(options);
+      let result = setData?.data?.data;
+      if (result) setProgress(result);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   };
 
   // Site List 정보 가져오기
@@ -137,8 +187,25 @@ const CustomerInfo = (props) => {
 
       let result = setData.data.data;
       console.log('selec', result);
+      let items = [];
+      if (result) {
+        for (let i in result) {
+          if (Object.prototype.hasOwnProperty.call(result, i)) {
+            let row = result[i];
 
-      setCustomerOrderList(result);
+            let convertData = {
+              ...row,
+              price_txt: priceType.filter(type => type.code === row.price_type)[0]?.text,
+              order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
+              progressBtn: ProgressBtn(row),
+            };
+
+            items.push(convertData);
+          }
+        }
+      }
+
+      setCustomerOrderList(items);
       setSelectCustomer(data);
     } catch (e) {
       console.log('ERROR', e);
@@ -146,6 +213,7 @@ const CustomerInfo = (props) => {
   };
 
   useEffect(() => {
+    if (progress.length === 0) getProgressInfo();
     if (siteList.length === 0) getSiteList(); // 지점 리스트
     if (customerData.length === 0) getCustomerList();
   }, [siteList]);
