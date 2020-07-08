@@ -17,7 +17,7 @@ const CustomerInfo = (props) => {
   const [customerTotal, setCustomerTotal] = useState(0); // 고객 수
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
-  const [customerOrderList, setCustomerOrderList] = useState({});
+  const [customerOrderList, setCustomerOrderList] = useState([]);
 
   // Modal State
   const [isModal, setIsModal] = useState({
@@ -138,6 +138,7 @@ const CustomerInfo = (props) => {
       let result = setData.data.data;
       console.log('selec', result);
 
+      setCustomerOrderList(result);
       setSelectCustomer(data);
     } catch (e) {
       console.log('ERROR', e);
