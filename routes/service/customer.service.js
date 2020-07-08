@@ -5,7 +5,7 @@ const Customer = require(`${APPROOT}/db/models`).Customer;
 const CustomerQuery = require(`${APPROOT}/db/models/payload/customer`);
 const {Sequelize: {Op}} = require(`${APPROOT}/db/models`);
 
-
+//push
 module.exports = {
     /**
      * 고객정보 전체 조회

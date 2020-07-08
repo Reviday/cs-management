@@ -9,8 +9,7 @@
       "IP": "127.0.0.1",
       "PORT": "4000"
     },
-    "SESSION_EXPIRE": 3600000,
-
+    "SESSION_EXPIRE": 3600000
   },
   "ops": {
     "DEBUG_LEVEL": "debug",
@@ -24,5 +23,4 @@
     "SESSION_EXPIRE": 3600000
   },
   "timezoneoffset_value": 60000,
-  "EXPLAIN" : "Web Hosting 이용으로 인해, API PORT 번호는 제외"
 }

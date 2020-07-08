@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+    //push
     return sequelize.define('custom_info', {
         site: {
             type: DataTypes.STRING(10),

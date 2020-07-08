@@ -1,5 +1,5 @@
 'use strict';
-
+//push
 const path = require('path');
 const Sequelize = require('sequelize');
 const configFile = require(__dirname + '/../config/config.json');

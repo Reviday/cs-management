@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+    //push
     const Order = sequelize.define('p_order', {
         site: {
             type: DataTypes.STRING(10),
