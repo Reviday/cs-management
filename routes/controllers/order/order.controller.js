@@ -100,7 +100,7 @@ module.exports = {
 
             } else if (action === 'status_u') {
                 // [주문 상태 정보 update]
-                paramCheck = Util.param_check(req, res, fileName, ['needs', 'order_status']);
+                paramCheck = Util.param_check(req, res, fileName, ['needs', 'order_status','order_date','complete_date']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
                 setReqParams = {
                     category: req.query.category,
@@ -108,6 +108,8 @@ module.exports = {
                     id: req.query.id,
                     needs: req.query.needs,
                     order_status: req.query.order_status,
+                    order_date: req.query.order_date || today,
+                    complete_date: req.query.complete_date || complete_day
                 };
                 // 주문 상태 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);

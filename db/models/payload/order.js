@@ -26,6 +26,8 @@ module.exports = {
 
         // 1. 기본 검색 Query 구성
         let result = null;
+        const date = new Date();
+        const today = moment(date).format('YYYY-MM-DD');
         switch (category) {
             case 'all' :
                 result = {
@@ -41,6 +43,29 @@ module.exports = {
                     }],
                     limit: 10,
                     offset: (10 * start) - 10,
+                    order: [
+                        ['create_at', 'DESC']
+                    ]
+
+                };
+                break;
+            case 'checklist' :
+                result = {
+                    attributes: [
+                        "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
+                        "complete_date", "update_at", "order_status", "needs", "order_status", "address",
+                        "telpno","zipcode", "detail_addr"
+                    ],
+                    include: [{
+                        model: db.OrderStatusCode,
+                        required: false,
+                        attributes: ["status_name"]
+                    }],
+                    limit: 10,
+                    offset: (10 * start) - 10,
+                    where : {
+                        complete_date : today
+                    },
                     order: [
                         ['create_at', 'DESC']
                     ]

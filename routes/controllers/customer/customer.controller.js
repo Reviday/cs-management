@@ -106,6 +106,7 @@ module.exports = {
                 telpno: req.query.telpno,
                 zipcode: req.query.zipcode,
                 address: req.query.address,
+                detail_addr : req.query.detail_addr,
                 interest_style: req.query.interest_style,
                 birth: req.query.birth,
                 memo: req.query.customer_memo

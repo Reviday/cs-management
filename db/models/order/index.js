@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         complete_date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false,
         },
         create_at: {
