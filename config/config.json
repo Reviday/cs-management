@@ -22,5 +22,5 @@
     },
     "SESSION_EXPIRE": 3600000
   },
-  "timezoneoffset_value": 60000,
+  "timezoneoffset_value": 60000
 }
