@@ -28,10 +28,22 @@ const Alert = (props) => {
               alertModal의 useState 값 중, title을 의미 : required
     content ─ Alert 창의 내용을 의미.
               alertModal의 useState 값 중, content를 의미 : required
+    type    ─ Alert 창의 내용의 글자 색을 조절하기 위해 사용.
+              default: red, error: red, common: #505050 (사용에 따라 추가 가능)
     hide    ─ Alert 창을 x 버튼으로 종료시킬때(초기화) 사용.
               toggleModal을 의미 : required
+    execute ─ Alert 창을 종료하면 실행될 함수
 
   */
+
+  const onHandle = () => {
+    props.hide();
+    if (props?.execute) {
+      props.execute();
+    }
+  };
+
+
   if (props.view) {
     return ReactDOM.createPortal(
       <React.Fragment>
@@ -44,11 +56,15 @@ const Alert = (props) => {
                   {props.title}
                 </div>
                 <div className="m_title _right">
-                  <div className="m_close" onClick={props.hide} onKeyDown={props.hide} />
+                  <div className="m_close" onClick={onHandle} onKeyDown={props.hide} />
                 </div>
               </div>
               <div className="modal_content_center">
-                <div className="_alert">{props.content}</div>
+
+                { !props.type && <div className="_alert">{props.content}</div> }
+                { props.type === 'error' && <div className="_alert">{props.content}</div> }
+                { props.type === 'common' && <div className="_alert" style={{ color: '#505050' }}>{props.content}</div> }
+
               </div>
             </div>
           </div>

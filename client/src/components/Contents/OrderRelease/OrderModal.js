@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
@@ -115,13 +115,20 @@ const ModalContents = (props) => {
   };
 
   // 일괄 order 처리 함수
-  // conf
   const executeOrder = async (type, id) => {
+    if (type === 'cancel') {
+      // state값 초기화 후, modal 닫기
+      setState({});
+      props.hide();
+      return false;
+    }
+
+    let category = items.type === 'insertOrder' ? 'order' : props.data.order_status < 3 ? 'order' : 'ship';
 
     // data default setting
     let data = {
       ...state,
-      category: items.type,
+      category: category,
       action: '',
       site: state.site,
       name: state.name,
@@ -153,11 +160,6 @@ const ModalContents = (props) => {
           action: 'd',
         };
         break;
-      case 'cancel':
-        // state값 초기화 후, modal 닫기
-        setState({});
-        props.hide();
-        return false;
       default: return false;
 
     }
@@ -180,39 +182,41 @@ const ModalContents = (props) => {
 
       let result = setData.data.data; // true
 
+      // 정상적으로 처리되었을 때, 리스트 및 카운트를 다시 호출
+      if (result === true && category === 'order') {
+        items.getOrderList('order');
+      } else if (result === true && category === 'ship') {
+        items.getOrderList('ship');
+      }
+
       // 정상적으로 처리되었고, type이 insert일 때
-      if (result && type === 'insert') {
+      if (result === true && type === 'insert') {
         setAlertModal({
           show: true,
           title: '알림 메시지',
-          content: '주문 등록이 완료되었습니다.'
+          content: '주문 등록이 완료되었습니다.',
+          useExecute: true
         });
-        // 모달창 종료 및 데이터 다시 가져오기.
-        props.hide();
-        items.getOrderList('order');
-        items.getOrderList('ship');
+
       // 정상적으로 처리되었고, type이 update일 때
-      } else if (result && type === 'update') {
+      } else if (result === true && type === 'update') {
         setAlertModal({
           show: true,
           title: '알림 메시지',
-          content: '주문 수정이 완료되었습니다.'
+          content: '주문 수정이 완료되었습니다.',
+          useExecute: true
         });
-        // 모달창 종료 및 데이터 다시 가져오기.
-        props.hide();
-        items.getOrderList('order');
-        items.getOrderList('ship');
+
       // 정상적으로 처리되었고, type이 delete일 때
-      } else if (result && type === 'delete') {
+      } else if (result === true && type === 'delete') {
+        console.log('들어옴');
         setAlertModal({
           show: true,
           title: '알림 메시지',
-          content: '주문 삭제가 완료되었습니다.'
+          content: '주문 삭제가 완료되었습니다.',
+          useExecute: true
         });
-        // 모달창 종료 및 데이터 다시 가져오기.
-        props.hide();
-        items.getOrderList('order');
-        items.getOrderList('ship');
+        
       // 그 외, result가 true가 아닐 경우.
       // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
       } else {
@@ -240,7 +244,6 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      {console.log(state)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
@@ -478,6 +481,8 @@ const ModalContents = (props) => {
         title={alertModal.title}
         content={alertModal.content}
         hide={toggleAlert}
+        color="#505050"
+        execute={alertModal.useExecute === true ? props.hide : ''}
       />
       <Postcode
         set={isPostcode}
