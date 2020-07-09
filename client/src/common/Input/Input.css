@@ -1,34 +1,85 @@
 div.row_title {
-    float: left;
-    width: 70px;
-    font-size: 18px;
-    font-weight: 600;
-    padding: 5px 5px;
-    margin: 5px 0;
-    border-right: 3px solid black;
+  float: left;
+  width: 70px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 5px 5px;
+  margin: 5px 0;
+  border-right: 3px solid black;
 }
 
 div.row_input {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
-div.row_input input[type=text] {
-    border: 1px solid #aaa;
-    border-radius: 20px;
-    padding: 10px 20px;
-    margin: 0px 10px;
-    font-size: 15px;
-    color: rgb(80, 80, 80);
-    outline: none;
-    transition: 0.3s;
+div.row_input input[type="text"] {
+  border: 1px solid #aaa;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 0px 10px;
+  font-size: 15px;
+  color: rgb(80, 80, 80);
+  outline: none;
+  transition: 0.3s;
 }
 
-div.row_input input[type=text]:focus {
-    border-color: rgb(59, 59, 59);
+div.row_input input[type="text"]:focus {
+  border-color: rgb(59, 59, 59);
 }
 
-div.row_input input[type=text]::placeholder {
-    font-size: 15px;
-    font-weight: 400;
+div.row_input input[type="text"]::placeholder {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* DatePicker CSS */
+
+div.range_picker_wrapper {
+  display: flex;
+}
+
+div.react-datepicker__input-container input {
+  font-size: 13px !important;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 2px #e9e9e9;
+  border: 1px solid #aeaeae;
+  line-height: 16px;
+  padding: 6px 10px 5px;
+}
+
+div.start_date,
+div.end_date {
+  width: fit-content;
+  margin: auto;
+}
+
+div.picker_title {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  /* padding: 3px; */
+  margin: 7px 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.react-datepicker__year-read-view,
+div.react-datepicker__month-read-view,
+div.react-datepicker__month-year-read-view {
+  border: 1px solid transparent;
+  border-radius: 0.3rem;
+  padding: 5px;
+}
+
+.react-datepicker__year-read-view--down-arrow,
+.react-datepicker__month-read-view--down-arrow,
+.react-datepicker__month-year-read-view--down-arrow {
+  top: 4px !important;
+}
+
+.react-datepicker__close-icon::after {
+  padding: 0px !important;
 }

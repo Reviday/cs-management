@@ -6,6 +6,7 @@ import moment from 'moment';
 import Input from 'common/Input/Input';
 import Select from 'common/Select/Select';
 import InputCustom from 'common/Input/InputCustom';
+import DatePicker from 'common/Input/InputDatepicker';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import Postcode from 'common/Modal/ModalPostcode';
@@ -34,6 +35,16 @@ const ModalContents = (props) => {
         manager: ''
       }
       : props.data
+  );
+  const [startDate, setStartDate] = useState(
+    items.type === 'insertOrder'
+      ? null : props.data.order_date
+        ? new Date(props.data.order_date) : null
+  );
+  const [endDate, setEndDate] = useState(
+    items.type === 'insertOrder'
+      ? null : props.data.complete_date
+        ? new Date(props.data.complete_date) : null
   );
 
   const priceType = [
@@ -96,10 +107,53 @@ const ModalContents = (props) => {
     let validation = true;
     let message = '';
 
-
     /**
      * check validate
      */
+
+    // 1. 각 data 별로 빈 값이 존재하는지 체크
+    if (validation) {
+      // 필수로 입력되어야 하는 요소 목록
+      // select는 넣을 필요가 없지만 일단 필수 요소이기에 추가.
+      let checkList = [
+        { key: 'site', name: '지점' }, // select
+        { key: 'name', name: '고객명' }, // input
+        { key: 'telpno', name: '연락처' }, // input
+        { key: 'zipcode', name: '우편번호' }, // input - API
+        { key: 'address', name: '주소' }, // input - API
+        { key: 'detail_addr', name: '상세주소' }, // input
+        { key: 'product', name: '상품명' }, // input
+        { key: 'price', name: '가격' }, // input
+        { key: 'price_type', name: '결제상태' }, // select
+        { key: 'manager', name: '매니저' }, // input
+      ];
+
+      for (let key in state) {
+        if (Object.prototype.hasOwnProperty.call(state, key)) {
+          // state의 해당 key가 필수 목록에 포함되는지 체크
+          let checkField = checkList.filter(item => item.key === key);
+          if (checkField.length > 0) {
+            if (state[key] === undefined || state[key] === '') {
+              validation = false;
+              message = `${checkField[0].name}을(를) 입력해주시기 바랍니다.`;
+              break;
+            }
+          }
+        }
+      }
+
+      // startDate는 필수 요소로 체크
+      if (validation && (!startDate || startDate === '')) {
+        validation = false;
+        message = '주문 날짜를 선택해주시기 바랍니다.';
+      }
+    }
+
+    // 2. 전달받은 data가 정상적인 값인지 확인
+    // 아직은 체크해야할 부분이 명확하지 않음...
+    if (validation) {
+      //
+    }
 
 
     // validation에서 체크되지 않은 항목이 존재하면 alert창 출력
@@ -140,8 +194,8 @@ const ModalContents = (props) => {
       order_status: state.order_status,
       price_type: state.price_type,
       manager: state.manager,
-      // order_date: state.order_date,
-      // complete_date: state.complete_date
+      order_date: startDate,
+      complete_date: endDate
     };
 
     switch (type) {
@@ -165,7 +219,6 @@ const ModalContents = (props) => {
     }
 
     // set options
-    // 2020.07.08 ${Config.API_HOST.PORT} 제거
     let options = {
       url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
@@ -244,6 +297,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
+      {console.log(startDate, endDate)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">
@@ -397,6 +451,16 @@ const ModalContents = (props) => {
                     disabled={items.type === 'showOrder'}
                   />
                 </div>
+                <div className="rows-mb-20">
+                  <DatePicker
+                    startTitle="주문날짜"
+                    endTitle="완료날짜"
+                    startState={[startDate, setStartDate]}
+                    endState={[endDate, setEndDate]}
+                    isClearable={items.type !== 'showOrder'}
+                    disabled={items.type === 'showOrder'}
+                  />
+                </div>
                 <div className="rows" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
                     items.type === 'insertOrder'
@@ -481,7 +545,7 @@ const ModalContents = (props) => {
         title={alertModal.title}
         content={alertModal.content}
         hide={toggleAlert}
-        color="#505050"
+        type="common"
         execute={alertModal.useExecute === true ? props.hide : ''}
       />
       <Postcode

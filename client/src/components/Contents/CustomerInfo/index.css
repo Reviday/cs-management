@@ -208,3 +208,26 @@ div.removeBtn::before {
   background-color: rgb(236, 135, 192);
   color: rgb(80, 80, 80);
 }
+
+ul.img_list, ol.img_list {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    max-width: 250px;
+    width: 100%;
+}
+
+ul.img_list li, ol.img_list li {
+    padding: 5px 0px 5px 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+    font-size: 12px;
+}
+
+ul.img_list li:before,
+ol.img_list li:before {
+    content: ">";
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0px 5px 6px 0px;
+}

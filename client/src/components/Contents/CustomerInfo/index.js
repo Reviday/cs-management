@@ -29,7 +29,7 @@ const CustomerInfo = (props) => {
 
   // close modal
   const toggleModal = () => {
-    setIsModal({ ...isModal,
+    setIsModal({
       view: !isModal.view,
       type: '',
       data: {}
@@ -38,8 +38,7 @@ const CustomerInfo = (props) => {
 
   const viewModal = async (type, data) => {
     setIsModal({
-      ...isModal,
-      view: !isModal.view,
+      view: true,
       type: type,
       data: data || {}
     });

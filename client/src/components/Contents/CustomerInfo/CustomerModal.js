@@ -127,9 +127,8 @@ const ModalContents = (props) => {
     if (validation) {
       let checkList = ['site', 'name', 'zipcode', 'address', 'telpno'];
       for (let key in state) {
-        if (Object.prototype.hasOwnProperty.call(state, key) && checkList.indexOf(key) > 0) {
+        if (Object.prototype.hasOwnProperty.call(state, key) && checkList.indexOf(key) > -1) {
           if (state[key] === undefined || state[key] === '') {
-            console.log(state[key]);
             validation = false;
             message = '비어있는 필수항목이 있습니다. (필수항목 : 지점, 이름, 우편번호, 주소, 연락처)';
           }

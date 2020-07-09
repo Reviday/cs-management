@@ -74,13 +74,13 @@ const CustomerInfoPage = (props) => {
                   선호하는 스타일
                 </td>
                 <td className="td_data">
-                  {selectCustomer.interest_style}
+                  {selectCustomer.interest_style ? selectCustomer.interest_style : ''}
                 </td>
                 <td className="td_title">
                   선호하는 원단
                 </td>
                 <td className="td_data">
-                  {selectCustomer.interest_skin}
+                  {selectCustomer.interest_skin ? selectCustomer.interest_skin : ''}
                 </td>
               </tr>
             </tbody>
@@ -117,6 +117,29 @@ const CustomerInfoPage = (props) => {
               )
               : (
                 <div>주문 정보가 없습니다.</div>
+              )
+          }
+        </div>
+
+        <div className="name_title" style={{ marginTop: '50px' }}>
+          고객 사진
+        </div>
+        <div className="ct_box">
+          {
+            // 데이터가 없거나, 존재하지만 빈 값만 있을 경우 후자를 출력
+            // 데이터가 1개 존재하는데, 빈 값이여서 출력이 안되는 경우도 있음
+            !selectCustomer.custom_image || selectCustomer.custom_image.length === 0
+              || (selectCustomer.custom_image && selectCustomer.custom_image.length === 1 && selectCustomer.custom_image[0] === '')
+              ? <div>등록된 사진이 없습니다.</div>
+              : (
+                <ul className="img_list">
+                  {
+                    selectCustomer.custom_image.map((image) => {
+                      if (!image || image === '') return null;
+                      return (<li key={image}>{image}</li>);
+                    })
+                  }
+                </ul>
               )
           }
         </div>

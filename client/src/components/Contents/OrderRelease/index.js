@@ -54,7 +54,7 @@ const OrderRelease = (props) => {
   const viewModal = async (type, data) => {
     console.log(type, data);
     setIsModal({
-      view: !isModal.view,
+      view: true,
       type: type,
       data: data
     });
@@ -423,7 +423,7 @@ const OrderRelease = (props) => {
       <OrderPage // 입고 지연 제품
         category="delay"
         title="입고 지연 제품"
-        headerSet={delayReceiptHeaderSet}
+        headerSet={receiptHeaderSet}
         data={delayReceiptData}
         total={delayTotal}
         more={more}
