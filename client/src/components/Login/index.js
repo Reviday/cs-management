@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import sha512 from 'crypto-js/sha512';
 
 // import logo from 'resources/images/ibricks_img.png';
+import Alert from 'common/Modal/ModalAlert';
 import Config from 'config';
 import './Login.css';
 
@@ -17,7 +18,58 @@ const Login = () => {
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
+  // alertModal State
+  const [alertModal, setAlertModal] = useState({
+    show: false,
+    title: '',
+    content: '',
+    type: ''
+  });
+
+  const toggleAlert = () => {
+    setAlertModal({
+      show: false,
+      title: '',
+      content: '',
+      type: ''
+    });
+  };
+
+  const checkValidate = () => {
+    let validation = true;
+    let message = '';
+
+    /**
+     * check validate
+     */
+
+    // 1. 빈 값 체크
+    if (validation) {
+      if (!inputId || inputId === '') {
+        validation = false;
+        message = '아이디를 입력하시기 바랍니다.';
+      } else if (!inputPw || inputPw === '') {
+        validation = false;
+        message = '패스워드를 입력하시기 바랍니다.';
+      }
+    }
+
+    // validation에서 체크되지 않은 항목이 존재하면 alert창 출력
+    if (!validation) {
+      setAlertModal({
+        show: true,
+        title: '안내 메시지',
+        content: message,
+        type: 'common'
+      });
+    }
+
+    return validation;
+  };
+
   const doLogin = async () => {
+    if (!checkValidate()) return false;
+    
     // 비밀번호 암호화
     const cipher = crypto.createCipher('aes-256-cbc', 'tailer');
     let cryptoPassword = cipher.update(inputPw, 'utf8', 'base64');
@@ -38,28 +90,40 @@ const Login = () => {
 
       let result = setData.data.data;
 
-      setUserInfo({
-        isLogged: true,
-        userId: result.id,
-        userName: result.name,
-        site: result.site,
-        auth: result.auth
-      });
+      console.log(result);
 
-      // if (response.result === 'ok') {
-      //   setHasCookie(true);
-      // } else {
-      //   throw new Error(response.error);
-      // }
+      if (result && typeof result === 'object') {
+        setUserInfo({
+          isLogged: true,
+          userId: result.id,
+          userName: result.name,
+          site: result.site,
+          auth: result.auth
+        });
+  
+        window.sessionStorage.setItem(sha512('id'), result.id);
+        window.sessionStorage.setItem(sha512('name'), result.name);
+        window.sessionStorage.setItem(sha512('site'), result.site);
+        window.sessionStorage.setItem(sha512('auth'), result.auth);
 
-      window.sessionStorage.setItem(sha512('id'), result.id);
-      window.sessionStorage.setItem(sha512('name'), result.name);
+      } else if (result === false) {
+        setAlertModal({
+          show: true,
+          title: '안내 메시지',
+          content: '등록되지 않은 아이디거나, 잘못된 비밀번호입니다.',
+          type: 'common'
+        });
+      }
 
     } catch (err) {
-      alert('로그인에 실패했습니다.' + err);
+      setAlertModal({
+        show: true,
+        title: '에러 메시지',
+        content: err,
+        type: 'common'
+      });
       setInputId('');
       setInputPw('');
-      console.error('login error', err);
     }
 
   };
@@ -86,9 +150,6 @@ const Login = () => {
                 <li className="tit main_logo_tit">
                   {/* title */}
                 </li>
-              </ul>
-              <ul className="_ul">
-                <li className="ver">Prototype</li>
               </ul>
               <div
                 style={{
@@ -135,6 +196,13 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Alert
+        view={alertModal.show}
+        title={alertModal.title}
+        content={alertModal.content}
+        type={alertModal.type}
+        hide={toggleAlert}
+      />
     </>
   );
 };

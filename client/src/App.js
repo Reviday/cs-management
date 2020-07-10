@@ -34,7 +34,9 @@ const App = (props) => {
     setUserInfo({
       isLogged: true,
       userId: window.sessionStorage.getItem(sha512('id')),
-      userName: window.sessionStorage.getItem(sha512('name'))
+      userName: window.sessionStorage.getItem(sha512('name')),
+      site: window.sessionStorage.getItem(sha512('site')),
+      auth: window.sessionStorage.getItem(sha512('auth'))
     });
   };
   
