@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -7,12 +7,17 @@ import CustomerInfoPage from './CustomerInfoPage';
 import BorderButton from 'common/Button/BorderButton';
 import Modal from 'common/Modal/ModalCover';
 import CustomerModalContent from './CustomerModal';
-import OrderModalContent from 'components/Contents/OrderRelease/OrderModal';
 import Config from 'config';
 
 import './index.css';
 
+// context
+import { UserInfoContext } from 'contexts/UserInfoContext';
+
+// 권한 제한이 존재하는 페이지 (auth < 2)
 const CustomerInfo = (props) => {
+
+  const [userInfo] = useContext(UserInfoContext);
   const [siteList, setSiteList] = useState([]); // 지점 리스트
   const [progress, setProgress] = useState([]); // 진행상황 리스트
   const [customerTotal, setCustomerTotal] = useState(0); // 고객 수
@@ -49,10 +54,6 @@ const CustomerInfo = (props) => {
     { code: 1, text: '현금 결제' },
     { code: 2, text: '카드 결제' }
   ];
-
-  const addCustomer = () => {
-    console.log('btn click');
-  };
 
   // 진행 상황 버튼
   const ProgressBtn = (data) => {
@@ -114,7 +115,62 @@ const CustomerInfo = (props) => {
     }
   };
 
+  const getOrderListByCustomer = async (data, start) => {
+    // 권한 값이 1보다 크면 함수 작동이 되지 않는다.
+    if (userInfo.auth > 1) return false;
+
+    let options = {
+      url: `http://${Config.API_HOST.IP}/api/order/making`,
+      method: 'post',
+      data: {
+        category: 'order',
+        action: 's',
+        start: start || 1,
+        search_field: 'name',
+        search_word: data.name,
+        search_telpno: data.telpno.replace(/[^0-9]/g, '')
+      }
+    };
+
+    try {
+      let setData = await axios(options);
+
+      let result = setData.data.data;
+      let items = [];
+      if (result) {
+        for (let i in result) {
+          if (Object.prototype.hasOwnProperty.call(result, i)) {
+            let row = result[i];
+
+            let convertData = {
+              ...row,
+              price_txt: priceType.filter(type => type.code === row.price_type)[0]?.text,
+              order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
+              progressBtn: ProgressBtn(row),
+            };
+
+            // 권한이 부족하면 price 필드를 제거
+            if (userInfo?.auth > 0) {
+              delete convertData.price;
+            }
+
+            items.push(convertData);
+          }
+        }
+      }
+
+      setCustomerOrderList(items);
+      setSelectCustomer(data);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+  };
+
+
   const getCustomerList = async (start) => {
+    // 권한 값이 1보다 크면 함수 작동이 되지 않는다.
+    if (userInfo.auth > 1) return false;
+
     let options = {
       url: `http://${Config.API_HOST.IP}/api/customer/select`,
       method: 'post',
@@ -160,52 +216,7 @@ const CustomerInfo = (props) => {
       setCustomerData(items);
       setCustomerTotal(count);
       // 데이터가 존재하면 첫번째 요소를 자동으로 선택
-      if (result?.length > 0) setSelectCustomer(result[0]);
-    } catch (e) {
-      console.log('ERROR', e);
-    }
-  };
-
-  const getOrderListByCustomer = async (data, start) => {
-    let options = {
-      url: `http://${Config.API_HOST.IP}/api/order/making`,
-      method: 'post',
-      data: {
-        category: 'order',
-        action: 's',
-        start: start || 1,
-        search_field: 'name',
-        search_word: data.name,
-        search_telpno: data.telpno.replace(/[^0-9]/g, '')
-      }
-    };
-
-    try {
-      console.log('orderlsit:::', options);
-      let setData = await axios(options);
-
-      let result = setData.data.data;
-      console.log('selec', result);
-      let items = [];
-      if (result) {
-        for (let i in result) {
-          if (Object.prototype.hasOwnProperty.call(result, i)) {
-            let row = result[i];
-
-            let convertData = {
-              ...row,
-              price_txt: priceType.filter(type => type.code === row.price_type)[0]?.text,
-              order_date: moment(new Date(row.order_date)).format('YYYY.MM.DD'),
-              progressBtn: ProgressBtn(row),
-            };
-
-            items.push(convertData);
-          }
-        }
-      }
-
-      setCustomerOrderList(items);
-      setSelectCustomer(data);
+      if (result?.length > 0) getOrderListByCustomer(result[0]);
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -246,16 +257,16 @@ const CustomerInfo = (props) => {
           <CustomerInfoPage
             selectCustomer={selectCustomer}
             orderList={customerOrderList}
-            viewModal={data => viewModal('showCustomer', data)}
+            viewModal={data => viewModal('update', data)}
           />
         </div>
         <Modal
           set={isModal}
           hide={toggleModal}
-          title={isModal.type === 'showOrder' ? '주문 정보' : 'Customer Card'}
-          style={isModal.type === 'showOrder' ? { width: '500px', height: '685px' } : { width: '500px', height: 'fit-content' }}
-          contents={isModal.type === 'showOrder' ? OrderModalContent : CustomerModalContent}
-          items={{ type: isModal.type, siteList: siteList }}
+          title="Customer Card"
+          style={{ width: '500px', height: 'fit-content' }}
+          contents={CustomerModalContent}
+          items={{ type: isModal.type, siteList: siteList, getCustomerList: getCustomerList }}
         />
       </div>
     </React.Fragment>

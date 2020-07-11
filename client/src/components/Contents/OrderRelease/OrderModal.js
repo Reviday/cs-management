@@ -262,7 +262,6 @@ const ModalContents = (props) => {
 
       // 정상적으로 처리되었고, type이 delete일 때
       } else if (result === true && type === 'delete') {
-        console.log('들어옴');
         setAlertModal({
           show: true,
           title: '알림 메시지',
@@ -505,8 +504,6 @@ const ModalContents = (props) => {
                           <BorderButton
                             addClass="deleteBtn"
                             onHandle={() => {
-                              // check validate
-                              if (!checkValidate()) return false;
                               setConfirmModal({
                                 show: true,
                                 title: '확인 메시지',

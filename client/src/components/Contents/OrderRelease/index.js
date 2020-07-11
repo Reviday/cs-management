@@ -13,7 +13,6 @@ import './index.css';
 
 import { UserInfoContext } from 'contexts/UserInfoContext';
 
-
 const OrderRelease = (props) => {
 
   const [userInfo] = useContext(UserInfoContext);
@@ -52,7 +51,6 @@ const OrderRelease = (props) => {
   };
 
   const viewModal = async (type, data) => {
-    console.log(type, data);
     setIsModal({
       view: true,
       type: type,
@@ -89,18 +87,6 @@ const OrderRelease = (props) => {
     { field: 'manager', text: '매니저', sort: '' },
     { field: 'order_date', text: '출고요청 날짜', sort: '' },
     { field: 'complete_date', text: '출고완료 날짜', sort: '' },
-    { field: 'progressBtn', text: '진행사항' },
-    { field: 'updateBtn', text: '업데이트' },
-    { field: 'update_at', text: '업데이트 날짜', sort: '' }
-  ];
-
-  // Delay Receipt Table Header Set
-  const delayReceiptHeaderSet = [
-    { field: 'site', text: '지점', sort: '' },
-    { field: 'name', text: '고객명', sort: '' },
-    { field: 'product', text: '품명', sort: '' },
-    { field: 'order_date', text: '주문 날짜', sort: '' },
-    { field: 'complete_date', text: '입고완료 날짜', sort: '' },
     { field: 'progressBtn', text: '진행사항' },
     { field: 'updateBtn', text: '업데이트' },
     { field: 'update_at', text: '업데이트 날짜', sort: '' }
@@ -315,15 +301,20 @@ const OrderRelease = (props) => {
               />
             </div>
           </div>
-          <div className="_rt">
-            <div className="_addOrder">
-              <BorderButton
-                addClass="addOrderBtn"
-                onHandle={() => viewModal('insertOrder')}
-                name="주문 등록"
-              />
-            </div>
-          </div>
+          {
+            userInfo?.auth < 2
+              && (
+                <div className="_rt">
+                  <div className="_addOrder">
+                    <BorderButton
+                      addClass="addOrderBtn"
+                      onHandle={() => viewModal('insertOrder')}
+                      name="주문 등록"
+                    />
+                  </div>
+                </div>
+             )
+          }
         </div>
         <div className="ct_box">
           <Table
@@ -380,19 +371,6 @@ const OrderRelease = (props) => {
                     </div>
                   </div>
                 </div>
-                {/* {
-                  more.delay
-                    && (
-                      <div className="ct_box">
-                        <Table
-                          headerSet={releaseHeaderSet}
-                          data={releaseData}
-                          onClick={data => viewModal('showOrder', data)}
-                          recordLimit={3}
-                        />
-                      </div>
-                    )
-                } */}
               </div>
             )
         }

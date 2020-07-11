@@ -44,14 +44,16 @@ const ModalContents = (props) => {
   const [alertModal, setAlertModal] = useState({
     show: false,
     title: '',
-    content: ''
+    content: '',
+    type: ''
   });
 
   const toggleAlert = () => {
     setAlertModal({
       show: false,
       title: '',
-      content: ''
+      content: '',
+      type: ''
     });
   };
 
@@ -125,21 +127,37 @@ const ModalContents = (props) => {
 
     // 1. 각 data 별로 빈 값이 존재하는지 체크
     if (validation) {
-      let checkList = ['site', 'name', 'zipcode', 'address', 'telpno'];
+      // 필수로 입력되어야 하는 요소 목록
+      // select는 넣을 필요가 없지만 일단 필수 요소이기에 추가.
+      let checkList = [
+        { key: 'site', name: '지점' }, // select
+        { key: 'name', name: '고객명' }, // input
+        { key: 'telpno', name: '연락처' }, // input
+        { key: 'zipcode', name: '우편번호' }, // input - API
+        { key: 'address', name: '주소' }, // input - API
+        { key: 'detail_addr', name: '상세주소' }, // input
+        { key: 'product', name: '상품명' }, // input
+      ];
+
       for (let key in state) {
-        if (Object.prototype.hasOwnProperty.call(state, key) && checkList.indexOf(key) > -1) {
-          if (state[key] === undefined || state[key] === '') {
-            validation = false;
-            message = '비어있는 필수항목이 있습니다. (필수항목 : 지점, 이름, 우편번호, 주소, 연락처)';
+        if (Object.prototype.hasOwnProperty.call(state, key)) {
+          // state의 해당 key가 필수 목록에 포함되는지 체크
+          let checkField = checkList.filter(item => item.key === key);
+          if (checkField.length > 0) {
+            if (state[key] === undefined || state[key] === '') {
+              validation = false;
+              message = `${checkField[0].name}을(를) 입력해주시기 바랍니다.`;
+              break;
+            }
           }
         }
       }
     }
 
-    // 2. 고객 정보 중복 체크 (name, telpno)
-    if (validation && !duplCheck()) {
+    // 2. 고객 정보 중복 체크 (name, telpno) => insert에서만 수행
+    if (validation && items.type === 'insertCustomer' && !duplCheck()) {
       validation = false;
-      message = '이미 등록된 고객 정보입니다. 고객 이름과, 연락처를 확인해주시기 바랍니다.';
+      message = '이미 등록된 고객 정보입니다. 고객명과, 연락처를 확인해주시기 바랍니다.';
     }
 
 
@@ -147,10 +165,13 @@ const ModalContents = (props) => {
     if (!validation) {
       setAlertModal({
         show: true,
-        title: '오류 메시지',
-        content: message
+        title: '알림 메시지',
+        content: message,
+        type: 'common'
       });
     }
+
+    console.log('val::', validation);
 
     return validation;
   };
@@ -163,13 +184,10 @@ const ModalContents = (props) => {
       setState({});
       setImg([]);
       props.hide();
+      return false;
     }
 
-    // check validate
-    // if (checkValidate()) return false;
-
     const formData = new FormData();
-    console.log(img[0]);
     formData.append('file', img);
     for (let key in state) {
       if (Object.prototype.hasOwnProperty.call(state, key)) {
@@ -194,6 +212,54 @@ const ModalContents = (props) => {
 
       let result = setData.data.data;
       console.log(result);
+
+      // 정상적으로 처리되었을 때, 리스트 및 카운트를 다시 호출
+      if (result === true) {
+        items.getCustomerList();
+      }
+
+
+      // 정상적으로 처리되었고, type이 insert일 때
+      if (result === true && type === 'insert') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '고객 등록이 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 update일 때
+      } else if (result === true && type === 'update') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '고객 수정이 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 delete일 때
+      } else if (result === true && type === 'delete') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '고객 삭제가 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+        
+      // 그 외, result가 true가 아닐 경우.
+      // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
+      } else {
+        setAlertModal({
+          show: true,
+          title: '오류 메시지',
+          content: '문제가 발생하였습니다. 잠시 후 다시 시도해주시기 바랍니다.',
+          type: 'error'
+        });
+      }
+
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -209,7 +275,7 @@ const ModalContents = (props) => {
     });
   };
 
-  // 이미지 업로드용 함수
+  // 이미지 업로드용 함수 (수정필요)
   const uploadImg = (files = []) => {
     let fileList = [];
     if (files.length > 0) {
@@ -431,8 +497,6 @@ const ModalContents = (props) => {
                           <BorderButton
                             addClass="deleteBtn"
                             onHandle={() => {
-                              // check validate
-                              if (!checkValidate()) return false;
                               setConfirmModal({
                                 show: true,
                                 title: '확인 메시지',
@@ -470,6 +534,8 @@ const ModalContents = (props) => {
         title={alertModal.title}
         content={alertModal.content}
         hide={toggleAlert}
+        type={alertModal.type}
+        execute={alertModal.useExecute === true ? props.hide : ''}
       />
       <Postcode
         set={isPostcode}
