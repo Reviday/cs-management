@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 
+import DatePicker from 'common/Input/InputDatepicker';
 import BorderButton from 'common/Button/BorderButton';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
@@ -11,6 +12,14 @@ const ModalContents = (props) => {
   const progress = props.items.progress || [];
   const items = props.items;
   const [state, setState] = useState(props.data);
+  const [startDate, setStartDate] = useState(
+    props.data.order_date
+      ? new Date(props.data.order_date) : null
+  );
+  const [endDate, setEndDate] = useState(
+    props.data.complete_date
+      ? new Date(props.data.complete_date) : null
+  );
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -52,6 +61,11 @@ const ModalContents = (props) => {
     /**
      * check validate
      */
+    // startDate는 필수 요소로 체크
+    if (validation && (!startDate || startDate === '')) {
+      validation = false;
+      message = '주문 날짜를 선택해주시기 바랍니다.';
+    }
 
 
     // validation에서 체크되지 않은 항목이 존재하면 alert창 출력
@@ -74,6 +88,8 @@ const ModalContents = (props) => {
       method: 'post',
       data: qs.stringify({
         ...state,
+        order_date: startDate,
+        complete_date: endDate,
         category: items.type,
         action: 'status_u'
       }),
@@ -141,6 +157,19 @@ const ModalContents = (props) => {
                       );
                     })
                   }
+                </div>
+                <div className="rows-mb-20" style={{ height: '40px' }}>
+                  <div className="row_title">
+                    주문날짜
+                  </div>
+                </div>
+                <div className="rows-mb-20">
+                  <DatePicker
+                    startTitle="주문날짜"
+                    endTitle="완료날짜"
+                    startState={[startDate, setStartDate]}
+                    endState={[endDate, setEndDate]}
+                  />
                 </div>
                 <div className="rows-mb-20" style={{ height: '40px' }}>
                   <div className="row_title">
