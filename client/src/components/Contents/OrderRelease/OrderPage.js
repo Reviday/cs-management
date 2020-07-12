@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
@@ -10,10 +10,42 @@ const OrderPage = (props) => {
   const headerSet = props.headerSet;
   const data = props.data;
   const total = props.total;
+  const setSearchData = props.setSearchData; // 검색 시, 확정된 state 값을 고정시기 위한 state
   const more = props.more;
   const onMoreBtn = props.onMoreBtn;
   const viewModal = props.viewModal;
   const getOrderList = props.getOrderList;
+
+  const searchField = useRef(props?.searchData?.field || 'default');
+  const searchWord = useRef(props?.searchData?.word || '');
+
+  const onHandle = () => {
+    let data = {
+      field: searchField.current.value,
+      word: searchWord.current.value
+    };
+
+    // 검색 데이터 저장
+    setSearchData({
+      ...data,
+      set: true,
+    });
+
+    // 검색 데이터 기반으로 리스트를 새로 불러옴
+    getOrderList(category, 1, data);
+  };
+
+  useEffect(() => {
+    if (more[category] === false) {
+      
+      if (searchField.current.value) {
+        searchField.current.value = 'default';
+      }
+      if (searchWord.current.value) {
+        searchWord.current.value = '';
+      }
+    }
+  }, [more]);
 
   return (
     <div className={`ct_layout abs ${more[category] ? 'on' : ''}`}>
@@ -81,25 +113,31 @@ const OrderPage = (props) => {
         <div className="ct_box_footer">
           <div className="rows_flex">
             <Paging
-              onClick={start => getOrderList(category, start)}
+              onClick={start => getOrderList(category, start, props.searchData)}
               totalCount={total}
               listCount={10}
               displayCount={10}
               current={1}
             />
           </div>
-          <div className="rows_flex">
-            <div className="search_field">
-              <select name="sel_field" defaultValue="default">
-                <option value="default" disabled hidden>검색영역</option>
-                <option value="site">지점</option>
-                <option value="name">고객명</option>
-                <option value="product">품명</option>
-              </select>
-              <input type="text" className="search" placeholder="Search" />
-              <button type="button" className="search_btn" />
-            </div>
-          </div>
+          {
+            // delay는 검색 기능 제한
+            category !== 'delay'
+              && (
+              <div className="rows_flex">
+                <div className="search_field">
+                  <select ref={searchField} name="sel_field" defaultValue="default">
+                    <option value="default" disabled hidden>검색영역</option>
+                    <option value="site">지점</option>
+                    <option value="name">고객명</option>
+                    <option value="order_state">진행상황</option>
+                  </select>
+                  <input ref={searchWord} type="text" className="search" placeholder="Search" />
+                  <button type="button" className="search_btn" onClick={onHandle} />
+                </div>
+              </div>
+              )
+          }
         </div>
       </div>
     </div>

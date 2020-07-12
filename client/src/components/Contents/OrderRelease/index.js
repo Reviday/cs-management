@@ -24,8 +24,10 @@ const OrderRelease = (props) => {
   const [receiptTotal, setReceiptTotal] = useState(0);
   const [releaseTotal, setReleaseTotal] = useState(0);
   const [delayTotal, setDelayTotal] = useState(0);
-  const [searchData, setSearchData] = useState({ // 검색 시 사용될 데이터
-    tpye: '',
+  const [searchData, setSearchData] = useState({ // 검색 시 사용될 데이터(확정 검색 데이터)
+    set: false,
+    field: '',
+    word: ''
   });
 
   const [more, setMore] = useState({
@@ -167,7 +169,7 @@ const OrderRelease = (props) => {
   };
 
   // 주문 리스트 가져오기
-  const getOrderList = async (category, start) => {
+  const getOrderList = async (category, start, data) => {
     let options = {};
     let countOption = {
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
@@ -175,6 +177,8 @@ const OrderRelease = (props) => {
       data: {
         site: userInfo.site,
         category: category,
+        search_field: data?.field || undefined,
+        search_word: data?.word || undefined
       }
     };
 
@@ -195,10 +199,13 @@ const OrderRelease = (props) => {
           site: userInfo.site,
           category: category,
           action: 's',
-          start: start || 1
+          start: start || 1,
+          search_field: data?.field || undefined,
+          search_word: data?.word || undefined
         }
       };
     }
+
     try {
       // 데이터 reset
       if (category === 'order') {
@@ -281,6 +288,21 @@ const OrderRelease = (props) => {
       if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
     }
   }, [progress]); // [] : Run useEffect only once.
+
+  useEffect(() => {
+    console.log(more.order);
+    if (searchData.set) {
+      if (more.order === false) {
+        setSearchData({ set: false, field: '', word: '' });
+        getOrderList('order');
+      } else if (more.ship === false) {
+        setSearchData({ set: false, field: '', word: '' });
+        getOrderList('ship');
+      } else if (more.delay === false) {
+        setSearchData({ set: false, field: '', word: '' });
+      }
+    }
+  }, [more]);
 
   return (
     <React.Fragment>
@@ -382,6 +404,8 @@ const OrderRelease = (props) => {
         headerSet={receiptHeaderSet}
         data={receiptData}
         total={receiptTotal}
+        searchData={searchData}
+        setSearchData={setSearchData}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}
@@ -393,6 +417,8 @@ const OrderRelease = (props) => {
         headerSet={releaseHeaderSet}
         data={releaseData}
         total={releaseTotal}
+        searchData={searchData}
+        setSearchData={setSearchData}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}

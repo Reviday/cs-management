@@ -24,6 +24,11 @@ const CustomerInfo = (props) => {
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
   const [customerOrderList, setCustomerOrderList] = useState([]);
+  const [searchData, setSearchData] = useState({ // 검색 시 사용될 데이터(확정 검색 데이터)
+    set: false,
+    field: '',
+    word: ''
+  });
 
   // Modal State
   const [isModal, setIsModal] = useState({
@@ -167,7 +172,7 @@ const CustomerInfo = (props) => {
   };
 
 
-  const getCustomerList = async (start) => {
+  const getCustomerList = async (start, data) => {
     // 권한 값이 1보다 크면 함수 작동이 되지 않는다.
     if (userInfo.auth > 1) return false;
 
@@ -175,7 +180,9 @@ const CustomerInfo = (props) => {
       url: `http://${Config.API_HOST.IP}/api/customer/select`,
       method: 'post',
       data: {
-        start: start || 1
+        start: start || 1,
+        search_field: data?.field || undefined,
+        search_word: data?.word || undefined
       }
     };
 
@@ -184,6 +191,8 @@ const CustomerInfo = (props) => {
       method: 'post',
       data: {
         category: 'customer',
+        search_field: data?.field || undefined,
+        search_word: data?.word || undefined
       }
     };
 
@@ -251,6 +260,8 @@ const CustomerInfo = (props) => {
           <CustomerTablePage
             data={customerData}
             total={customerTotal}
+            searchData={searchData}
+            setSearchData={setSearchData}
             setSelectCustomer={getOrderListByCustomer}
             getCustomerList={getCustomerList}
           />

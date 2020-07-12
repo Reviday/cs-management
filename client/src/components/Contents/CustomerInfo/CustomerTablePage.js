@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Table from 'common/Table';
 import Paging from 'common/Paging';
 
@@ -8,6 +8,8 @@ const CustomerTablePage = (props) => {
   const setSelectCustomer = props.setSelectCustomer;
   const getCustomerList = props.getCustomerList;
   
+  const searchField = useRef(props?.searchData?.field || 'default');
+  const searchWord = useRef(props?.searchData?.word || '');
 
   const customerHeaderSet = [
     { field: 'site', text: '지점', sort: '' },
@@ -16,6 +18,23 @@ const CustomerTablePage = (props) => {
     { field: 'lastorder', text: '최근 주문날짜', sort: '' }
   ];
     
+
+  const onHandle = () => {
+    let data = {
+      field: searchField.current.value,
+      word: searchWord.current.value
+    };
+
+    // 검색 데이터 저장
+    setSearchData({
+      ...data,
+      set: true,
+    });
+
+    // 검색 데이터 기반으로 리스트를 새로 불러옴
+    getCustomerList(1, data);
+  };
+
   return (
     <div className="flex_box">
       <div className="ct_box">
@@ -34,7 +53,7 @@ const CustomerTablePage = (props) => {
         <div className="ct_box_footer">
           <div className="rows_flex">
             <Paging
-              onClick={start => getCustomerList(start)}
+              onClick={start => getCustomerList(start, props.searchData)}
               totalCount={total} // total 가져오는 로직 필요.
               listCount={10}
               displayCount={10}
@@ -43,14 +62,13 @@ const CustomerTablePage = (props) => {
           </div>
           <div className="rows_flex">
             <div className="search_field">
-              <select name="sel_field" defaultValue="default">
+              <select ref={searchField} name="sel_field" defaultValue="default">
                 <option value="default" disabled hidden>검색영역</option>
                 <option value="site">지점</option>
                 <option value="name">고객명</option>
-                <option value="product">품명</option>
               </select>
-              <input type="text" className="search" placeholder="Search" />
-              <button type="button" className="search_btn" />
+              <input ref={searchWord} type="text" className="search" placeholder="Search" />
+              <button type="button" className="search_btn" onClick={onHandle} />
             </div>
           </div>
         </div>
