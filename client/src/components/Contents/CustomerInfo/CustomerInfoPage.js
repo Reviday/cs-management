@@ -30,10 +30,6 @@ const CustomerInfoPage = (props) => {
     { field: 'manager', text: '담당자' },
   ];
 
-  if (userInfo?.auth > 0) {
-    orderHeaderSet.slice(4); // index값이 4인 price 원소 제거
-  }
-
   // alertModal State
   const [alertModal, setAlertModal] = useState({
     show: false,
@@ -190,7 +186,7 @@ const CustomerInfoPage = (props) => {
               ? (
                 <React.Fragment>
                   <Table
-                    headerSet={orderHeaderSet}
+                    headerSet={userInfo?.auth === 0 ? orderHeaderSet : orderHeaderSet.filter(item => item.field !== 'price')}
                     data={orderList}
                     recordLimit="none"
                     tableStyle={{ margin: '0' }}

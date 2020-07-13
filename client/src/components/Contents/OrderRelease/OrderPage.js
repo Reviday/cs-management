@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
 import Paging from 'common/Paging';
 
+import { UserInfoContext } from 'contexts/UserInfoContext';
+
 const OrderPage = (props) => {
+
+  const [userInfo] = useContext(UserInfoContext);
   const category = props.category; // category is 'order' or 'ship'
   const title = props.title;
   const headerSet = props.headerSet;
@@ -69,7 +73,7 @@ const OrderPage = (props) => {
           </div>
         </div>
         {
-          category === 'order'
+          category === 'order' && userInfo?.auth < 2
             && (
               <div className="_rt">
                 <div className="_addOrder">
