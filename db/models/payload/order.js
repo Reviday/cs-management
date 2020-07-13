@@ -172,10 +172,14 @@ module.exports = {
             result.price = reqParams.price;
             result.manager = reqParams.manager;
             result.price_type = reqParams.price_type;
+            result.order_date = reqParams.order_date;
+            result.complete_date = reqParams.complete_date;
 
         } else {
             result.order_status = reqParams.order_status;
             result.needs = reqParams.needs;
+            result.order_date = reqParams.order_date;
+            result.complete_date = reqParams.complete_date;
         }
 
         return result;
