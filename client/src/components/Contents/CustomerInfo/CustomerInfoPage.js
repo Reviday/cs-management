@@ -106,7 +106,7 @@ const CustomerInfoPage = (props) => {
       console.log('ERROR', e);
     }
   };
-    
+
   return (
     <React.Fragment>
       <div className="flex_box">
@@ -225,7 +225,13 @@ const CustomerInfoPage = (props) => {
                   {
                     selectCustomer.custom_image.map((image) => {
                       if (!image || image === '') return null;
-                      return (<li key={image}>{image}</li>);
+                      return (
+                        <li key={image}>
+                          <a href={`http://${Config.API_HOST.IP}/api/customer/${image}`} download>
+                            {image}
+                          </a>
+                        </li>
+                      );
                     })
                   }
                 </ul>

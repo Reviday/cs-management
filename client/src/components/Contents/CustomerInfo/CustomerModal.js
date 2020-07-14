@@ -192,7 +192,11 @@ const ModalContents = (props) => {
     }
     for (let key in state) {
       if (Object.prototype.hasOwnProperty.call(state, key)) {
-        formData.append(key, state[key]);
+        if (key === 'telpno') {
+          formData.append(key, state[key].replace(/[^0-9]/g, ''));
+        } else {
+          formData.append(key, state[key]);
+        }
       }
     }
 
@@ -287,7 +291,6 @@ const ModalContents = (props) => {
       }
     }
     setImg(fileList);
-
   };
 
   return (
@@ -421,7 +424,6 @@ const ModalContents = (props) => {
                                 setImg(
                                   img.filter(target => target !== item)
                                 );
-                                console.log(upload.current);
                               }}
                             />
                           </div>
