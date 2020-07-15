@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 /*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
+import Calendar from 'common/Calendar';
 /*  CSS  */
 import './index.css';
 
@@ -22,7 +23,7 @@ const DashBoard = (props) => {
           </div>
         </div>
         <div className="ct_box">
-          content
+          <Calendar />
         </div>
 
         <div className="ct_title">
