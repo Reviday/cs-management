@@ -10,10 +10,23 @@
   line-height: 1.5;
   background: #eaf9ff;
   border-right: 1px solid #d3e2e8;
+  border-radius: 20px;
+  margin: 50px 10px;
 }
 
 .app-sidebar-section {
   padding: 2em;
+}
+
+.app-sidebar-section h2.h2_date {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.app-sidebar-section h2.h2_day {
+  font-size: 20px;
+  font-weight: 400;
+  color: #aaa;
 }
 
 .calendar-wrapper {

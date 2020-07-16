@@ -3,6 +3,7 @@ import moment from 'moment';
 /*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
 import Calendar from 'common/Calendar';
+import Modal from 'common/Modal/ModalCover';
 /*  CSS  */
 import './index.css';
 

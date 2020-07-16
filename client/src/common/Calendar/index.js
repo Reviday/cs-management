@@ -72,7 +72,7 @@ const Calendar = (props) => {
     weekendsVisible: true,
     currentEvents: [
       { id: 0, title: 'event 1', date: '2020-07-01' },
-      { id: 1, title: 'event 3', date: '2020-07-01' },
+      { id: 12312, title: 'event 3', date: '2020-07-01' },
       { id: 2, title: 'event 2', date: '2020-07-14' }
     ]
   });
@@ -84,8 +84,8 @@ const Calendar = (props) => {
     });
   };
 
+  // Date Click
   const handleDateSelect = (selectInfo) => {
-    console.log('selectinfo:::', selectInfo);
     let title = prompt('Please enter a new title for your event');
     let calendarApi = selectInfo.view.calendar;
 
@@ -102,18 +102,30 @@ const Calendar = (props) => {
     }
   };
 
+  // Event click
   const handleEventClick = (clickInfo) => {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove();
     }
   };
 
+  // Event move
   const handleEventChange = (event) => {
     // console.log(event.event);
     // console.log(event.oldEvent);
+
+    // 변경 전 기간
     console.log(event.oldEvent._instance.range);
     console.log('to');
+    // 변경 후 기간
     console.log(event.event._instance.range);
+
+    // event.id와 같은 값
+    console.log(event.event._def.publicId);
+
+    /**
+     * 추후, 위 id값으로 event update 처리를 수행하면 될 듯.
+     */
   };
 
   const handleEvents = (events) => {
@@ -128,8 +140,8 @@ const Calendar = (props) => {
     return (
       <div className="app-sidebar">
         <div className="app-sidebar-section">
-          <h2>{moment().format('YYYY년 MM월 DD일')}</h2>
-          <h2>{moment().format('dd요일')}</h2>
+          <h2 className="h2_date">{moment(new Date()).format('YYYY년 MM월 DD일')}</h2>
+          <h2 className="h2_day">{moment(new Date()).format('dd요일')}</h2>
         </div>
         <div className="app-sidebar-section">
           <h2>
