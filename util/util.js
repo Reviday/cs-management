@@ -63,8 +63,6 @@ module.exports.res_ok = function (data) {
 };
 
 
-
-
 /** [LOG] Request Parameter */
 module.exports.reqParam = async function (urlname, req, fileName) {
     console.debug('---------------------------------------', fileName);
@@ -302,7 +300,7 @@ module.exports.getFilesPath = function (reqFiles) {
         let filepath = value.path;
         filepath = filepath.split('/');
         filepath = filepath[1];
-        if (idx === reqFiles.length) {
+        if (idx === reqFiles.length - 1) {
             allFilesPath += filepath;
         } else {
             allFilesPath += filepath + ',';
@@ -322,7 +320,7 @@ module.exports.splitBySeparator = function (originString, Separator) {
     const result = [];
     const origin = originString.split(Separator);
     origin.map((text, idx) => {
-        if(text !== '' || text !== null || text !== undefined){
+        if (text !== '' || text !== null || text !== undefined) {
             result.push(text.trim());
         }
     })
@@ -343,13 +341,13 @@ module.exports.makeResponseMessage = function (data) {
         if (element === 'telpno') {
             objData[element] = this.addDashes(objData[element]);
         }
-        if (element === 'custom_image'){
+        if (element === 'custom_image') {
             objData[element] = this.splitBySeparator(objData[element], separator);
         }
         if (element === 'order_status_code') {
             objData[element] = objData[element]['status_name'];
         }
-        if (element === 'price'){
+        if (element === 'price') {
             objData[element] = this.addComma(objData[element]);
         }
     });

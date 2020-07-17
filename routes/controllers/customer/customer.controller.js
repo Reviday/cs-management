@@ -17,7 +17,7 @@ module.exports = {
             req.paramStatus = 'customerSelect';
             const setReqParams = {
                 start: req.query.start || req.body.start || 1,
-                search_word : req.query.search_word || req.body.search_word || '',
+                search_word: req.query.search_word || req.body.search_word || '',
                 search_field: req.query.search_field || req.body.search_field || '',
             };
             result = await Service.selectAllList(setReqParams);
@@ -91,8 +91,6 @@ module.exports = {
         }
     },
     update: async (req, res) => {
-        console.log(req.body);
-        console.log(req.query);
         //console.log(req.files);
         let result = null;
         try {
@@ -106,17 +104,34 @@ module.exports = {
                 telpno: req.query.telpno,
                 zipcode: req.query.zipcode,
                 address: req.query.address,
-                detail_addr : req.query.detail_addr,
+                detail_addr: req.query.detail_addr,
                 interest_style: req.query.interest_style,
                 birth: req.query.birth,
                 memo: req.query.customer_memo
             };
             // 3. Check Validation Attachments Files(첨부 파일) Value
-            if (req.files.length > 0) {
-                setReqParams.custom_image = Util.getFilesPath(req.files);
-            } else if (req.query.custom_image !== null || req.query.custom_image !== '' || undefined) {
-                setReqParams.custom_image = req.query.custom_image;
+            if (req.query.custom_image !== null || req.query.custom_image !== '') {
+                let beforeUploadFiles = req.query.custom_image;
+                // 기존에 첨부파일이 존재하는 case
+                if (req.files.length > 0) {
+                    let newUploadFiles = Util.getFilesPath(req.files); // ,(쉼표)로 append한 업로드 파일 목록
+                    beforeUploadFiles += ',' + newUploadFiles;
+                    setReqParams.custom_image = beforeUploadFiles;
+                } else {
+                    setReqParams.custom_image = beforeUploadFiles;
+                }
+
+            } else {
+                // 기존에 첨부파일이 존재하지 않는 case
+                if (req.files.length > 0) {
+                    setReqParams.custom_image = Util.getFilesPath(req.files); // ,(쉼표)로 append한 업로드 파일 목록
+                }
             }
+            // if (req.files.length > 0) {
+            //     setReqParams.custom_image = Util.getFilesPath(req.files);
+            // } else if (req.query.custom_image !== null || req.query.custom_image !== '' || undefined) {
+            //     setReqParams.custom_image = req.query.custom_image;
+            // }
             console.log(setReqParams);
             // 4. Execute Insert Query
             result = await Service.customInfoUpdate(setReqParams);
