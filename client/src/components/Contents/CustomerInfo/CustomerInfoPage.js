@@ -30,10 +30,6 @@ const CustomerInfoPage = (props) => {
     { field: 'manager', text: '담당자' },
   ];
 
-  if (userInfo?.auth > 0) {
-    orderHeaderSet.slice(4); // index값이 4인 price 원소 제거
-  }
-
   // alertModal State
   const [alertModal, setAlertModal] = useState({
     show: false,
@@ -110,7 +106,7 @@ const CustomerInfoPage = (props) => {
       console.log('ERROR', e);
     }
   };
-    
+
   return (
     <React.Fragment>
       <div className="flex_box">
@@ -190,7 +186,7 @@ const CustomerInfoPage = (props) => {
               ? (
                 <React.Fragment>
                   <Table
-                    headerSet={orderHeaderSet}
+                    headerSet={userInfo?.auth === 0 ? orderHeaderSet : orderHeaderSet.filter(item => item.field !== 'price')}
                     data={orderList}
                     recordLimit="none"
                     tableStyle={{ margin: '0' }}
@@ -229,7 +225,13 @@ const CustomerInfoPage = (props) => {
                   {
                     selectCustomer.custom_image.map((image) => {
                       if (!image || image === '') return null;
-                      return (<li key={image}>{image}</li>);
+                      return (
+                        <li key={image}>
+                          <a href={`http://${Config.API_HOST.IP}/api/customer/${image}`} download>
+                            {image}
+                          </a>
+                        </li>
+                      );
                     })
                   }
                 </ul>

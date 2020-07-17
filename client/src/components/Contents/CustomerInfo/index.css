@@ -222,6 +222,7 @@ ul.img_list li, ol.img_list li {
     margin-bottom: 5px;
     border-bottom: 1px solid #efefef;
     font-size: 12px;
+    cursor: pointer;
 }
 
 ul.img_list li:before,

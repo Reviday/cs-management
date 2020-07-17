@@ -136,7 +136,6 @@ const ModalContents = (props) => {
         { key: 'zipcode', name: '우편번호' }, // input - API
         { key: 'address', name: '주소' }, // input - API
         { key: 'detail_addr', name: '상세주소' }, // input
-        { key: 'product', name: '상품명' }, // input
       ];
 
       for (let key in state) {
@@ -188,10 +187,16 @@ const ModalContents = (props) => {
     }
 
     const formData = new FormData();
-    formData.append('file', img);
+    for (let i = 0; i < img.length; i++) {
+      formData.append('custom_image', img[i]);
+    }
     for (let key in state) {
       if (Object.prototype.hasOwnProperty.call(state, key)) {
-        formData.append(key, state[key]);
+        if (key === 'telpno') {
+          formData.append(key, state[key].replace(/[^0-9]/g, ''));
+        } else {
+          formData.append(key, state[key]);
+        }
       }
     }
 
@@ -279,13 +284,13 @@ const ModalContents = (props) => {
   const uploadImg = (files = []) => {
     let fileList = [];
     if (files.length > 0) {
-      // for (let i in files) {
-      //   if (Object.prototype.hasOwnProperty.call(files, i)) {
-      //     fileList.push(files[i]);
-      //   }
-      // }
-      setImg(img.concat(files[0]));
+      for (let i in files) {
+        if (Object.prototype.hasOwnProperty.call(files, i)) {
+          fileList.push(files[i]);
+        }
+      }
     }
+    setImg(fileList);
   };
 
   return (
@@ -297,28 +302,28 @@ const ModalContents = (props) => {
               <div className="grid_box">
                 <div className="rows-mb-20">
                   {
-                    // siteList가 존재하지 않거나, 개수가 0개이면
-                    // input 스타일로 처리. 있으면 select 스타일로 처리.
-                    siteList && siteList.length > 0
-                      ? (
-                        <Select
-                          name="지점"
-                          setKey="s_code"
-                          setVal="site"
-                          list={siteList}
-                          setValue={e => setState({ ...state, site: e })}
-                        />
-                      )
-                      : (
-                        <Input
-                          name="지점"
-                          value={state.site}
-                          setValue={() => {}} // 값을 바꾸지 않음.
-                          style={{ width: '120px' }}
-                          disabled
-                        />
-                      )
-                  }
+                  // siteList가 존재하지 않거나, 개수가 0개이면
+                  // input 스타일로 처리. 있으면 select 스타일로 처리.
+                  siteList && siteList.length > 0
+                    ? (
+                      <Select
+                        name="지점"
+                        setKey="s_code"
+                        setVal="site"
+                        list={siteList}
+                        setValue={e => setState({ ...state, site: e })}
+                      />
+                    )
+                    : (
+                      <Input
+                        name="지점"
+                        value={state.site}
+                        setValue={() => {}} // 값을 바꾸지 않음.
+                        style={{ width: '120px' }}
+                        disabled
+                      />
+                    )
+                }
                 </div>
                 <div className="rows-mb-20">
                   <Input
@@ -403,113 +408,112 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20">
                   {/* TO-DO: showCustomer에 대한 처리 필요 */}
                   <div className="row_title">
-                    사진등록
+                  사진등록
                   </div>
                   <div className="row_input" style={{ width: '360px' }}>
                     <div className={`img_list${img.length > 0 ? ' on' : ''}`}>
                       {
-                        img.map((item, index) => {
-                          let key = `${index}_${item.name}`;
-                          return (
-                            <div key={key}>
-                              <span>{item.name}</span>
-                              <div
-                                className="removeBtn"
-                                onClick={() => {
-                                  setImg(
-                                    img.filter(target => target !== item)
-                                  );
-                                  console.log(upload.current);
-                                }}
-                              />
-                            </div>
-                          );
-                        })
-                      }
+                      img.map((item, index) => {
+                        let key = `${index}_${item.name}`;
+                        return (
+                          <div key={key}>
+                            <span>{item.name}</span>
+                            <div
+                              className="removeBtn"
+                              onClick={() => {
+                                setImg(
+                                  img.filter(target => target !== item)
+                                );
+                              }}
+                            />
+                          </div>
+                        );
+                      })
+                    }
                     </div>
                     {
-                      items.type !== 'showCustomer'
-                        && (
-                          <React.Fragment>
-                            <input
-                              className="img_upload"
-                              type="button"
-                              value="사진첨부"
-                              onClick={() => upload.current.click()}
-                              disabled={items.type === 'showCustomer'}
-                            />
-                            <input
-                              ref={upload}
-                              type="file"
-                              multiple
-                              accept="image/*"
-                              onChange={e => uploadImg(e.target.files)}
-                              style={{ display: 'none' }}
-                              disabled={items.type === 'showCustomer'}
-                            />
-                          </React.Fragment>
-                        )
-                    }
+                    items.type !== 'showCustomer'
+                      && (
+                        <React.Fragment>
+                          <input
+                            className="img_upload"
+                            type="button"
+                            value="사진첨부"
+                            onClick={() => upload.current.click()}
+                            disabled={items.type === 'showCustomer'}
+                          />
+                          <input
+                            ref={upload}
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={e => uploadImg(e.target.files)}
+                            style={{ display: 'none' }}
+                            disabled={items.type === 'showCustomer'}
+                          />
+                        </React.Fragment>
+                      )
+                  }
                   </div>
                 </div>
                 <div className="rows" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
-                    items.type === 'insertCustomer'
-                      && (
-                        <React.Fragment>
-                          <BorderButton
-                            addClass="insertBtn"
-                            onHandle={() => {
-                              // check validate
-                              if (!checkValidate()) return false;
-                              setConfirmModal({
-                                show: true,
-                                title: '확인 메시지',
-                                content: '고객을 등록하시겠습니까?',
-                                type: 'insert'
-                              });
-                            }}
-                            name="등록"
-                            style={{ width: '80px' }}
-                          />
-                        </React.Fragment>
-                      )
-                  }
+                  items.type === 'insertCustomer'
+                    && (
+                      <React.Fragment>
+                        <BorderButton
+                          addClass="insertBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '고객을 등록하시겠습니까?',
+                              type: 'insert'
+                            });
+                          }}
+                          name="등록"
+                          style={{ width: '80px' }}
+                        />
+                      </React.Fragment>
+                    )
+                }
                   {
-                    items.type === 'update'
-                      && (
-                        <React.Fragment>
-                          <BorderButton
-                            addClass="updateBtn"
-                            onHandle={() => {
-                              // check validate
-                              if (!checkValidate()) return false;
-                              setConfirmModal({
-                                show: true,
-                                title: '확인 메시지',
-                                content: '고객 정보를 수정하시겠습니까?',
-                                type: 'update'
-                              });
-                            }}
-                            name="수정"
-                            style={{ width: '80px' }}
-                          />
-                          <BorderButton
-                            addClass="deleteBtn"
-                            onHandle={() => {
-                              setConfirmModal({
-                                show: true,
-                                title: '확인 메시지',
-                                content: '고객 정보를 삭제하시겠습니까?',
-                                type: 'delete'
-                              });
-                            }}
-                            name="삭제"
-                            style={{ width: '80px' }}
-                          />
-                        </React.Fragment>
-                      )
-                  }
+                  items.type === 'update'
+                    && (
+                      <React.Fragment>
+                        <BorderButton
+                          addClass="updateBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '고객 정보를 수정하시겠습니까?',
+                              type: 'update'
+                            });
+                          }}
+                          name="수정"
+                          style={{ width: '80px' }}
+                        />
+                        <BorderButton
+                          addClass="deleteBtn"
+                          onHandle={() => {
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '고객 정보를 삭제하시겠습니까?',
+                              type: 'delete'
+                            });
+                          }}
+                          name="삭제"
+                          style={{ width: '80px' }}
+                        />
+                      </React.Fragment>
+                    )
+                }
                   <BorderButton
                     addClass="cancelBtn"
                     onHandle={() => executeCustomer('cancel')}
