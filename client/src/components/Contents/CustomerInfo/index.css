@@ -213,8 +213,11 @@ ul.img_list, ol.img_list {
     list-style: none;
     margin: 0px;
     padding: 0px;
-    max-width: 250px;
+    max-width: calc(100% - 100px);;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 ul.img_list li, ol.img_list li {
