@@ -9,6 +9,7 @@ import App from 'App';
 import ContextComposer from 'react-context-composer';
 import { UserInfoProvider } from 'contexts/UserInfoContext';
 import { CollapseProvider } from 'contexts/CollapseContext';
+import { SiteListProvider } from 'contexts/SiteListContext';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
     <ContextComposer contexts={[
       <UserInfoProvider />,
       <CollapseProvider />,
+      <SiteListProvider />,
     ]}
     >
       <App />

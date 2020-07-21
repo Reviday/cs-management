@@ -12,7 +12,7 @@ function Select(props) {
     placeholder ─ 표기할 placeholder가 필요한 경우 지정 : (default : 'Input [name]')
   */
   const selected = useRef();
-  const name = props.name || 'Input'; // name
+  const name = props.name; // name
   const list = props.list || [];
   const setKey = props.setKey; // list의 원소가 object 형식일 때 사용. value 값을 추출할 key값을 사용.
   const setVal = props.setVal; // list의 원소가 object 형식일 때 사용. option에 표기하기 위한 텍스트를 추출할 key값을 사용.
@@ -33,9 +33,13 @@ function Select(props) {
 
   return (
     <React.Fragment>
-      <div className="row_title">
-        {name}
-      </div>
+      {
+        name && (
+          <div className="row_title">
+            {name}
+          </div>
+        )
+      }
       <div className="row_input">
         <select ref={selected} value={value} onChange={e => onHandle(e)}>
           {

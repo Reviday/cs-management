@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import moment from 'moment';
 /*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
 import Calendar from 'common/Calendar';
+import Select from 'common/Select/Select';
 import Modal from 'common/Modal/ModalCover';
 /*  CSS  */
 import './index.css';
 
+// context
+import { UserInfoContext } from 'contexts/UserInfoContext';
+import { SiteListContext } from 'contexts/SiteListContext';
+
 const DashBoard = (props) => {
+
+  const selected = useRef();
+  const [userInfo] = useContext(UserInfoContext);
+  const [siteList, setSiteList] = useContext(SiteListContext); // 지점 리스트
+  const [state, setState] = useState({});
+  
 
   const onMoreBtn = () => {
     console.log('btn click');
@@ -19,7 +30,23 @@ const DashBoard = (props) => {
         <div className="ct_title">
           <div className="_lt">
             <div className="_title">
-             전체 일정
+              {moment(new Date()).format('YYYY년 MM월')}
+              <div className="row_input">
+                <Select
+                  setKey="s_code"
+                  setVal="site"
+                  list={siteList}
+                  value={state.s_code}
+                  setValue={(e) => {
+                    let selectSite = siteList.filter(item => item.s_code === e);
+                    setState({
+                      ...state,
+                      site: selectSite[0].site,
+                      s_code: e
+                    });
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -30,7 +57,7 @@ const DashBoard = (props) => {
         <div className="ct_title">
           <div className="_lt">
             <div className="_title">
-              입/출고 현황
+              금일 입고 예정
             </div>
           </div>
           <div className="_rt">
