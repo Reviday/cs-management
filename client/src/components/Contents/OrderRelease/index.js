@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
-import OrderPage from './OrderPage';
 import BorderButton from 'common/Button/BorderButton';
 import Table from 'common/Table';
 import Modal from 'common/Modal/ModalCover';
+import OrderPage from './OrderPage';
 import OrderModalContent from './OrderModal';
 import ProgressContent from './ProgressModal';
 import Config from 'config';
@@ -249,10 +249,12 @@ const OrderRelease = (props) => {
 
   // 주문 리스트를 가져온다.
   useEffect(() => {
-    if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
-    if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
-    if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
-  }, []); // [] : Run useEffect only once.
+    if (progress.length > 0) {
+      if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
+      if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
+      if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
+    }
+  }, [progress]); // [] : Run useEffect only once.
 
   useEffect(() => {
     if (searchData.set) {

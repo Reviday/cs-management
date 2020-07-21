@@ -13,6 +13,7 @@ import Postcode from 'common/Modal/ModalPostcode';
 import BorderButton from 'common/Button/BorderButton';
 import Config from 'config';
 import 'common/Modal/Modal.scss';
+import './index.css';
 
 const ModalContents = (props) => {
   const items = props.items;
