@@ -10,6 +10,7 @@ import ContextComposer from 'react-context-composer';
 import { UserInfoProvider } from 'contexts/UserInfoContext';
 import { CollapseProvider } from 'contexts/CollapseContext';
 import { SiteListProvider } from 'contexts/SiteListContext';
+import { ProgressProvider } from 'contexts/ProgressContext';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
@@ -18,6 +19,7 @@ ReactDOM.render(
       <UserInfoProvider />,
       <CollapseProvider />,
       <SiteListProvider />,
+      <ProgressProvider />,
     ]}
     >
       <App />

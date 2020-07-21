@@ -8,16 +8,19 @@ import Modal from 'common/Modal/ModalCover';
 /*  CSS  */
 import './index.css';
 
-// context
+/* Context */
 import { UserInfoContext } from 'contexts/UserInfoContext';
 import { SiteListContext } from 'contexts/SiteListContext';
+import { ProgressContext } from 'contexts/ProgressContext';
 
 const DashBoard = (props) => {
 
   const selected = useRef();
   const [userInfo] = useContext(UserInfoContext);
-  const [siteList, setSiteList] = useContext(SiteListContext); // 지점 리스트
-  const [state, setState] = useState({});
+  const [siteList] = useContext(SiteListContext); // 지점 리스트
+  const [progress] = useContext(ProgressContext); // 진행상황 리스트
+  const [calState, setCalState] = useState({}); // calendar용 state
+  const [orderState, setOrderState] = useState({}); // order용 state
   
 
   const onMoreBtn = () => {
@@ -35,12 +38,18 @@ const DashBoard = (props) => {
                 <Select
                   setKey="s_code"
                   setVal="site"
+                  useAll
                   list={siteList}
-                  value={state.s_code}
+                  value={calState.s_code || 'all'}
                   setValue={(e) => {
                     let selectSite = siteList.filter(item => item.s_code === e);
-                    setState({
-                      ...state,
+
+                    if (selectSite.length === 0) {
+                      selectSite = [{ site: '전체', s_code: 'all' }];
+                    }
+
+                    setCalState({
+                      ...calState,
                       site: selectSite[0].site,
                       s_code: e
                     });
@@ -58,6 +67,28 @@ const DashBoard = (props) => {
           <div className="_lt">
             <div className="_title">
               금일 입고 예정
+              <div className="row_input">
+                <Select
+                  setKey="s_code"
+                  setVal="site"
+                  useAll
+                  list={siteList}
+                  value={orderState.s_code || 'all'}
+                  setValue={(e) => {
+                    let selectSite = siteList.filter(item => item.s_code === e);
+
+                    if (selectSite.length === 0) {
+                      selectSite = [{ site: '전체', s_code: 'all' }];
+                    }
+
+                    setOrderState({
+                      ...orderState,
+                      site: selectSite[0].site,
+                      s_code: e
+                    });
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="_rt">

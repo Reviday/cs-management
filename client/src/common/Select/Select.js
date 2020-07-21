@@ -18,7 +18,9 @@ function Select(props) {
   const setVal = props.setVal; // list의 원소가 object 형식일 때 사용. option에 표기하기 위한 텍스트를 추출할 key값을 사용.
   const value = props.value;
   const setValue = props.setValue;
-  // const defaultValue = props.defaultValue; // Select의 기본 값 설정
+
+  /* 사용 유의! */
+  const useAll = props.useAll; // '전체' 선택지를 만들기 위한 props (array가 object 형식일때만 사용. setValue 예외처리는 사용자가 해야함)
 
   const onHandle = (e) => {
     let findData = list.find(e => String(e[setKey].toString()) === String(selected.current.value));
@@ -42,6 +44,9 @@ function Select(props) {
       }
       <div className="row_input">
         <select ref={selected} value={value} onChange={e => onHandle(e)}>
+          {
+            useAll && (<option value="all">전체</option>)
+          }
           {
             list?.map((item, index) => {
               if (typeof item === 'object') {

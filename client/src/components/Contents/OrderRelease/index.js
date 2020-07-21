@@ -14,12 +14,13 @@ import './index.css';
 // context
 import { UserInfoContext } from 'contexts/UserInfoContext';
 import { SiteListContext } from 'contexts/SiteListContext';
+import { ProgressContext } from 'contexts/ProgressContext';
 
 const OrderRelease = (props) => {
 
   const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
-  const [progress, setProgress] = useState([]); // 진행상황 리스트
+  const [progress] = useContext(ProgressContext); // 진행상황 리스트
   const [receiptData, setReceiptData] = useState([]); // 입고
   const [releaseData, setReleaseData] = useState([]); // 출고
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
@@ -137,22 +138,6 @@ const OrderRelease = (props) => {
     );
   };
 
-  // progress 정보 가져오기
-  const getProgressInfo = async () => {
-    let options = {
-      url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,
-      method: 'post'
-    };
-
-    try {
-      let setData = await axios(options);
-      let result = setData?.data?.data;
-      if (result) setProgress(result);
-    } catch (e) {
-      console.log('ERROR', e);
-    }
-  };
-
   // 주문 리스트 가져오기
   const getOrderList = async (category, start, data) => {
     let options = {};
@@ -262,19 +247,14 @@ const OrderRelease = (props) => {
     });
   };
 
-  // 1. 진행 상황 리스트를 가져온 후,
-  // 2. 주문 리스트를 가져온다.
+  // 주문 리스트를 가져온다.
   useEffect(() => {
-    if (progress.length === 0) getProgressInfo(); // 진행 상황 리스트
-    else {
-      if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
-      if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
-      if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
-    }
-  }, [progress]); // [] : Run useEffect only once.
+    if (receiptData.length === 0) getOrderList('order'); // 입고 리스트
+    if (releaseData.length === 0) getOrderList('ship'); // 출고 리스트
+    if (delayReceiptData.length === 0) getOrderList('delay'); // 입고 지연 리스트
+  }, []); // [] : Run useEffect only once.
 
   useEffect(() => {
-    console.log(more.order);
     if (searchData.set) {
       if (more.order === false) {
         setSearchData({ set: false, field: '', word: '' });

@@ -11,16 +11,17 @@ import Config from 'config';
 
 import './index.css';
 
-// context
+/* Context */
 import { UserInfoContext } from 'contexts/UserInfoContext';
 import { SiteListContext } from 'contexts/SiteListContext';
+import { ProgressContext } from 'contexts/ProgressContext';
 
 // 권한 제한이 존재하는 페이지 (auth < 2)
 const CustomerInfo = (props) => {
 
   const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
-  const [progress, setProgress] = useState([]); // 진행상황 리스트
+  const [progress] = useContext(ProgressContext); // 진행상황 리스트
   const [customerTotal, setCustomerTotal] = useState(0); // 고객 수
   const [customerData, setCustomerData] = useState([]);
   const [selectCustomer, setSelectCustomer] = useState({});
@@ -86,22 +87,6 @@ const CustomerInfo = (props) => {
         disabled
       />
     );
-  };
-
-  // progress 정보 가져오기
-  const getProgressInfo = async () => {
-    let options = {
-      url: `http://${Config.API_HOST.IP}/api/order/making/statuslist`,
-      method: 'post'
-    };
-
-    try {
-      let setData = await axios(options);
-      let result = setData?.data?.data;
-      if (result) setProgress(result);
-    } catch (e) {
-      console.log('ERROR', e);
-    }
   };
 
   const getOrderListByCustomer = async (data, start) => {
@@ -216,7 +201,6 @@ const CustomerInfo = (props) => {
   };
 
   useEffect(() => {
-    if (progress.length === 0) getProgressInfo();
     if (customerData.length === 0) getCustomerList();
   }, [siteList]);
 
