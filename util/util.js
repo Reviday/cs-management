@@ -350,6 +350,19 @@ module.exports.makeResponseMessage = function (data) {
         if (element === 'price') {
             objData[element] = this.addComma(objData[element]);
         }
+        if(element === 'start_date'){
+            let start_time = objData[element];
+            start_time = start_time.split(' ');
+            objData['start_time'] = start_time[1];
+        }
+        if(element === 'end_date'){
+            let end_time = objData[element];
+            end_time = end_time.split(' ');
+            objData['end_time'] = end_time[1];
+        }
+        if(element === 'meeting_code'){
+            objData[element] = objData[element]['disc'];
+        }
     });
 
     return objData;
@@ -376,3 +389,16 @@ module.exports.setResponseMessage = function (rows) {
 
     return result;
 };
+
+module.exports.getNowMonthDay = function(nowMonth){
+    const result = {};
+
+    const nowYear = new Date().getFullYear();
+    let firstDay = new Date(nowYear, nowMonth, 1).getDate().toString();
+    firstDay = '0' + firstDay;
+    const lastDay = new Date(nowYear, nowMonth, 0).getDate();
+    result.startDay = nowYear + '-' + nowMonth + '-' + firstDay;
+    result.endDay = nowYear + '-' + nowMonth + '-' + lastDay;
+
+    return result;
+}
