@@ -86,6 +86,11 @@ const CustomerInfoPage = (props) => {
 
       let result = setData.data.data;
 
+      // 정상적으로 처리되었을 때, 리스트 및 카운트를 다시 호출
+      if (result === true) {
+        props.getCustomerList();
+      }
+
       if (result === true) {
         setAlertModal({
           show: true,

@@ -269,6 +269,7 @@ const CustomerInfo = (props) => {
             selectCustomer={selectCustomer}
             orderList={customerOrderList}
             viewModal={data => viewModal('update', data)}
+            getCustomerList={getCustomerList}
           />
         </div>
         <Modal

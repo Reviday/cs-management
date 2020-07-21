@@ -33,7 +33,7 @@ function Header() {
         <div className="t_left">
           <Link to="/">
             <div className="logo" />
-            <div className="title">untitled</div>
+            <div className="title">Formentera</div>
           </Link>
         </div>
         
