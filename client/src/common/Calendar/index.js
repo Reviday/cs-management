@@ -67,15 +67,21 @@ const convertEvents = (data) => {
 };
 
 const Calendar = (props) => {
+  console.log(props.events);
   
   const [state, setState] = useState({
     weekendsVisible: true,
-    currentEvents: [
+    currentEvents: props.events
+  });
+
+  /*
+[
       { id: 0, title: 'event 1', date: '2020-07-01' },
       { id: 12312, title: 'event 3', date: '2020-07-01' },
-      { id: 2, title: 'event 2', date: '2020-07-14' }
+      { id: 2, title: 'event 2', date: '2020-07-14' },
+      { id: 3, title: 'event 5', date: '2020-07-14T12:00:00' }
     ]
-  });
+  */
 
   const handleWeekendsToggle = () => {
     setState({

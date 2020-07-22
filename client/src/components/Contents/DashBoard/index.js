@@ -24,7 +24,11 @@ const DashBoard = (props) => {
   const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
   const [progress] = useContext(ProgressContext); // 진행상황 리스트
-  const [calState, setCalState] = useState({}); // calendar용 state
+  const [scheduleList, setScheduleList] = useState([]); // 상담일정 리스트
+  const [calState, setCalState] = useState({
+    site: '전체',
+    s_code: 'all'
+  }); // calendar용 state
   const [orderState, setOrderState] = useState({}); // order용 state
   const [orderList, setOrderList] = useState([]); // 금일 입고 예정
   const [orderTotal, setOrderTotal] = useState(0); // 금일 입고 예정 총 개수
@@ -122,6 +126,51 @@ const DashBoard = (props) => {
     );
   };
 
+  // 상담 일정 리스트 가져오기
+  const getScheduleList = async () => {
+    let options = {
+      url: `http://${Config.API_HOST.IP}/api/promise/selectByAll`,
+      method: 'post',
+      data: {
+        site: calState.s_code === 'all' ? undefined : calState.site,
+        now_month: '07'
+      }
+    };
+    try {
+      // 데이터 reset
+      setScheduleList([]);
+
+      console.log('options:::', options);
+      let setData = await axios(options);
+
+      let result = setData?.data?.data; // list result
+      console.log(result);
+      let items = [];
+      if (result) {
+        for (let i in result) {
+          if (Object.prototype.hasOwnProperty.call(result, i)) {
+            let row = result[i];
+
+            let convertData = {
+              ...row,
+              // calendar 필수 데이터는 명시
+              id: row.id,
+              title: row.name,
+              date: new Date(row.start_date).toISOString().replace(/T.*$/, '')
+            };
+
+            items.push(convertData);
+          }
+        }
+      }
+
+      console.log(items);
+      setScheduleList(items);
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+  };
+
   // 주문 리스트 가져오기
   const getOrderList = async (start, data) => {
     let options = {
@@ -129,7 +178,7 @@ const DashBoard = (props) => {
       method: 'post',
       data: {
         site: userInfo.site,
-        category: 'order',
+        category: 'checklist',
         action: 's',
         start: start || 1,
         search_field: data?.field || undefined,
@@ -142,7 +191,7 @@ const DashBoard = (props) => {
       method: 'post',
       data: {
         site: userInfo.site,
-        category: 'order',
+        category: 'checklist',
         search_field: data?.field || undefined,
         search_word: data?.word || undefined
       }
@@ -152,13 +201,11 @@ const DashBoard = (props) => {
       // 데이터 reset
       setOrderList([]);
 
-      console.log('options:::', options);
       let listSetData = await axios(options);
       let countSetData = await axios(countOption);
 
       let result = listSetData?.data?.data; // list result
       let count = countSetData?.data?.data?.total; // count result
-      console.log(result, count);
       let items = [];
       if (result) {
         for (let i in result) {
@@ -191,6 +238,11 @@ const DashBoard = (props) => {
   useEffect(() => {
     if (progress.length > 0 && orderList.length === 0) getOrderList();
   }, [progress]);
+
+  // 상담일정 리스트를 가져온다.
+  useEffect(() => {
+    if (scheduleList.length === 0) getScheduleList();
+  }, []);
 
   return (
     <React.Fragment>
@@ -225,7 +277,9 @@ const DashBoard = (props) => {
           </div>
         </div>
         <div className="ct_box">
-          <Calendar />
+          <Calendar
+            events={scheduleList}
+          />
         </div>
 
         <div className="ct_title">
