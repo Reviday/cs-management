@@ -16,6 +16,7 @@
     "@fullcalendar/core": "^5.1.0",
     "@fullcalendar/daygrid": "^5.1.0",
     "@fullcalendar/interaction": "^5.1.0",
+    "@fullcalendar/moment": "^5.1.0",
     "@fullcalendar/react": "^5.1.0",
     "@fullcalendar/timegrid": "^5.1.0",
     "app-root-path": "^2.2.1",

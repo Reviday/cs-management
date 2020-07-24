@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+
 /*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
 import Calendar from 'common/Calendar';
@@ -11,6 +12,7 @@ import OrderModalContent from 'components/Contents/OrderRelease/OrderModal';
 import ProgressContent from 'components/Contents/OrderRelease/ProgressModal';
 import OrderPage from 'components/Contents/OrderRelease/OrderPage';
 import Config from 'config';
+
 /*  CSS  */
 import './index.css';
 
@@ -24,6 +26,7 @@ const DashBoard = (props) => {
   const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
   const [progress] = useContext(ProgressContext); // 진행상황 리스트
+  
   const [scheduleList, setScheduleList] = useState([]); // 상담일정 리스트
   const [calState, setCalState] = useState({
     site: '전체',
@@ -144,7 +147,6 @@ const DashBoard = (props) => {
       let setData = await axios(options);
 
       let result = setData?.data?.data; // list result
-      console.log(result);
       let items = [];
       if (result) {
         for (let i in result) {
@@ -156,7 +158,10 @@ const DashBoard = (props) => {
               // calendar 필수 데이터는 명시
               id: row.id,
               title: row.name,
-              date: new Date(row.start_date).toISOString().replace(/T.*$/, '')
+              start: new Date(row.start_date).toISOString().replace(/T.*$/, '')
+                + (row.start_time ? 'T' + row.start_time : null),
+              end: new Date(row.end_date).toISOString().replace(/T.*$/, '')
+                + (row.end_time ? 'T' + row.end_time : null),
             };
 
             items.push(convertData);
@@ -237,11 +242,12 @@ const DashBoard = (props) => {
   // 주문 리스트를 가져온다.
   useEffect(() => {
     if (progress.length > 0 && orderList.length === 0) getOrderList();
+    if (scheduleList.length === 0) getScheduleList();
   }, [progress]);
 
   // 상담일정 리스트를 가져온다.
   useEffect(() => {
-    if (scheduleList.length === 0) getScheduleList();
+    
   }, []);
 
   return (
