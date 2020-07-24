@@ -64,6 +64,7 @@ const Calendar = (props) => {
   // const [weekendsVisible, setWeekendsVisible] = useState(true);
   // const [events, setEvents] = useState([]);
   const calendarRef = useRef();
+  const [locale, setLocale] = useState(koLocale);
   const [state, setState] = useState({
     // weekendsVisible: true,
     currentEvents: []
@@ -221,6 +222,23 @@ const Calendar = (props) => {
             />
             toggle weekends
           </label> */}
+          
+          {/* 시험용 기능 */}
+          <label htmlFor="locale_chkbox">
+            <input
+              type="checkbox"
+              id="locale_chkbox"
+              checked={locale}
+              onChange={() => {
+                if (locale) {
+                  setLocale(undefined);
+                } else {
+                  setLocale(koLocale);
+                }
+              }}
+            />
+            한국어
+          </label>
           <div className="calendar-wrapper">
             <FullCalendar
               ref={calendarRef}
@@ -236,7 +254,7 @@ const Calendar = (props) => {
               selectMirror
               dayMaxEvents
               timeZone="Asia/Seoul"
-              locale={koLocale}
+              locale={locale}
               validRange={validRange}
               // weekends={state.weekendsVisible}
               // initialEvents={props.events} // alternatively, use the `events` setting to fetch from a feed
