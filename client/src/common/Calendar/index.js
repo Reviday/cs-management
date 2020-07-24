@@ -59,15 +59,6 @@ const createEventId = () => {
   return String(eventGuid++);
 };
 
-const convertEvents = (data) => {
-//   let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-  return {
-    id: createEventId(),
-    title: data.title,
-    start: new Date(data.date).toISOString().replace(/T.*$/, '')
-  };
-};
-
 const Calendar = (props) => {
 
   // const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -77,12 +68,20 @@ const Calendar = (props) => {
     // weekendsVisible: true,
     currentEvents: []
   });
-  const [data, setData] = useState(props.events || []);
+  const [data, setData] = useState(props.events || []); // 없어도 될 것 같기도
 
+  // calendar에 표기되는 event time format
   const eventTimeFormat = {
     hour: '2-digit',
     minute: '2-digit',
     meridiem: false
+  };
+
+  // 사용자가 탐색할 수 있는 날짜와 이벤트가 진행되는 위치 제한
+  // 오늘 날 기준으로 전/후 2년까지로 제한.
+  const validRange = {
+    start: moment().subtract(2, 'years').format('YYYY-MM-DD'),
+    end: moment().add(2, 'years').format('YYYY-MM-DD'),
   };
 
 
@@ -238,6 +237,7 @@ const Calendar = (props) => {
               dayMaxEvents
               timeZone="Asia/Seoul"
               locale={koLocale}
+              validRange={validRange}
               // weekends={state.weekendsVisible}
               // initialEvents={props.events} // alternatively, use the `events` setting to fetch from a feed
               events={props.events}
