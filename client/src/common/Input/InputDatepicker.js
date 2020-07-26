@@ -40,6 +40,14 @@ const InputDatepicker = (props) => {
   const [startDate, setStartDate] = props.startState;
   const [endDate, setEndDate] = props.endState;
 
+  const CustomTimeInput = ({ value, onChange }) => (
+    <input
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      style={{ border: 'solid 1px pink' }}
+    />
+  );
+
   return (
     <React.Fragment>
       <div className="range_picker_wrapper">
@@ -50,11 +58,12 @@ const InputDatepicker = (props) => {
           <DatePicker
             selected={startDate}
             onChange={date => setStartDate(date)}
-            dateFormat="yyyy/MM/dd"
+            dateFormat={props.useTime ? 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
             selectsStart
             startDate={startDate}
             endDate={endDate}
-            showTimeSelect={props.showTimeSelect}
+            showTimeInput={props.useTime}
+            // customTimeInput={<CustomTimeInput />}
             showYearDropdown
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}
@@ -70,12 +79,13 @@ const InputDatepicker = (props) => {
           <DatePicker
             selected={endDate}
             onChange={date => setEndDate(date)}
-            dateFormat="yyyy/MM/dd"
+            dateFormat={props.useTime ? 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
             selectsEnd
             startDate={startDate}
             endDate={endDate}
             minDate={startDate}
-            showTimeSelect={props.showTimeSelect}
+            showTimeInput={props.useTime}
+            // customTimeInput={<CustomTimeInput />}
             showYearDropdown
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}

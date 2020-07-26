@@ -173,7 +173,7 @@ const ModalContents = (props) => {
                     endTitle="종료시간"
                     startState={[startDate, setStartDate]}
                     endState={[endDate, setEndDate]}
-                    showTimeSelect
+                    useTime
                     isClearable={items.type !== 'showEvent'}
                     disabled={items.type === 'showEvent'}
                   />
