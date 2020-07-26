@@ -10,6 +10,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
+import BorderButton from 'common/Button/BorderButton';
 
 /*  CSS  */
 import './index.css';
@@ -156,6 +157,7 @@ const Calendar = (props) => {
 
   // Event click
   const handleEventClick = (clickInfo) => {
+    viewModal('showEvent');
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //  clickInfo.event.remove();
     // }
@@ -198,7 +200,20 @@ const Calendar = (props) => {
     return (
       <div className="app-sidebar">
         <div className="app-sidebar-section">
-          <h2 className="h2_date">{moment(selectDate).format('YYYY년 MM월 DD일')}</h2>
+          
+          <h2 className="h2_date">
+            {moment(selectDate).format('YYYY년 MM월 DD일')}
+            <div className="_rt">
+              <div className="_more">
+                <BorderButton
+                  addClass="moreBtn"
+                  onHandle={() => viewModal('addEvent')}
+                  style={{ width: '100px' }}
+                  name="일정 추가"
+                />
+              </div>
+            </div>
+          </h2>
           <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>
         <div className="app-sidebar-section">

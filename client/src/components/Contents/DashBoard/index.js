@@ -11,7 +11,6 @@ import Modal from 'common/Modal/ModalCover';
 import OrderModalContent from 'components/Contents/OrderRelease/OrderModal';
 import ProgressContent from 'components/Contents/OrderRelease/ProgressModal';
 import OrderPage from 'components/Contents/OrderRelease/OrderPage';
-import DayClickModal from './DayClickModal';
 import EventClickModal from './EventClickModal';
 import Config from 'config';
 
@@ -287,7 +286,6 @@ const DashBoard = (props) => {
         <div className="ct_box">
           <Calendar
             events={scheduleList}
-            dayClick={DayClickModal}
             eventClick={EventClickModal}
           />
         </div>

@@ -54,6 +54,7 @@ const InputDatepicker = (props) => {
             selectsStart
             startDate={startDate}
             endDate={endDate}
+            showTimeSelect={props.showTimeSelect}
             showYearDropdown
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}
@@ -74,6 +75,7 @@ const InputDatepicker = (props) => {
             startDate={startDate}
             endDate={endDate}
             minDate={startDate}
+            showTimeSelect={props.showTimeSelect}
             showYearDropdown
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}

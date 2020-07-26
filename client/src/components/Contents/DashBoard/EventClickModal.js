@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -13,8 +13,12 @@ import DatePicker from 'common/Input/InputDatepicker';
 import 'common/Modal/Modal.scss';
 import Config from 'config';
 
+// context
+import { SiteListContext } from 'contexts/SiteListContext';
+
 const ModalContents = (props) => {
   const items = props.items;
+  const [siteList] = useContext(SiteListContext); // 지점 리스트
   const [state, setState] = useState({
     name: '',
     telpno: '',
@@ -120,6 +124,31 @@ const ModalContents = (props) => {
             <div className="_content">
               <div className="grid_box">
                 <div className="rows-mb-20">
+                  {
+                  // siteList가 존재하지 않거나, 개수가 0개이면
+                  // input 스타일로 처리. 있으면 select 스타일로 처리.
+                  items.type === 'showEvent'
+                    ? (
+                      <Select
+                        name="지점"
+                        setKey="s_code"
+                        setVal="site"
+                        list={siteList}
+                        setValue={e => setState({ ...state, site: e })}
+                      />
+                    )
+                    : (
+                      <Input
+                        name="지점"
+                        value={state.site}
+                        setValue={() => {}} // 값을 바꾸지 않음.
+                        style={{ width: '120px' }}
+                        disabled
+                      />
+                    )
+                }
+                </div>
+                <div className="rows-mb-20">
                   <Input
                     name="고객명"
                     value={state.name}
@@ -144,8 +173,9 @@ const ModalContents = (props) => {
                     endTitle="종료시간"
                     startState={[startDate, setStartDate]}
                     endState={[endDate, setEndDate]}
-                    isClearable={items.type !== 'showOrder'}
-                    disabled={items.type === 'showOrder'}
+                    showTimeSelect
+                    isClearable={items.type !== 'showEvent'}
+                    disabled={items.type === 'showEvent'}
                   />
                 </div>
                 <div className="rows-mb-20" style={{ height: '40px' }}>
