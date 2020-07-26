@@ -11,6 +11,8 @@ import Modal from 'common/Modal/ModalCover';
 import OrderModalContent from 'components/Contents/OrderRelease/OrderModal';
 import ProgressContent from 'components/Contents/OrderRelease/ProgressModal';
 import OrderPage from 'components/Contents/OrderRelease/OrderPage';
+import DayClickModal from './DayClickModal';
+import EventClickModal from './EventClickModal';
 import Config from 'config';
 
 /*  CSS  */
@@ -158,10 +160,10 @@ const DashBoard = (props) => {
               // calendar 필수 데이터는 명시
               id: row.id,
               title: row.name,
-              start: new Date(row.start_date).toISOString().replace(/T.*$/, '')
-                + (row.start_time ? 'T' + row.start_time : null),
-              end: new Date(row.end_date).toISOString().replace(/T.*$/, '')
-                + (row.end_time ? 'T' + row.end_time : null),
+              start: moment(row.start_date).format('YYYY-MM-DD')
+              + (row.start_time ? 'T' + row.start_time : null),
+              end: moment(row.end_date).format('YYYY-MM-DD')
+              + (row.end_time ? 'T' + row.end_time : null),
             };
 
             items.push(convertData);
@@ -239,13 +241,13 @@ const DashBoard = (props) => {
     }
   };
 
-  // 주문 리스트를 가져온다.
+  // 주문, 상담일정 리스트를 가져온다.
   useEffect(() => {
     if (progress.length > 0 && orderList.length === 0) getOrderList();
     if (scheduleList.length === 0) getScheduleList();
   }, [progress]);
 
-  // 상담일정 리스트를 가져온다.
+  //  리스트를 가져온다.
   useEffect(() => {
     
   }, []);
@@ -285,6 +287,8 @@ const DashBoard = (props) => {
         <div className="ct_box">
           <Calendar
             events={scheduleList}
+            dayClick={DayClickModal}
+            eventClick={EventClickModal}
           />
         </div>
 

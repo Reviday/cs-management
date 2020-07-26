@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -8,6 +8,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import momentPlugin from '@fullcalendar/moment';
 import koLocale from '@fullcalendar/core/locales/ko';
 
+/*  User Import  */
+import Modal from 'common/Modal/ModalCover';
+
+/*  CSS  */
 import './index.css';
 
 /** **************************************************************************
@@ -37,21 +41,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 let eventGuid = 0;
 
-const renderSidebarEvent = (event) => {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
-      <i>{event.title}</i>
-    </li>
-  );
-};
-
 const renderEventContent = (eventInfo) => {
   return (
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
+  );
+};
+
+const renderSidebarEvent = (event) => {
+  return (
+    <li key={event.id}>
+      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
+      <i>{event.title}</i>
+    </li>
   );
 };
 
@@ -63,13 +67,37 @@ const Calendar = (props) => {
 
   // const [weekendsVisible, setWeekendsVisible] = useState(true);
   // const [events, setEvents] = useState([]);
-  const calendarRef = useRef();
   const [locale, setLocale] = useState(koLocale);
+  const [selectDate, setSelectDate] = useState(new Date());
   const [state, setState] = useState({
     // weekendsVisible: true,
     currentEvents: []
   });
   const [data, setData] = useState(props.events || []); // 없어도 될 것 같기도
+
+  // Modal State
+  const [isModal, setIsModal] = useState({
+    view: false,
+    type: '',
+    data: {}
+  });
+
+  // close modal
+  const toggleModal = () => {
+    setIsModal({ ...isModal,
+      view: !isModal.view,
+      type: '',
+      data: {}
+    });
+  };
+
+  const viewModal = async (type, data) => {
+    setIsModal({
+      view: true,
+      type: type,
+      data: data
+    });
+  };
 
   // calendar에 표기되는 event time format
   const eventTimeFormat = {
@@ -108,20 +136,22 @@ const Calendar = (props) => {
 
   // Date Click
   const handleDateSelect = (selectInfo) => {
-    let title = prompt('Please enter a new title for your event');
-    let calendarApi = selectInfo.view.calendar;
+    setSelectDate(moment(selectInfo.startStr));
+    // viewModal('day', {});
+    // let title = prompt('Please enter a new title for your event');
+    // let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+    // calendarApi.unselect(); // clear date selection
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      });
-    }
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: createEventId(),
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     allDay: selectInfo.allDay
+    //   });
+    // }
   };
 
   // Event click
@@ -163,24 +193,41 @@ const Calendar = (props) => {
       currentEvents: events
     });
   };
-  
+
   const renderSidebar = () => {
     return (
       <div className="app-sidebar">
         <div className="app-sidebar-section">
-          <h2 className="h2_date">{moment(new Date()).format('YYYY년 MM월 DD일')}</h2>
-          <h2 className="h2_day">{moment(new Date()).format('dd요일')}</h2>
+          <h2 className="h2_date">{moment(selectDate).format('YYYY년 MM월 DD일')}</h2>
+          <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>
         <div className="app-sidebar-section">
           <h2>
-            할 일 (To-Do)
+            오전
             (
-            {state.currentEvents.length}
+            {state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).length}
             )
           </h2>
           <ul>
             {
-              state.currentEvents.map(renderSidebarEvent)
+              state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).map(renderSidebarEvent)
+            }
+          </ul>
+          <h2>
+            오후
+            (
+            {state.currentEvents.filter(event => {
+              if (moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후')) {
+                console.log(event.start);
+              }
+              return moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후');
+              
+            }).length}
+            )
+          </h2>
+          <ul>
+            {
+              state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후')).map(renderSidebarEvent)
             }
           </ul>
         </div>
@@ -210,71 +257,79 @@ const Calendar = (props) => {
   // }, [props.events]);
 
   return (
-    <div className="mypage-body">
-      <div className="body-wrapper box">
-        <div className="body-info-container">
-          {/* <label htmlFor="week_chkbox">
-            <input
-              type="checkbox"
-              id="week_chkbox"
-              checked={state.weekendsVisible}
-              onChange={handleWeekendsToggle}
-            />
-            toggle weekends
-          </label> */}
-          
-          {/* 시험용 기능 */}
-          <label htmlFor="locale_chkbox">
-            <input
-              type="checkbox"
-              id="locale_chkbox"
-              checked={locale}
-              onChange={() => {
-                if (locale) {
-                  setLocale(undefined);
-                } else {
-                  setLocale(koLocale);
-                }
-              }}
-            />
-            한국어
-          </label>
-          <div className="calendar-wrapper">
-            <FullCalendar
-              ref={calendarRef}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin]}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-              }}
-              initialView="dayGridMonth"
-              editable
-              selectable
-              selectMirror
-              dayMaxEvents
-              timeZone="Asia/Seoul"
-              locale={locale}
-              validRange={validRange}
-              // weekends={state.weekendsVisible}
-              // initialEvents={props.events} // alternatively, use the `events` setting to fetch from a feed
-              events={props.events}
-              eventTimeFormat={eventTimeFormat}
-              select={handleDateSelect}
-              eventContent={renderEventContent} // custom render function
-              eventClick={handleEventClick}
-              eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-              // you can update a remote database when these fire:
-              // eventAdd={function(){}}
-              eventChange={handleEventChange}
-              //   eventRemove={function(){}}
-              //   dateClick={e => onClick(e)}
-            />
+    <React.Fragment>
+      <div className="mypage-body">
+        <div className="body-wrapper box">
+          <div className="body-info-container">
+            {/* <label htmlFor="week_chkbox">
+              <input
+                type="checkbox"
+                id="week_chkbox"
+                checked={state.weekendsVisible}
+                onChange={handleWeekendsToggle}
+              />
+              toggle weekends
+            </label> */}
+            
+            {/* 시험용 기능 */}
+            <label htmlFor="locale_chkbox">
+              <input
+                type="checkbox"
+                id="locale_chkbox"
+                checked={locale}
+                onChange={() => {
+                  if (locale) {
+                    setLocale(undefined);
+                  } else {
+                    setLocale(koLocale);
+                  }
+                }}
+              />
+              한국어
+            </label>
+            <div className="calendar-wrapper">
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin]}
+                headerToolbar={{
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }}
+                initialView="dayGridMonth"
+                editable
+                selectable
+                selectMirror
+                dayMaxEvents
+                timeZone="Asia/Seoul"
+                locale={locale}
+                validRange={validRange}
+                // weekends={state.weekendsVisible}
+                // initialEvents={props.events} // alternatively, use the `events` setting to fetch from a feed
+                events={props.events}
+                eventTimeFormat={eventTimeFormat}
+                select={handleDateSelect}
+                eventContent={renderEventContent} // custom render function
+                eventClick={handleEventClick}
+                eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+                // you can update a remote database when these fire:
+                // eventAdd={function(){}}
+                eventChange={handleEventChange}
+                //   eventRemove={function(){}}
+                //   dateClick={e => onClick(e)}
+              />
+            </div>
           </div>
         </div>
+        {renderSidebar()}
       </div>
-      {renderSidebar()}
-    </div>
+      <Modal
+        set={isModal}
+        hide={toggleModal}
+        title="일정 상세"
+        style={{ width: '500px', height: 'fit-content' }}
+        contents={props.eventClick}
+      />
+    </React.Fragment>
   );
 };
 
