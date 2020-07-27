@@ -59,11 +59,14 @@ div.picker_title {
   font-size: 16px;
   font-weight: 600;
   /* padding: 3px; */
-  margin: 7px 0;
+  padding: 7px 0;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-radius: 5px 5px 0 0;
+  background-color: rgba(93, 156, 236, .4);
+  /* background-color: #aeaeae; */
 }
 
 div.react-datepicker__year-read-view,
@@ -88,4 +91,9 @@ div.react-datepicker__month-year-read-view {
   font-size: 11px;
   font-weight: 400;
   width: 100px !important;
+}
+
+div.react-datepicker__input-container input {
+  border-radius: 0 0 4px 4px !important;
+  /* border: 1px solid rgba(93, 156, 236, .4) !important; */
 }

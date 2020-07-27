@@ -341,7 +341,7 @@ const Calendar = (props) => {
         set={isModal}
         hide={toggleModal}
         title="일정 상세"
-        style={{ width: '500px', height: 'fit-content' }}
+        style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
       />
     </React.Fragment>

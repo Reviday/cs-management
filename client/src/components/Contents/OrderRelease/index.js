@@ -405,7 +405,7 @@ const OrderRelease = (props) => {
         set={isModal}
         hide={toggleModal}
         title={isModal.type === 'progress' ? '진행 절차 업데이트' : isModal.type === 'insertOrder' ? '주문 등록' : '주문 정보'}
-        style={{ width: '500px', height: 'fit-content' }}
+        style={isModal.type === 'progress' ? { width: '580px', height: 'fit-content' } : { width: '500px', height: 'fit-content' }}
         contents={isModal.type === 'progress' ? ProgressContent : OrderModalContent}
         items={isModal.type === 'progress' ? { type: isModal.type, progress: progress, getOrderList: getOrderList } : { type: isModal.type, siteList: siteList, getOrderList: getOrderList }}
       />

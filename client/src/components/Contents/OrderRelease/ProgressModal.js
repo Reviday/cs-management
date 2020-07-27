@@ -136,6 +136,11 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20 pro_title">
                   진행 절차 업데이트
                 </div>
+                {/* <div className="rows-mb-20" style={{ height: '60px' }}>
+                  <div className="row_title">
+                    진행 절차 업데이트
+                  </div>
+                </div> */}
                 <div className="_progress">
                   <div className="rows-mb-20">
                     {
@@ -189,12 +194,10 @@ const ModalContents = (props) => {
                     })
                   }
                 </div>
-                <div className="rows-mb-20" style={{ height: '40px' }}>
+                <div className="rows-mb-20" style={{ height: '60px', marginTop: '30px' }}>
                   <div className="row_title">
                     주문날짜
                   </div>
-                </div>
-                <div className="rows-mb-20">
                   <DatePicker
                     startTitle="주문날짜"
                     endTitle="완료날짜"
@@ -202,12 +205,10 @@ const ModalContents = (props) => {
                     endState={[endDate, setEndDate]}
                   />
                 </div>
-                <div className="rows-mb-20" style={{ height: '40px' }}>
+                <div className="rows-mb-20" style={{ height: '170px' }}>
                   <div className="row_title">
                     특이사항
                   </div>
-                </div>
-                <div className="rows-mb-20">
                   <div className="needs_area">
                     <textarea
                       value={state.needs}

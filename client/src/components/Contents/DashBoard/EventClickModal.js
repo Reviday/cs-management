@@ -116,7 +116,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
+      <div className="modal_content" style={{ height: 'fit-content', overflow: 'hidden', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div" style={{ minHeight: '515px', height: 'fit-content' }}>
           <div className="box_layout noshadow">
             <div className="_content">
@@ -125,7 +125,7 @@ const ModalContents = (props) => {
                   {
                   // siteList가 존재하지 않거나, 개수가 0개이면
                   // input 스타일로 처리. 있으면 select 스타일로 처리.
-                  items.type === 'showEvent'
+                  items.type !== 'showEvent'
                     ? (
                       <Select
                         name="지점"
@@ -165,7 +165,21 @@ const ModalContents = (props) => {
                     disabled={items.type === 'showEvent'}
                   />
                 </div>
-                <div className="rows-mb-20" style={{ height: '40px' }}>
+                <div className="rows-mb-20">
+                  <div className="row_title">
+                    상담시간
+                  </div>
+                  <DatePicker
+                    startTitle="시작시간"
+                    endTitle="종료시간"
+                    startState={[startDate, setStartDate]}
+                    endState={[endDate, setEndDate]}
+                    useTime
+                    isClearable={items.type !== 'showEvent'}
+                    disabled={items.type === 'showEvent'}
+                  />
+                </div>
+                <div className="rows-mb-20" style={{ height: '180px' }}>
                   <div className="row_title">
                     메모
                   </div>
@@ -179,18 +193,31 @@ const ModalContents = (props) => {
                     />
                   </div>
                 </div>
-                <div className="rows-mb-20">
-                  
+                <div className="rows-mb-20" style={{ height: '40px' }}>
+                  <div className="row_title">
+                    상담종류
+                  </div>
                 </div>
-                <div className="rows-mb-20">
-                  <DatePicker
-                    startTitle="시작시간"
-                    endTitle="종료시간"
-                    startState={[startDate, setStartDate]}
-                    endState={[endDate, setEndDate]}
-                    useTime
-                    isClearable={items.type !== 'showEvent'}
-                    disabled={items.type === 'showEvent'}
+                <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
+                  <BorderButton
+                    addClass="updateBtn"
+                    onHandle={() => {
+                    // check validate
+                      if (!checkValidate()) return false;
+                      setConfirmModal({
+                        show: true,
+                        title: '확인 메시지',
+                        content: '진행사항을 수정하시겠습니까?',
+                      });
+                    }}
+                    name="수정"
+                    style={{ width: '80px' }}
+                  />
+                  <BorderButton
+                    addClass="cancelBtn"
+                    onHandle={() => { setState({}); props.hide(); }}
+                    name="취소"
+                    style={{ width: '80px' }}
                   />
                 </div>
               </div>

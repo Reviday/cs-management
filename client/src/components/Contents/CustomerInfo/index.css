@@ -110,6 +110,8 @@ div.img_list.on {
 
 div.img_list span {
   width: 195px;
+  font-size: 12px;
+  line-height: 12px;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
