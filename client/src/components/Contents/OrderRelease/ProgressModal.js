@@ -142,7 +142,7 @@ const ModalContents = (props) => {
                       progress.map((item) => {
                         if (item.order_status === state.order_status) {
                           let name = item.status_name;
-                          let addClass = `type${item.order_status}`;
+                          let addClass = `type${item.order_status} on`;
     
                           return (
                             <div className="rows-mb-20" key={`${item.order_status}-${item.status_name}`}>
@@ -166,6 +166,8 @@ const ModalContents = (props) => {
                       let addClass = `type${item.order_status}${item.order_status === state.order_status ? ' on' : ''}`;
 
                       const onHandle = () => {
+                        // view를 닫는다.
+                        setView(false);
                         // state 설정 후
                         setState({
                           ...state,
@@ -173,8 +175,6 @@ const ModalContents = (props) => {
                           status_name: name
                         });
 
-                        // view를 닫는다.
-                        setView(false);
                       };
 
                       return (

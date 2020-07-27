@@ -165,8 +165,20 @@ div.pro_title {
 
 div.pro_list {
   display: none;
+  width: 30%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, 95%);
+  transform: translate(-50%, 0%);
+  border: 1px solid #bbb;
+  border-radius: 20px;
   text-align: center;
   transition: 0.5s;
+  z-index: 1;
+  padding: 10px;
+  padding-top: 20px;
 }
 
 div._progress {
