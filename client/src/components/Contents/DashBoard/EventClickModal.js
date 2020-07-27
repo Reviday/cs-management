@@ -4,10 +4,8 @@ import moment from 'moment';
 
 import Select from 'common/Select/Select';
 import Input from 'common/Input/Input';
-import InputCustom from 'common/Input/InputCustom';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
-import Postcode from 'common/Modal/ModalPostcode';
 import BorderButton from 'common/Button/BorderButton';
 import DatePicker from 'common/Input/InputDatepicker';
 import 'common/Modal/Modal.scss';
@@ -167,6 +165,23 @@ const ModalContents = (props) => {
                     disabled={items.type === 'showEvent'}
                   />
                 </div>
+                <div className="rows-mb-20" style={{ height: '40px' }}>
+                  <div className="row_title">
+                    메모
+                  </div>
+                  <div className="needs_area">
+                    <textarea
+                      value={state.memo}
+                      onChange={e => setState({
+                        ...state,
+                        memo: e.target.value
+                      })}
+                    />
+                  </div>
+                </div>
+                <div className="rows-mb-20">
+                  
+                </div>
                 <div className="rows-mb-20">
                   <DatePicker
                     startTitle="시작시간"
@@ -177,22 +192,6 @@ const ModalContents = (props) => {
                     isClearable={items.type !== 'showEvent'}
                     disabled={items.type === 'showEvent'}
                   />
-                </div>
-                <div className="rows-mb-20" style={{ height: '40px' }}>
-                  <div className="row_title">
-                    메모
-                  </div>
-                </div>
-                <div className="rows-mb-20">
-                  <div className="needs_area">
-                    <textarea
-                      value={state.memo}
-                      onChange={e => setState({
-                        ...state,
-                        memo: e.target.value
-                      })}
-                    />
-                  </div>
                 </div>
               </div>
             </div>

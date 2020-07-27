@@ -164,6 +164,12 @@ div.pro_title {
 }
 
 div.pro_list {
+  display: none;
+  text-align: center;
+  transition: 0.5s;
+}
+
+div._progress {
   text-align: center;
 }
 

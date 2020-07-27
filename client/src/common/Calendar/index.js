@@ -231,7 +231,7 @@ const Calendar = (props) => {
           <h2>
             오후
             (
-            {state.currentEvents.filter(event => {
+            {state.currentEvents.filter((event) => {
               if (moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후')) {
                 console.log(event.start);
               }

@@ -297,7 +297,6 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      {console.log(startDate, endDate)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'auto', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div">
           <div className="box_layout noshadow">

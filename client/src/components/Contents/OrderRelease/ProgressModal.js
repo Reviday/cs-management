@@ -12,6 +12,7 @@ const ModalContents = (props) => {
   const progress = props.items.progress || [];
   const items = props.items;
   const [state, setState] = useState(props.data);
+  const [view, setView] = useState(false); // progress list를 보여줄지 여부
   const [startDate, setStartDate] = useState(
     props.data.order_date
       ? new Date(props.data.order_date) : null
@@ -82,7 +83,6 @@ const ModalContents = (props) => {
 
   const updateProgress = async () => {
     // set options
-    // 2020.07.08 ${Config.API_HOST.PORT} 제거
     let options = {
       url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
@@ -121,6 +121,10 @@ const ModalContents = (props) => {
     }
   };
 
+  const viewProgressList = () => {
+
+  };
+
   return (
     <React.Fragment>
       {console.log('check:::', state)}
@@ -132,18 +136,45 @@ const ModalContents = (props) => {
                 <div className="rows-mb-20 pro_title">
                   진행 절차 업데이트
                 </div>
-                <div className="pro_list">
+                <div className="_progress">
+                  <div className="rows-mb-20">
+                    {
+                      progress.map((item) => {
+                        if (item.order_status === state.order_status) {
+                          let name = item.status_name;
+                          let addClass = `type${item.order_status}`;
+    
+                          return (
+                            <div className="rows-mb-20" key={`${item.order_status}-${item.status_name}`}>
+                              <BorderButton
+                                addClass={`progressBtn ${addClass}`}
+                                onHandle={() => setView(true)}
+                                name={name}
+                              />
+                            </div>
+                          );
+                        }
+                        return null;
+                      })
+                    }
+                  </div>
+                </div>
+                <div className="pro_list" style={view ? { display: 'block' } : {}}>
                   {
                     progress.map((item) => {
                       let name = item.status_name;
                       let addClass = `type${item.order_status}${item.order_status === state.order_status ? ' on' : ''}`;
 
                       const onHandle = () => {
+                        // state 설정 후
                         setState({
                           ...state,
                           order_status: item.order_status,
                           status_name: name
                         });
+
+                        // view를 닫는다.
+                        setView(false);
                       };
 
                       return (
