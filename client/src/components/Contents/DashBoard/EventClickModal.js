@@ -18,13 +18,33 @@ import { SiteListContext } from 'contexts/SiteListContext';
 const ModalContents = (props) => {
   const items = props.items;
   const [siteList] = useContext(SiteListContext); // 지점 리스트
-  const [state, setState] = useState({
-    name: '',
-    telpno: '',
-    memo: '',
-    counseling_status: 0,
-    date: null
-  });
+  const [state, setState] = useState(
+    items.type !== 'showEvent'
+      ? {
+        site: '',
+        name: '',
+        telpno: '',
+        memo: '',
+        meeting_category: 0,
+        start_date: null,
+        end_date: null,
+        start_time: null,
+        end_time: null,
+      }
+      : props.data
+  );
+  console.log('event data:::', props.data);
+  /*
+    end_date: "2020-07-23 06:00"
+    end_time: "06:00"
+    meeting_category: "0"
+    memo: "상담전화"
+    name: "유진호"
+    site: "본점"
+    start_date: "2020-07-23 04:00"
+    start_time: "04:00"
+    telpno: "010-3625-7342"
+  */
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [view, setView] = useState(false); // categoryList view를 보일지 여부
@@ -32,10 +52,13 @@ const ModalContents = (props) => {
   // meeting_category list
   // 나중에 리스트 불러오는 형식으로 변경할 필요가 있음.
   const categoryList = [
-    { counseling_status: 0, status_name: '신규' },
-    { counseling_status: 1, status_name: '가봉' },
-    { counseling_status: 2, status_name: '완성' },
-    { counseling_status: 3, status_name: '완성피팅' },
+    { meeting_category: 0, status_name: 'Unknown' },
+    { meeting_category: 1, status_name: '신규' },
+    { meeting_category: 2, status_name: '가봉' },
+    { meeting_category: 3, status_name: '완성' },
+    { meeting_category: 4, status_name: '수선피팅' },
+    { meeting_category: 5, status_name: '대여복 셀렉' },
+    { meeting_category: 6, status_name: '기타' },
   ];
 
   // alertModal State
@@ -126,6 +149,47 @@ const ModalContents = (props) => {
     return validation;
   };
 
+  const executeEvent = async (type, id) => {
+    if (type === 'cancel') { // cancel이 안들어오긴 하지만, 추후 사용 여지를 위해.
+      // state값 초기화 후, modal 닫기
+      setState({});
+      props.hide();
+      return false;
+    }
+    
+    let data = {};
+    switch (type) {
+
+      case 'insert':
+        data.action = 'i';
+        break;
+      case 'update':
+        data.id = id;
+        data.action = 'u';
+        break;
+      case 'delete':
+        data = {
+          id: id,
+          action: 'd',
+        };
+        break;
+      default: return false;
+
+    }
+
+    // set options
+    let options = {
+      url: `http://${Config.API_HOST.IP}/api/promise/insert`,
+      method: 'post',
+      data: {
+        site: state.site,
+        
+      },
+    };
+
+
+  };
+
   return (
     <React.Fragment>
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'hidden', padding: '20px 10px', display: 'inline-block' }}>
@@ -182,6 +246,7 @@ const ModalContents = (props) => {
                     상담일정
                   </div>
                   <DatePicker
+                    title="상담일정"
                     state={[state.date, date => setState({ ...state, date })]}
                     isClearable={items.type !== 'showEvent'}
                     disabled={items.type === 'showEvent'}
@@ -221,12 +286,12 @@ const ModalContents = (props) => {
                   </div>
                   {
                     categoryList.map((item) => {
-                      if (item.counseling_status === state.counseling_status) {
+                      if (item.meeting_category === state.meeting_category) {
                         let name = item.status_name;
-                        let addClass = `type${item.counseling_status}`;
+                        let addClass = `type${item.meeting_category}`;
   
                         return (
-                          <div className="rows-mb-20" key={`${item.counseling_status}-${item.status_name}`}>
+                          <div style={{ marginLeft: '100px', padding: '8px' }} key={`${item.meeting_category}-${item.status_name}`}>
                             <BorderButton
                               addClass={`categoryBtn ${addClass}`}
                               onHandle={() => setView(true)}
@@ -243,7 +308,7 @@ const ModalContents = (props) => {
                   {
                     categoryList.map((item) => {
                       let name = item.status_name;
-                      let addClass = `type${item.counseling_status}${item.counseling_status === state.counseling_status ? ' on' : ''}`;
+                      let addClass = `type${item.meeting_category}${item.meeting_category === state.meeting_category ? ' on' : ''}`;
 
                       const onHandle = () => {
                         // view를 닫는다.
@@ -251,14 +316,14 @@ const ModalContents = (props) => {
                         // state 설정 후
                         setState({
                           ...state,
-                          counseling_status: item.counseling_status,
+                          meeting_category: item.meeting_category,
                           status_name: name
                         });
 
                       };
 
                       return (
-                        <div className="rows-mb-20" key={`${item.counseling_status}-${item.status_name}`}>
+                        <div className="rows-mb-20" key={`${item.meeting_category}-${item.status_name}`}>
                           <BorderButton
                             addClass={`categoryBtn ${addClass}`}
                             onHandle={e => onHandle(e)}
@@ -270,20 +335,66 @@ const ModalContents = (props) => {
                   }
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
-                  <BorderButton
-                    addClass="updateBtn"
-                    onHandle={() => {
-                    // check validate
-                      if (!checkValidate()) return false;
-                      setConfirmModal({
-                        show: true,
-                        title: '확인 메시지',
-                        content: '진행사항을 수정하시겠습니까?',
-                      });
-                    }}
-                    name="수정"
-                    style={{ width: '80px' }}
-                  />
+                  {
+                    items.type === 'addEvent'
+                      && (
+                        <BorderButton
+                          addClass="updateBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '상담 일정을 등록하시겠습니까?',
+                              type: 'insert'
+                            });
+                          }}
+                          name="등록"
+                          style={{ width: '80px' }}
+                        />
+                      )
+                  }
+                  {
+                    items.type === 'showEvent'
+                      && (
+                        <BorderButton
+                          addClass="updateBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '상담 일정을 수정하시겠습니까?',
+                              type: 'update'
+                            });
+                          }}
+                          name="수정"
+                          style={{ width: '80px' }}
+                        />
+                      )
+                  }
+                  {
+                    items.type === 'showEvent'
+                      && (
+                        <BorderButton
+                          addClass="updateBtn"
+                          onHandle={() => {
+                            // check validate
+                            if (!checkValidate()) return false;
+                            setConfirmModal({
+                              show: true,
+                              title: '확인 메시지',
+                              content: '상담 일정을 삭제하시겠습니까?',
+                              type: 'delete'
+                            });
+                          }}
+                          name="삭제"
+                          style={{ width: '80px' }}
+                        />
+                      )
+                  }
                   <BorderButton
                     addClass="cancelBtn"
                     onHandle={() => { setState({}); props.hide(); }}

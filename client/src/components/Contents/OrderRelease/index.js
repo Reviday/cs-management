@@ -139,13 +139,14 @@ const OrderRelease = (props) => {
   };
 
   // 주문 리스트 가져오기
-  const getOrderList = async (category, start, data) => {
+  const getOrderList = async (category, start, data, site) => {
     let options = {};
     let countOption = {
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
       method: 'post',
       data: {
-        site: userInfo.site,
+        user_site: userInfo.site,
+        site: site || undefined,
         category: category,
         search_field: data?.field || undefined,
         search_word: data?.word || undefined
@@ -157,7 +158,8 @@ const OrderRelease = (props) => {
         url: `http://${Config.API_HOST.IP}/api/order/making/delay`,
         method: 'post',
         data: {
-          site: userInfo.site,
+          user_site: userInfo.site,
+          site: site || undefined,
           start: start || 1
         }
       };
@@ -166,7 +168,8 @@ const OrderRelease = (props) => {
         url: `http://${Config.API_HOST.IP}/api/order/making`,
         method: 'post',
         data: {
-          site: userInfo.site,
+          user_site: userInfo.site,
+          site: site || undefined,
           category: category,
           action: 's',
           start: start || 1,
@@ -259,10 +262,10 @@ const OrderRelease = (props) => {
   useEffect(() => {
     if (searchData.set) {
       if (more.order === false) {
-        setSearchData({ set: false, field: '', word: '' });
+        setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
         getOrderList('order');
       } else if (more.ship === false) {
-        setSearchData({ set: false, field: '', word: '' });
+        setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
         getOrderList('ship');
       } else if (more.delay === false) {
         setSearchData({ set: false, field: '', word: '' });

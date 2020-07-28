@@ -157,13 +157,17 @@ const Calendar = (props) => {
 
   // Event click
   const handleEventClick = (clickInfo) => {
-    viewModal('showEvent');
+    viewModal('showEvent', {
+      ...clickInfo.event.extendedProps,
+      id: clickInfo.event._def.publicId
+    });
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //  clickInfo.event.remove();
     // }
 
     console.log('range:::', clickInfo.event._instance.range);
     console.log('info:::', clickInfo.event._def);
+    console.log('extendedProps:::', clickInfo.event.extendedProps);
   };
 
   // Event move
@@ -186,7 +190,8 @@ const Calendar = (props) => {
   };
 
   const handleEvents = (events) => {
-    console.log(state);
+    console.log('handleEvent:::', state.currentEvents);
+    console.log('handleEvent after:::', events);
     // setState({
     //   currentEvents: events
     // });
@@ -340,9 +345,10 @@ const Calendar = (props) => {
       <Modal
         set={isModal}
         hide={toggleModal}
-        title="일정 상세"
+        title={isModal.type === 'showEvent' ? '일정 상제' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
+        items={{ type: isModal.type }}
       />
     </React.Fragment>
   );

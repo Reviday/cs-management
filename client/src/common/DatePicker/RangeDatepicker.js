@@ -63,13 +63,17 @@ const RangeDatepicker = (props) => {
             locale="ko"
             selected={startDate}
             onChange={date => setStartDate(date)}
-            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
+            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy년 MM월 dd일'}
             selectsStart
             startDate={startDate}
             endDate={endDate}
-            showTimeInput={props.useTime || props.onlyTime}
+            showTimeInput={props.useTime}
             // customTimeInput={<CustomTimeInput />}
             showYearDropdown
+            showTimeSelect={props.useTime || props.onlyTime}
+            showTimeSelectOnly={props.onlyTime}
+            timeIntervals={15}
+            timeCaption="Time"
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}
             scrollableYearDropdown
@@ -84,7 +88,7 @@ const RangeDatepicker = (props) => {
           <DatePicker
             selected={endDate}
             onChange={date => setEndDate(date)}
-            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
+            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy년 MM월 dd일'}
             selectsEnd
             startDate={startDate}
             endDate={endDate}
@@ -92,6 +96,10 @@ const RangeDatepicker = (props) => {
             showTimeInput={props.useTime}
             // customTimeInput={<CustomTimeInput />}
             showYearDropdown
+            showTimeSelect={props.useTime || props.onlyTime}
+            showTimeSelectOnly={props.onlyTime}
+            timeIntervals={15}
+            timeCaption="Time"
             dateFormatCalendar="MMMM"
             yearDropdownItemNumber={15}
             scrollableYearDropdown

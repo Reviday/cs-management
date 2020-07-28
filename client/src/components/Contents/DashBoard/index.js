@@ -178,12 +178,13 @@ const DashBoard = (props) => {
   };
 
   // 주문 리스트 가져오기
-  const getOrderList = async (start, data) => {
+  const getOrderList = async (category, start, data, site) => {
     let options = {
       url: `http://${Config.API_HOST.IP}/api/order/making`,
       method: 'post',
       data: {
-        site: userInfo.site,
+        user_site: userInfo.site,
+        site: site || undefined,
         category: 'checklist',
         action: 's',
         start: start || 1,
@@ -196,7 +197,8 @@ const DashBoard = (props) => {
       url: `http://${Config.API_HOST.IP}/api/order/making/count`,
       method: 'post',
       data: {
-        site: userInfo.site,
+        user_site: userInfo.site,
+        site: site || undefined,
         category: 'checklist',
         search_field: data?.field || undefined,
         search_word: data?.word || undefined
@@ -294,7 +296,7 @@ const DashBoard = (props) => {
           <div className="_lt">
             <div className="_title">
               금일 입고 예정
-              <div className="row_input">
+              {/* <div className="row_input">
                 <Select
                   setKey="s_code"
                   setVal="site"
@@ -315,7 +317,7 @@ const DashBoard = (props) => {
                     });
                   }}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="_rt">

@@ -126,9 +126,8 @@ div.category_list {
   width: 30%;
   background-color: white;
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0%);
+  bottom: -20px;
+  left: 235px;
   border: 1px solid #bbb;
   border-radius: 20px;
   text-align: center;
