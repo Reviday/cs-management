@@ -1,8 +1,12 @@
 import React from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
+import ko from 'date-fns/locale/ko';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import './Input.css';
+import './index.css';
+
+registerLocale('ko', ko);
+setDefaultLocale('ko');
 
 /** **************************************************************************
 The MIT License (MIT)
@@ -28,7 +32,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 *************************************************************************** */
 
-const InputDatepicker = (props) => {
+const RangeDatepicker = (props) => {
   
   const startTitle = props.startTitle; // start_date 부분 상단 제목
   const endTitle = props.endTitle; // end_date 부분 상단 제목
@@ -56,13 +60,14 @@ const InputDatepicker = (props) => {
             {startTitle}
           </div>
           <DatePicker
+            locale="ko"
             selected={startDate}
             onChange={date => setStartDate(date)}
-            dateFormat={props.useTime ? 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
+            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
             selectsStart
             startDate={startDate}
             endDate={endDate}
-            showTimeInput={props.useTime}
+            showTimeInput={props.useTime || props.onlyTime}
             // customTimeInput={<CustomTimeInput />}
             showYearDropdown
             dateFormatCalendar="MMMM"
@@ -79,7 +84,7 @@ const InputDatepicker = (props) => {
           <DatePicker
             selected={endDate}
             onChange={date => setEndDate(date)}
-            dateFormat={props.useTime ? 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
+            dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy/MM/dd'}
             selectsEnd
             startDate={startDate}
             endDate={endDate}
@@ -100,4 +105,4 @@ const InputDatepicker = (props) => {
   );
 };
 
-export default InputDatepicker;
+export default RangeDatepicker;

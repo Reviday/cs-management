@@ -7,7 +7,8 @@ import Input from 'common/Input/Input';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import BorderButton from 'common/Button/BorderButton';
-import DatePicker from 'common/Input/InputDatepicker';
+import RangeDatePicker from 'common/DatePicker/RangeDatepicker';
+import DatePicker from 'common/DatePicker/Datepicker';
 import 'common/Modal/Modal.scss';
 import Config from 'config';
 
@@ -21,10 +22,21 @@ const ModalContents = (props) => {
     name: '',
     telpno: '',
     memo: '',
-    counseling_status: 0
+    counseling_status: 0,
+    date: null
   });
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [view, setView] = useState(false); // categoryList view를 보일지 여부
+
+  // meeting_category list
+  // 나중에 리스트 불러오는 형식으로 변경할 필요가 있음.
+  const categoryList = [
+    { counseling_status: 0, status_name: '신규' },
+    { counseling_status: 1, status_name: '가봉' },
+    { counseling_status: 2, status_name: '완성' },
+    { counseling_status: 3, status_name: '완성피팅' },
+  ];
 
   // alertModal State
   const [alertModal, setAlertModal] = useState({
@@ -167,14 +179,24 @@ const ModalContents = (props) => {
                 </div>
                 <div className="rows-mb-20">
                   <div className="row_title">
-                    상담시간
+                    상담일정
                   </div>
                   <DatePicker
+                    state={[state.date, date => setState({ ...state, date })]}
+                    isClearable={items.type !== 'showEvent'}
+                    disabled={items.type === 'showEvent'}
+                  />
+                </div>
+                <div className="rows-mb-20">
+                  <div className="row_title">
+                    상담시간
+                  </div>
+                  <RangeDatePicker
                     startTitle="시작시간"
                     endTitle="종료시간"
-                    startState={[startDate, setStartDate]}
-                    endState={[endDate, setEndDate]}
-                    useTime
+                    startState={[startTime, setStartTime]}
+                    endState={[endTime, setEndTime]}
+                    onlyTime
                     isClearable={items.type !== 'showEvent'}
                     disabled={items.type === 'showEvent'}
                   />
@@ -197,6 +219,55 @@ const ModalContents = (props) => {
                   <div className="row_title">
                     상담종류
                   </div>
+                  {
+                    categoryList.map((item) => {
+                      if (item.counseling_status === state.counseling_status) {
+                        let name = item.status_name;
+                        let addClass = `type${item.counseling_status}`;
+  
+                        return (
+                          <div className="rows-mb-20" key={`${item.counseling_status}-${item.status_name}`}>
+                            <BorderButton
+                              addClass={`categoryBtn ${addClass}`}
+                              onHandle={() => setView(true)}
+                              name={name}
+                            />
+                          </div>
+                        );
+                      }
+                      return null;
+                    })
+                  }
+                </div>
+                <div className="category_list" style={view ? { display: 'block' } : {}}>
+                  {
+                    categoryList.map((item) => {
+                      let name = item.status_name;
+                      let addClass = `type${item.counseling_status}${item.counseling_status === state.counseling_status ? ' on' : ''}`;
+
+                      const onHandle = () => {
+                        // view를 닫는다.
+                        setView(false);
+                        // state 설정 후
+                        setState({
+                          ...state,
+                          counseling_status: item.counseling_status,
+                          status_name: name
+                        });
+
+                      };
+
+                      return (
+                        <div className="rows-mb-20" key={`${item.counseling_status}-${item.status_name}`}>
+                          <BorderButton
+                            addClass={`categoryBtn ${addClass}`}
+                            onHandle={e => onHandle(e)}
+                            name={name}
+                          />
+                        </div>
+                      );
+                    })
+                  }
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   <BorderButton

@@ -170,7 +170,6 @@ div.pro_list {
   position: absolute;
   top: 0;
   left: 50%;
-  -webkit-transform: translate(-50%, 95%);
   transform: translate(-50%, 0%);
   border: 1px solid #bbb;
   border-radius: 20px;

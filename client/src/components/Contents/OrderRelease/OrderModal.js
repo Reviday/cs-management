@@ -6,7 +6,7 @@ import moment from 'moment';
 import Input from 'common/Input/Input';
 import Select from 'common/Select/Select';
 import InputCustom from 'common/Input/InputCustom';
-import DatePicker from 'common/Input/InputDatepicker';
+import DatePicker from 'common/DatePicker/RangeDatepicker';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';
 import Postcode from 'common/Modal/ModalPostcode';

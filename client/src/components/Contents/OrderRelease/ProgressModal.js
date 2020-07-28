@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 
-import DatePicker from 'common/Input/InputDatepicker';
+import DatePicker from 'common/DatePicker/RangeDatepicker';
 import BorderButton from 'common/Button/BorderButton';
 import Alert from 'common/Modal/ModalAlert';
 import Confirm from 'common/Modal/ModalConfirm';

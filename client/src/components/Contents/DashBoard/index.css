@@ -30,3 +30,110 @@ div.card_cont .cont_body {
   width: calc(100% - 32px);
   padding: 2px 16px;
 }
+
+/* BorderButton Custom CSS */
+.categoryBtn {
+  width: 120px !important;
+}
+
+.categoryBtn:active {
+  opacity: 0.5;
+}
+
+.categoryBtn.type0 {
+  border: none;
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.categoryBtn.type0:hover {
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.categoryBtn.type1 {
+  border: none;
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.categoryBtn.type1:hover {
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.categoryBtn.type2 {
+  border: none;
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 0.8;
+}
+
+.categoryBtn.type2:hover {
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 1;
+}
+
+.categoryBtn.type3 {
+  border: none;
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.categoryBtn.type3:hover {
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 1;
+}
+
+.categoryBtn.type4 {
+  border: none;
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 0.8;
+}
+
+.categoryBtn.type4:hover {
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 1;
+}
+
+.categoryBtn.type5 {
+  border: none;
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.categoryBtn.type5:hover {
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+}
+
+.categoryBtn.on {
+  box-shadow: 0px 0px 3px 8px rgb(46, 229, 157);
+}
+
+div.category_list {
+  display: none;
+  width: 30%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  text-align: center;
+  transition: 0.5s;
+  z-index: 1;
+  padding: 10px;
+  padding-top: 20px;
+}
