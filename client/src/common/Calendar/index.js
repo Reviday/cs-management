@@ -55,7 +55,8 @@ const renderEventContent = (eventInfo) => {
 const renderSidebarEvent = (event) => {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
+      {/* <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b> */}
+      <b>{formatDate(event.start, { hour: 'numeric', minute: '2-digit' })}</b>
       <i>{event.title}</i>
     </li>
   );
@@ -226,12 +227,16 @@ const Calendar = (props) => {
           <h2>
             오전
             (
-            {state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).length}
+            {state.currentEvents
+              .filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).length}
             )
           </h2>
           <ul>
             {
-              state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).map(renderSidebarEvent)
+              state.currentEvents
+                .filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전'))
+                .sort((a, b) => new Date(a.start) - new Date(b.start))
+                .map(renderSidebarEvent)
             }
           </ul>
           <h2>
@@ -248,7 +253,10 @@ const Calendar = (props) => {
           </h2>
           <ul>
             {
-              state.currentEvents.filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후')).map(renderSidebarEvent)
+              state.currentEvents
+                .filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후'))
+                .sort((a, b) => new Date(a.start) - new Date(b.start))
+                .map(renderSidebarEvent)
             }
           </ul>
         </div>
