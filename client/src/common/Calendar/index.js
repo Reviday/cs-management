@@ -6,6 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentPlugin from '@fullcalendar/moment';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import koLocale from '@fullcalendar/core/locales/ko';
 
 /*  User Import  */
@@ -309,7 +310,7 @@ const Calendar = (props) => {
             </label>
             <div className="calendar-wrapper">
               <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin, momentTimezonePlugin]}
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
