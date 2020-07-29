@@ -159,10 +159,19 @@ const Calendar = (props) => {
 
   // Event click
   const handleEventClick = (clickInfo) => {
+    // 현재, 정상적으로 new Date를 날려도 내부적으로 +9 시간이 추가되어서 나오는 문제가 있어서,
+    // modal로 날려주기 전에 -9을 하여 정상적인 시간을 강제적으로 만들 생각.
+    let start = new Date(clickInfo.event._instance.range.start);
+    let end = new Date(clickInfo.event._instance.range.end);
+
     viewModal('showEvent', {
       ...clickInfo.event.extendedProps,
-      id: clickInfo.event._def.publicId
+      id: clickInfo.event._def.publicId,
+      start: start.setHours(start.getHours() - 9),
+      end: end.setHours(end.getHours() - 9),
+      date: start.setHours(start.getHours() - 9)
     });
+
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //  clickInfo.event.remove();
     // }
@@ -178,13 +187,13 @@ const Calendar = (props) => {
     // console.log(event.oldEvent);
 
     // 변경 전 기간
-    console.log(event.oldEvent._instance.range);
-    console.log('to');
+    // console.log(event.oldEvent._instance.range);
+    // console.log('to');
     // 변경 후 기간
-    console.log(event.event._instance.range);
+    // console.log(event.event._instance.range);
 
     // event.id와 같은 값
-    console.log(event.event._def.publicId);
+    // console.log(event.event._def.publicId);
 
     /**
      * 추후, 위 id값으로 event update 처리를 수행하면 될 듯.
@@ -317,6 +326,7 @@ const Calendar = (props) => {
               한국어
             </label>
             <div className="calendar-wrapper">
+              {console.log('cal_state::', state, props.events)}
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin, momentTimezonePlugin]}
                 headerToolbar={{
@@ -354,7 +364,7 @@ const Calendar = (props) => {
       <Modal
         set={isModal}
         hide={toggleModal}
-        title={isModal.type === 'showEvent' ? '일정 상제' : '일정 등록'}
+        title={isModal.type === 'showEvent' ? '일정 상세' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
         items={{ type: isModal.type }}

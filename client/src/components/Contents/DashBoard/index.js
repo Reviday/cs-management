@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import 'moment/locale/ko';
 
 /*  User Import  */
 import BorderButton from 'common/Button/BorderButton';
@@ -143,8 +144,6 @@ const DashBoard = (props) => {
     try {
       // 데이터 reset
       setScheduleList([]);
-
-      console.log('options:::', options);
       let setData = await axios(options);
 
       let result = setData?.data?.data; // list result
@@ -159,10 +158,8 @@ const DashBoard = (props) => {
               // calendar 필수 데이터는 명시
               id: row.id,
               title: row.name,
-              start: moment(row.start_date).format('YYYY-MM-DD')
-              + (row.start_time ? 'T' + row.start_time : null),
-              end: moment(row.end_date).format('YYYY-MM-DD')
-              + (row.end_time ? 'T' + row.end_time : null),
+              start: new Date(row.start_date),
+              end: new Date(row.end_date)
             };
 
             items.push(convertData);

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import 'moment/locale/ko';
 
 import Select from 'common/Select/Select';
 import Input from 'common/Input/Input';
@@ -13,25 +14,30 @@ import 'common/Modal/Modal.scss';
 import Config from 'config';
 
 // context
+import { UserInfoContext } from 'contexts/UserInfoContext';
 import { SiteListContext } from 'contexts/SiteListContext';
 
 const ModalContents = (props) => {
-  const items = props.items;
+  
+  const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
+  
+  const items = props.items;
   const [state, setState] = useState(
-    items.type !== 'showEvent'
-      ? {
+    items.type === 'showEvent'
+      ? props.data
+      : {
         site: '',
         name: '',
         telpno: '',
         memo: '',
-        meeting_category: 0,
+        meeting_category: 1,
         start_date: null,
         end_date: null,
         start_time: null,
         end_time: null,
+        date: null
       }
-      : props.data
   );
   console.log('event data:::', props.data);
   /*
@@ -45,14 +51,21 @@ const ModalContents = (props) => {
     start_time: "04:00"
     telpno: "010-3625-7342"
   */
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState(
+    items.type === 'showEvent'
+      ? props.data.start
+      : null
+  );
+  const [endTime, setEndTime] = useState(
+    items.type === 'showEvent'
+      ? props.data.end
+      : null
+  );
   const [view, setView] = useState(false); // categoryList view를 보일지 여부
 
   // meeting_category list
   // 나중에 리스트 불러오는 형식으로 변경할 필요가 있음.
   const categoryList = [
-    { meeting_category: 0, status_name: 'Unknown' },
     { meeting_category: 1, status_name: '신규' },
     { meeting_category: 2, status_name: '가봉' },
     { meeting_category: 3, status_name: '완성' },
@@ -156,6 +169,9 @@ const ModalContents = (props) => {
       props.hide();
       return false;
     }
+
+    // 권한 부족 시, 수행 안 함
+    if (userInfo.auth > 1) return false;
     
     let data = {};
     switch (type) {
@@ -192,6 +208,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
+      {console.log('state:::', state)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'hidden', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div" style={{ minHeight: '515px', height: 'fit-content' }}>
           <div className="box_layout noshadow">
@@ -228,7 +245,7 @@ const ModalContents = (props) => {
                     value={state.name}
                     setValue={e => setState({ ...state, name: e })}
                     style={{ width: '150px' }}
-                    disabled={items.type === 'showEvent'}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -238,7 +255,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
                     setReg={/[^0-9]/gi}
-                    disabled={items.type === 'showEvent'}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -248,8 +265,8 @@ const ModalContents = (props) => {
                   <DatePicker
                     title="상담일정"
                     state={[state.date, date => setState({ ...state, date })]}
-                    isClearable={items.type !== 'showEvent'}
-                    disabled={items.type === 'showEvent'}
+                    isClearable={userInfo.auth > 1}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -259,11 +276,11 @@ const ModalContents = (props) => {
                   <RangeDatePicker
                     startTitle="시작시간"
                     endTitle="종료시간"
-                    startState={[startTime, setStartTime]}
+                    startState={[startTime, (date) => {console.log(date);setStartTime(date)}]}
                     endState={[endTime, setEndTime]}
                     onlyTime
-                    isClearable={items.type !== 'showEvent'}
-                    disabled={items.type === 'showEvent'}
+                    isClearable={userInfo.auth > 1}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20" style={{ height: '180px' }}>
@@ -286,7 +303,7 @@ const ModalContents = (props) => {
                   </div>
                   {
                     categoryList.map((item) => {
-                      if (item.meeting_category === state.meeting_category) {
+                      if (String(item.meeting_category) === String(state.meeting_category)) {
                         let name = item.status_name;
                         let addClass = `type${item.meeting_category}`;
   
@@ -308,7 +325,7 @@ const ModalContents = (props) => {
                   {
                     categoryList.map((item) => {
                       let name = item.status_name;
-                      let addClass = `type${item.meeting_category}${item.meeting_category === state.meeting_category ? ' on' : ''}`;
+                      let addClass = `type${item.meeting_category}${String(item.meeting_category) === String(state.meeting_category) ? ' on' : ''}`;
 
                       const onHandle = () => {
                         // view를 닫는다.
@@ -336,7 +353,7 @@ const ModalContents = (props) => {
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
-                    items.type === 'addEvent'
+                    items.type === 'addEvent' && userInfo.auth < 2
                       && (
                         <BorderButton
                           addClass="updateBtn"
@@ -356,7 +373,7 @@ const ModalContents = (props) => {
                       )
                   }
                   {
-                    items.type === 'showEvent'
+                    items.type === 'showEvent' && userInfo.auth < 2
                       && (
                         <BorderButton
                           addClass="updateBtn"
