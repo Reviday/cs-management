@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -12,6 +12,9 @@ import koLocale from '@fullcalendar/core/locales/ko';
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
 import BorderButton from 'common/Button/BorderButton';
+
+/*  Context  */
+import { UserInfoContext } from 'contexts/UserInfoContext';
 
 /*  CSS  */
 import './index.css';
@@ -68,6 +71,7 @@ const createEventId = () => {
 
 const Calendar = (props) => {
 
+  const [userInfo] = useContext(UserInfoContext);
   // const [weekendsVisible, setWeekendsVisible] = useState(true);
   // const [events, setEvents] = useState([]);
   const [locale, setLocale] = useState(koLocale);
@@ -219,16 +223,21 @@ const Calendar = (props) => {
           
           <h2 className="h2_date">
             {moment(selectDate).format('YYYY년 MM월 DD일')}
-            <div className="_rt">
-              <div className="_more">
-                <BorderButton
-                  addClass="moreBtn"
-                  onHandle={() => viewModal('addEvent')}
-                  style={{ width: '100px' }}
-                  name="일정 추가"
-                />
-              </div>
-            </div>
+            {
+              userInfo.auth < 2
+                && (
+                  <div className="_rt">
+                    <div className="_more">
+                      <BorderButton
+                        addClass="moreBtn"
+                        onHandle={() => viewModal('addEvent')}
+                        style={{ width: '100px' }}
+                        name="일정 추가"
+                      />
+                    </div>
+                  </div>
+                )
+            }
           </h2>
           <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>

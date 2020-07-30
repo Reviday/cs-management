@@ -96,7 +96,8 @@ const ModalContents = (props) => {
     show: false,
     title: '',
     content: '',
-    type: ''
+    type: '',
+    id: ''
   });
 
   const toggleConfirm = () => {
@@ -162,7 +163,7 @@ const ModalContents = (props) => {
     return validation;
   };
 
-  const executeEvent = async (type, id) => {
+  const executeEvent = async (type) => {
     if (type === 'cancel') { // cancel이 안들어오긴 하지만, 추후 사용 여지를 위해.
       // state값 초기화 후, modal 닫기
       setState({});
@@ -174,10 +175,11 @@ const ModalContents = (props) => {
     if (userInfo.auth > 1) return false;
     
     let data = {};
+    // 일단은 insert밖에 없긴한데..
     switch (type) {
 
       case 'insert':
-        data.action = 'i';
+        // data.action = 'i';
         break;
       case 'update':
         data.id = id;
@@ -198,12 +200,67 @@ const ModalContents = (props) => {
       url: `http://${Config.API_HOST.IP}/api/promise/insert`,
       method: 'post',
       data: {
+        ...data,
         site: state.site,
-        
+        name: state.name,
+        telpno: state.telpno,
+        start_date: '',
+        end_date: '',
+        memo: state.memo,
+        meeting_category: state.meeting_category
       },
     };
 
+    try {
+      let setData = await axios(options);
 
+      let result = setData.data.data; // true
+
+      // 정상적으로 처리되었을 때,
+      // 리스트를 다시 호출하나.. 기존 state에서 update를 할까..
+      if (result === true) {
+        //
+      }
+
+      // 정상적으로 처리되었고, type이 insert일 때
+      if (result === true && type === 'insert') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 등록이 완료되었습니다.',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 update일 때
+      } else if (result === true && type === 'update') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 수정이 완료되었습니다.',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 delete일 때
+      } else if (result === true && type === 'delete') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 삭제가 완료되었습니다.',
+          useExecute: true
+        });
+        
+      // 그 외, result가 true가 아닐 경우.
+      // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
+      } else {
+        setAlertModal({
+          show: true,
+          title: '오류 메시지',
+          content: '문제가 발생하였습니다. 잠시 후 다시 시도해주시기 바랍니다.'
+        });
+      }
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   };
 
   return (
@@ -276,7 +333,7 @@ const ModalContents = (props) => {
                   <RangeDatePicker
                     startTitle="시작시간"
                     endTitle="종료시간"
-                    startState={[startTime, (date) => {console.log(date);setStartTime(date)}]}
+                    startState={[startTime, setStartTime]}
                     endState={[endTime, setEndTime]}
                     onlyTime
                     isClearable={userInfo.auth > 1}
@@ -429,7 +486,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={() => {}}
+        execute={() => executeEvent(confirmModal.type)}
       />
       <Alert
         view={alertModal.show}
