@@ -204,15 +204,18 @@ const ModalContents = (props) => {
         site: state.site,
         name: state.name,
         telpno: state.telpno,
-        start_date: '',
-        end_date: '',
+        start_date: moment(state.date).format('YYYY-MM-DD')
+          + moment(startTime).format(' HH:mm'),
+        end_date: moment(state.date).format('YYYY-MM-DD')
+        + moment(endTime).format(' HH:mm'),
         memo: state.memo,
         meeting_category: state.meeting_category
       },
     };
 
     try {
-      let setData = await axios(options);
+      console.log(option);
+      // let setData = await axios(options);
 
       let result = setData.data.data; // true
 
