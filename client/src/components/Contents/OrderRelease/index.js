@@ -269,7 +269,8 @@ const OrderRelease = (props) => {
         setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
         getOrderList('ship');
       } else if (more.delay === false) {
-        setSearchData({ set: false, field: '', word: '' });
+        setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
+        getOrderList('delay');
       }
     }
   }, [more]);
@@ -400,6 +401,8 @@ const OrderRelease = (props) => {
         headerSet={receiptHeaderSet}
         data={delayReceiptData}
         total={delayTotal}
+        searchData={searchData}
+        setSearchData={setSearchData}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}

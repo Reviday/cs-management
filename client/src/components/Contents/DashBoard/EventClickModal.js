@@ -27,7 +27,7 @@ const ModalContents = (props) => {
     items.type === 'showEvent'
       ? props.data
       : {
-        site: '',
+        site: siteList[0].site,
         name: '',
         telpno: '',
         memo: '',
@@ -214,9 +214,10 @@ const ModalContents = (props) => {
     };
 
     try {
-      console.log(option);
-      // let setData = await axios(options);
+      console.log(options);
+      let setData = await axios(options);
 
+      console.log(setData);
       let result = setData.data.data; // true
 
       // 정상적으로 처리되었을 때,
@@ -231,6 +232,7 @@ const ModalContents = (props) => {
           show: true,
           title: '알림 메시지',
           content: '일정 등록이 완료되었습니다.',
+          type: 'common',
           useExecute: true
         });
 
@@ -240,6 +242,7 @@ const ModalContents = (props) => {
           show: true,
           title: '알림 메시지',
           content: '일정 수정이 완료되었습니다.',
+          type: 'common',
           useExecute: true
         });
 
@@ -249,6 +252,7 @@ const ModalContents = (props) => {
           show: true,
           title: '알림 메시지',
           content: '일정 삭제가 완료되었습니다.',
+          type: 'common',
           useExecute: true
         });
         
@@ -268,7 +272,6 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
-      {console.log('state:::', state)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'hidden', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div" style={{ minHeight: '515px', height: 'fit-content' }}>
           <div className="box_layout noshadow">
@@ -278,7 +281,7 @@ const ModalContents = (props) => {
                   {
                   // siteList가 존재하지 않거나, 개수가 0개이면
                   // input 스타일로 처리. 있으면 select 스타일로 처리.
-                  items.type !== 'showEvent'
+                  userInfo.auth < 2
                     ? (
                       <Select
                         name="지점"
