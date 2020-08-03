@@ -82,6 +82,8 @@ const Calendar = (props) => {
   });
   const [data, setData] = useState(props.events || []); // 없어도 될 것 같기도
 
+  const calendarApi = FullCalendar.prototype.getApi();
+
   // Modal State
   const [isModal, setIsModal] = useState({
     view: false,
@@ -167,6 +169,11 @@ const Calendar = (props) => {
     // modal로 날려주기 전에 -9을 하여 정상적인 시간을 강제적으로 만들 생각.
     let start = new Date(clickInfo.event._instance.range.start);
     let end = new Date(clickInfo.event._instance.range.end);
+    // let calendarApi = clickInfo.view.calendar;
+
+    console.log(calendarApi);
+
+    console.log('clickinfo:::', clickInfo.view.calendar);
 
     viewModal('showEvent', {
       ...clickInfo.event.extendedProps,
@@ -376,7 +383,7 @@ const Calendar = (props) => {
         title={isModal.type === 'showEvent' ? '일정 상세' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
-        items={{ type: isModal.type }}
+        items={{ type: isModal.type, calendarApi: calendarApi }}
       />
     </React.Fragment>
   );

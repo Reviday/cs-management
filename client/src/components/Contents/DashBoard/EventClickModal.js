@@ -39,7 +39,6 @@ const ModalContents = (props) => {
         date: null
       }
   );
-  console.log('event data:::', props.data);
   /*
     end_date: "2020-07-23 06:00"
     end_time: "06:00"
@@ -62,6 +61,7 @@ const ModalContents = (props) => {
       : null
   );
   const [view, setView] = useState(false); // categoryList view를 보일지 여부
+  const calendarApi = items.calendarApi;
 
   // meeting_category list
   // 나중에 리스트 불러오는 형식으로 변경할 필요가 있음.
@@ -223,7 +223,16 @@ const ModalContents = (props) => {
       // 정상적으로 처리되었을 때,
       // 리스트를 다시 호출하나.. 기존 state에서 update를 할까..
       if (result === true) {
-        //
+        // 보여주는건 임시 id값 붙여서 보여주기로 하고..
+        // insert하고 해당 id값 가져오는 식으로 새로 넣어주어야 할 듯.
+        // 새로 인서트했을 때, 할당된 id 값을 리턴 받는다던가 하는 방식.
+        calendarApi.addEvent({
+          id: Math.random() * 1000,
+          title: options.data.name,
+          start: options.data.start_date,
+          end: options.data.end_date,
+          allDay: false
+        });
       }
 
       // 정상적으로 처리되었고, type이 insert일 때
