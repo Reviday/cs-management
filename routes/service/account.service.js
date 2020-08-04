@@ -8,20 +8,26 @@ module.exports = {
     selectMemberById: async (reqParams) => {
         try {
             const result = await Members.findByPk(reqParams.id);
-            const encryptedPassword = result.dataValues.pass;
-            if(!encryptedPassword){
+            if (result !== null) {
+                const encryptedPassword = result.dataValues.pass;
+                if (!encryptedPassword) {
+                    return false;
+                }
+                const checksum = Util.encryptPasswd(encryptedPassword, reqParams.password);
+                if (!checksum) {
+                    return false;
+                }
+                return result.dataValues;
+            } else {
                 return false;
             }
-            const checksum = Util.encryptPasswd(encryptedPassword, reqParams.password);
-            if(!checksum){
-                return false;
-            }
-            return result.dataValues;
+
+
         } catch (err) {
             throw err;
         }
     },
-    selectListBySite : async () => {
+    selectListBySite: async () => {
         try {
             return await Sites.findAll();
         } catch (err) {

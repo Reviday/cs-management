@@ -71,7 +71,8 @@ module.exports = {
                     }
                 }
 
-            } else if (action === 'u') {
+            }
+            else if (action === 'u') {
                 // [주문 정보 update]
                 paramCheck = Util.param_check(req, res, fileName, ['id', 'site', 'name', 'telpno', 'address',
                     'needs', 'product', 'price', 'order_status', 'price_type', 'manager']);
@@ -98,7 +99,8 @@ module.exports = {
                 // 주문 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
 
-            } else if (action === 'status_u') {
+            }
+            else if (action === 'status_u') {
                 // [주문 상태 정보 update]
                 paramCheck = Util.param_check(req, res, fileName, ['needs', 'order_status','order_date','complete_date']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
@@ -114,7 +116,8 @@ module.exports = {
                 // 주문 상태 정보 update
                 result = await Service.orderInfoUpdate(setReqParams);
 
-            } else if (action === 'd') {
+            }
+            else if (action === 'd') {
                 // [주문 상태 정보 delete]
                 paramCheck = Util.param_check(req, res, fileName, ['id']);
                 if (paramCheck.status) return res.status(400).send(paramCheck.errMsg);
@@ -122,15 +125,16 @@ module.exports = {
                     id: req.query.id
                 };
                 result = await Service.orderInfoDelete(setReqParams);
-            } else {
+            }
+            else {
                 // 전체 목록 및 상세 조회
                 setReqParams = {
                     category: req.query.category,
                     start: req.query.start || 1,
-                    site : req.query.site || '',
-                    search_word: req.query.search_word || '',
-                    search_field: req.query.search_field || '',
-                    search_telpno: req.query.search_telpno || ''
+                    userSite : req.query.user_site || '',
+                    searchWord: req.query.search_word || '',
+                    searchField: req.query.search_field || '',
+                    searchTelpno: req.query.search_telpno || '',
                 };
                 const id = req.query.id
                 if (id !== null || id !== '' || id !== undefined) {
@@ -176,8 +180,14 @@ module.exports = {
             const validateResult = Util.param_check(req, res, fileName, []);
             if (validateResult.status) return res.status(400).send(validateResult.errMsg);
 
-            const category = req.query.category || '';
-            const result = await Service.getListCount(category);
+            const setReqParams = {
+                selectedSite : req.query.site || '',
+                category : req.query.category,
+                searchField : req.query.search_field || '',
+                searchKeyword : req.query.search_keyword || '',
+            };
+
+            const result = await Service.getListCount(setReqParams);
             console.log(result.count);
 
             res.json(Util.res_ok({'total': result.count}));

@@ -19,10 +19,10 @@ module.exports = {
     selectQueryByOrder: function (reqParams) {
         const category = reqParams.category;
         const start = reqParams.start;
-        const mySite = reqParams.site;
-        const searchWord = reqParams.search_word;
-        const searchField = reqParams.search_field;
-        const searchTelpno = reqParams.search_telpno;
+        const mySite = reqParams.userSite;
+        const searchWord = reqParams.searchWord;
+        const searchField = reqParams.searchField;
+        const searchTelpno = reqParams.searchTelpno;
 
         // 1. 기본 검색 Query 구성
         let result = null;
@@ -34,7 +34,7 @@ module.exports = {
                     attributes: [
                         "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
                         "complete_date", "update_at", "order_status", "needs", "order_status", "address",
-                        "telpno","zipcode", "detail_addr"
+                        "telpno", "zipcode", "detail_addr"
                     ],
                     include: [{
                         model: db.OrderStatusCode,
@@ -54,7 +54,7 @@ module.exports = {
                     attributes: [
                         "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
                         "complete_date", "update_at", "order_status", "needs", "order_status", "address",
-                        "telpno","zipcode", "detail_addr"
+                        "telpno", "zipcode", "detail_addr"
                     ],
                     include: [{
                         model: db.OrderStatusCode,
@@ -63,8 +63,8 @@ module.exports = {
                     }],
                     limit: 10,
                     offset: (10 * start) - 10,
-                    where : {
-                        complete_date : today
+                    where: {
+                        complete_date: today
                     },
                     order: [
                         ['create_at', 'DESC']
@@ -77,7 +77,7 @@ module.exports = {
                     attributes: [
                         "id", "site", "name", "product", "price", "order_date", "price_type", "manager",
                         "complete_date", "update_at", "order_status", "needs", "order_status", "address",
-                        "telpno","zipcode", "detail_addr"
+                        "telpno", "zipcode", "detail_addr"
                     ],
                     where: {
                         order_status: {[Op.lte]: 3}
@@ -132,7 +132,7 @@ module.exports = {
 
         // 2020.07.07 추가
         // 주문정보 조회 시, 계정 별 지점 데이터를 이용한 특정 지점만 조회.
-        if((mySite !== '') && (category === 'order' || category === 'ship')) result.where['site'] = mySite;
+        if ((mySite !== '') && (category === 'order' || category === 'ship')) result.where['site'] = mySite;
 
         return result;
     },
@@ -212,31 +212,52 @@ module.exports = {
      * DB의 모든 테이블의 COUNT(*) API
      *
      * @param category
-     * @returns {{}}
+     * @param selectedSite  {String} : 선택한 지점(사이트)
+     * @param searchField   {String} : 검색 필드명
+     * @param searchKeyword {Stringr}: 검색 키워드
+     * @returns Select Query {{}}
      */
-    orderInfoListCountQuery: function (category) {
+    orderInfoListCountQuery: function (category, selectedSite, searchField, searchKeyword) {
         let query = {};
         const date = new Date();
         const today = moment(date).format('YYYY-MM-DD');
         if (category === 'order') {
+            // 1. 입고 정보 게시판 count
             query = {
                 where: {
                     order_status: {[Op.lte]: 3}
                 }
             };
         } else if (category === 'ship') {
+            // 2. 출고 정보 게시판 count
             query = {
                 where: {
                     order_status: {[Op.gt]: 3}
                 }
             };
         } else if (category === 'delay') {
+            // 3. 입고 지연
             query = {
                 where: {
                     order_status: {[Op.lte]: 3},
                     complete_date: {[Op.lte]: today}
                 }
             };
+        } else if (category === 'today_order_list') {
+            // 4. 금일 입고 count
+            query = {
+                where: {
+                    complete_date: today
+                }
+            };
+        }
+
+        if(selectedSite !== ''){
+            query.where.site = selectedSite;
+        }
+
+        if(searchField !== '' && searchKeyword !== ''){
+            query.where[searchField] = searchKeyword;
         }
 
         return query;

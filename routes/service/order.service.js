@@ -31,7 +31,6 @@ module.exports = {
                 if (result !== null) {
                     return Util.setResponseMessage(result[0]);
                 }
-
             }
 
         } catch (err) {
@@ -70,7 +69,7 @@ module.exports = {
         }
 
     },
-    orderInfoDelete: async(reqParams) => {
+    orderInfoDelete: async (reqParams) => {
         try {
             const result = await Order.destroy({
                 where: {
@@ -97,13 +96,20 @@ module.exports = {
      * @param category
      * @returns {Promise<<{rows: Model[]; count: number}>>}
      */
-    getListCount: async (category) => {
+    getListCount: async (reqParams) => {
+        const category = reqParams.category;
         if (category === 'customer') {
+            // 등록된 전체 고객의 수
             return Customer.findAndCountAll();
-
         } else {
-            let query = OrderQuery.orderInfoListCountQuery(category);
+            // 게시판 검색 조회 시, 목록 수
+            const selectedSite = reqParams.selectedSite;    // 선택한 사이트
+            const searchField = reqParams.searchField;      // 검색 필드명
+            const searchKeyword = reqParams.searchKeyword;  // 검색 키워드
+
+            const query = OrderQuery.orderInfoListCountQuery(category, selectedSite, searchField, searchKeyword);
             return Order.findAndCountAll(query);
+
         }
 
     },
