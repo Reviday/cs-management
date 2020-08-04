@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import 'moment/locale/ko';
 
 import Select from 'common/Select/Select';
 import Input from 'common/Input/Input';
@@ -13,27 +14,31 @@ import 'common/Modal/Modal.scss';
 import Config from 'config';
 
 // context
+import { UserInfoContext } from 'contexts/UserInfoContext';
 import { SiteListContext } from 'contexts/SiteListContext';
 
 const ModalContents = (props) => {
-  const items = props.items;
+  
+  const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
+  
+  const items = props.items;
   const [state, setState] = useState(
-    items.type !== 'showEvent'
-      ? {
-        site: '',
+    items.type === 'showEvent'
+      ? props.data
+      : {
+        site: siteList[0].site,
         name: '',
         telpno: '',
         memo: '',
-        meeting_category: 0,
+        meeting_category: 1,
         start_date: null,
         end_date: null,
         start_time: null,
         end_time: null,
+        date: null
       }
-      : props.data
   );
-  console.log('event data:::', props.data);
   /*
     end_date: "2020-07-23 06:00"
     end_time: "06:00"
@@ -45,14 +50,22 @@ const ModalContents = (props) => {
     start_time: "04:00"
     telpno: "010-3625-7342"
   */
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState(
+    items.type === 'showEvent'
+      ? props.data.start
+      : null
+  );
+  const [endTime, setEndTime] = useState(
+    items.type === 'showEvent'
+      ? props.data.end
+      : null
+  );
   const [view, setView] = useState(false); // categoryList view를 보일지 여부
+  const calendarApi = items.calendarApi;
 
   // meeting_category list
   // 나중에 리스트 불러오는 형식으로 변경할 필요가 있음.
   const categoryList = [
-    { meeting_category: 0, status_name: 'Unknown' },
     { meeting_category: 1, status_name: '신규' },
     { meeting_category: 2, status_name: '가봉' },
     { meeting_category: 3, status_name: '완성' },
@@ -83,7 +96,8 @@ const ModalContents = (props) => {
     show: false,
     title: '',
     content: '',
-    type: ''
+    type: '',
+    id: ''
   });
 
   const toggleConfirm = () => {
@@ -149,19 +163,23 @@ const ModalContents = (props) => {
     return validation;
   };
 
-  const executeEvent = async (type, id) => {
+  const executeEvent = async (type) => {
     if (type === 'cancel') { // cancel이 안들어오긴 하지만, 추후 사용 여지를 위해.
       // state값 초기화 후, modal 닫기
       setState({});
       props.hide();
       return false;
     }
+
+    // 권한 부족 시, 수행 안 함
+    if (userInfo.auth > 1) return false;
     
     let data = {};
+    // 일단은 insert밖에 없긴한데..
     switch (type) {
 
       case 'insert':
-        data.action = 'i';
+        // data.action = 'i';
         break;
       case 'update':
         data.id = id;
@@ -182,12 +200,83 @@ const ModalContents = (props) => {
       url: `http://${Config.API_HOST.IP}/api/promise/insert`,
       method: 'post',
       data: {
+        ...data,
         site: state.site,
-        
+        name: state.name,
+        telpno: state.telpno,
+        start_date: moment(state.date).format('YYYY-MM-DD')
+          + moment(startTime).format(' HH:mm'),
+        end_date: moment(state.date).format('YYYY-MM-DD')
+        + moment(endTime).format(' HH:mm'),
+        memo: state.memo,
+        meeting_category: state.meeting_category
       },
     };
 
+    try {
+      console.log(options);
+      let setData = await axios(options);
 
+      console.log(setData);
+      let result = setData.data.data; // true
+
+      // 정상적으로 처리되었을 때,
+      // 리스트를 다시 호출하나.. 기존 state에서 update를 할까..
+      if (result === true) {
+        // 보여주는건 임시 id값 붙여서 보여주기로 하고..
+        // insert하고 해당 id값 가져오는 식으로 새로 넣어주어야 할 듯.
+        // 새로 인서트했을 때, 할당된 id 값을 리턴 받는다던가 하는 방식.
+        calendarApi.addEvent({
+          id: Math.random() * 1000,
+          title: options.data.name,
+          start: options.data.start_date,
+          end: options.data.end_date,
+          allDay: false
+        });
+      }
+
+      // 정상적으로 처리되었고, type이 insert일 때
+      if (result === true && type === 'insert') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 등록이 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 update일 때
+      } else if (result === true && type === 'update') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 수정이 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+
+      // 정상적으로 처리되었고, type이 delete일 때
+      } else if (result === true && type === 'delete') {
+        setAlertModal({
+          show: true,
+          title: '알림 메시지',
+          content: '일정 삭제가 완료되었습니다.',
+          type: 'common',
+          useExecute: true
+        });
+        
+      // 그 외, result가 true가 아닐 경우.
+      // type이 세 가지 안에 포함되지 않으면 상단에서 return 되므로.
+      } else {
+        setAlertModal({
+          show: true,
+          title: '오류 메시지',
+          content: '문제가 발생하였습니다. 잠시 후 다시 시도해주시기 바랍니다.'
+        });
+      }
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   };
 
   return (
@@ -201,7 +290,7 @@ const ModalContents = (props) => {
                   {
                   // siteList가 존재하지 않거나, 개수가 0개이면
                   // input 스타일로 처리. 있으면 select 스타일로 처리.
-                  items.type !== 'showEvent'
+                  userInfo.auth < 2
                     ? (
                       <Select
                         name="지점"
@@ -228,7 +317,7 @@ const ModalContents = (props) => {
                     value={state.name}
                     setValue={e => setState({ ...state, name: e })}
                     style={{ width: '150px' }}
-                    disabled={items.type === 'showEvent'}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -238,7 +327,7 @@ const ModalContents = (props) => {
                     setValue={e => setState({ ...state, telpno: e })}
                     style={{ width: '300px' }}
                     setReg={/[^0-9]/gi}
-                    disabled={items.type === 'showEvent'}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -248,8 +337,8 @@ const ModalContents = (props) => {
                   <DatePicker
                     title="상담일정"
                     state={[state.date, date => setState({ ...state, date })]}
-                    isClearable={items.type !== 'showEvent'}
-                    disabled={items.type === 'showEvent'}
+                    isClearable={userInfo.auth > 1}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20">
@@ -262,8 +351,8 @@ const ModalContents = (props) => {
                     startState={[startTime, setStartTime]}
                     endState={[endTime, setEndTime]}
                     onlyTime
-                    isClearable={items.type !== 'showEvent'}
-                    disabled={items.type === 'showEvent'}
+                    isClearable={userInfo.auth > 1}
+                    disabled={userInfo.auth > 1}
                   />
                 </div>
                 <div className="rows-mb-20" style={{ height: '180px' }}>
@@ -286,7 +375,7 @@ const ModalContents = (props) => {
                   </div>
                   {
                     categoryList.map((item) => {
-                      if (item.meeting_category === state.meeting_category) {
+                      if (String(item.meeting_category) === String(state.meeting_category)) {
                         let name = item.status_name;
                         let addClass = `type${item.meeting_category}`;
   
@@ -308,7 +397,7 @@ const ModalContents = (props) => {
                   {
                     categoryList.map((item) => {
                       let name = item.status_name;
-                      let addClass = `type${item.meeting_category}${item.meeting_category === state.meeting_category ? ' on' : ''}`;
+                      let addClass = `type${item.meeting_category}${String(item.meeting_category) === String(state.meeting_category) ? ' on' : ''}`;
 
                       const onHandle = () => {
                         // view를 닫는다.
@@ -336,7 +425,7 @@ const ModalContents = (props) => {
                 </div>
                 <div className="rows-mb-20" style={{ justifyContent: 'center', textAlign: 'center' }}>
                   {
-                    items.type === 'addEvent'
+                    items.type === 'addEvent' && userInfo.auth < 2
                       && (
                         <BorderButton
                           addClass="updateBtn"
@@ -356,7 +445,7 @@ const ModalContents = (props) => {
                       )
                   }
                   {
-                    items.type === 'showEvent'
+                    items.type === 'showEvent' && userInfo.auth < 2
                       && (
                         <BorderButton
                           addClass="updateBtn"
@@ -412,7 +501,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={() => {}}
+        execute={() => executeEvent(confirmModal.type)}
       />
       <Alert
         view={alertModal.show}

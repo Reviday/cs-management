@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -12,6 +12,9 @@ import koLocale from '@fullcalendar/core/locales/ko';
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
 import BorderButton from 'common/Button/BorderButton';
+
+/*  Context  */
+import { UserInfoContext } from 'contexts/UserInfoContext';
 
 /*  CSS  */
 import './index.css';
@@ -68,6 +71,7 @@ const createEventId = () => {
 
 const Calendar = (props) => {
 
+  const [userInfo] = useContext(UserInfoContext);
   // const [weekendsVisible, setWeekendsVisible] = useState(true);
   // const [events, setEvents] = useState([]);
   const [locale, setLocale] = useState(koLocale);
@@ -77,6 +81,8 @@ const Calendar = (props) => {
     currentEvents: []
   });
   const [data, setData] = useState(props.events || []); // 없어도 될 것 같기도
+
+  const calendarApi = FullCalendar.prototype.getApi();
 
   // Modal State
   const [isModal, setIsModal] = useState({
@@ -159,10 +165,24 @@ const Calendar = (props) => {
 
   // Event click
   const handleEventClick = (clickInfo) => {
+    // 현재, 정상적으로 new Date를 날려도 내부적으로 +9 시간이 추가되어서 나오는 문제가 있어서,
+    // modal로 날려주기 전에 -9을 하여 정상적인 시간을 강제적으로 만들 생각.
+    let start = new Date(clickInfo.event._instance.range.start);
+    let end = new Date(clickInfo.event._instance.range.end);
+    // let calendarApi = clickInfo.view.calendar;
+
+    console.log(calendarApi);
+
+    console.log('clickinfo:::', clickInfo.view.calendar);
+
     viewModal('showEvent', {
       ...clickInfo.event.extendedProps,
-      id: clickInfo.event._def.publicId
+      id: clickInfo.event._def.publicId,
+      start: start.setHours(start.getHours() - 9),
+      end: end.setHours(end.getHours() - 9),
+      date: start.setHours(start.getHours() - 9)
     });
+
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //  clickInfo.event.remove();
     // }
@@ -178,13 +198,13 @@ const Calendar = (props) => {
     // console.log(event.oldEvent);
 
     // 변경 전 기간
-    console.log(event.oldEvent._instance.range);
-    console.log('to');
+    // console.log(event.oldEvent._instance.range);
+    // console.log('to');
     // 변경 후 기간
-    console.log(event.event._instance.range);
+    // console.log(event.event._instance.range);
 
     // event.id와 같은 값
-    console.log(event.event._def.publicId);
+    // console.log(event.event._def.publicId);
 
     /**
      * 추후, 위 id값으로 event update 처리를 수행하면 될 듯.
@@ -210,16 +230,21 @@ const Calendar = (props) => {
           
           <h2 className="h2_date">
             {moment(selectDate).format('YYYY년 MM월 DD일')}
-            <div className="_rt">
-              <div className="_more">
-                <BorderButton
-                  addClass="moreBtn"
-                  onHandle={() => viewModal('addEvent')}
-                  style={{ width: '100px' }}
-                  name="일정 추가"
-                />
-              </div>
-            </div>
+            {
+              userInfo.auth < 2
+                && (
+                  <div className="_rt">
+                    <div className="_more">
+                      <BorderButton
+                        addClass="moreBtn"
+                        onHandle={() => viewModal('addEvent')}
+                        style={{ width: '100px' }}
+                        name="일정 추가"
+                      />
+                    </div>
+                  </div>
+                )
+            }
           </h2>
           <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>
@@ -317,6 +342,7 @@ const Calendar = (props) => {
               한국어
             </label>
             <div className="calendar-wrapper">
+              {console.log('cal_state::', state, props.events)}
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin, momentTimezonePlugin]}
                 headerToolbar={{
@@ -354,10 +380,10 @@ const Calendar = (props) => {
       <Modal
         set={isModal}
         hide={toggleModal}
-        title={isModal.type === 'showEvent' ? '일정 상제' : '일정 등록'}
+        title={isModal.type === 'showEvent' ? '일정 상세' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
-        items={{ type: isModal.type }}
+        items={{ type: isModal.type, calendarApi: calendarApi }}
       />
     </React.Fragment>
   );

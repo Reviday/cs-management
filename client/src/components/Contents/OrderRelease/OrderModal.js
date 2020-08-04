@@ -230,9 +230,7 @@ const ModalContents = (props) => {
     };
 
     try {
-      console.log('options:::', options);
       let setData = await axios(options);
-      console.log('setData:::', setData);
 
       let result = setData.data.data; // true
 

@@ -21,6 +21,7 @@ const OrderRelease = (props) => {
   const [userInfo] = useContext(UserInfoContext);
   const [siteList] = useContext(SiteListContext); // 지점 리스트
   const [progress] = useContext(ProgressContext); // 진행상황 리스트
+  
   const [receiptData, setReceiptData] = useState([]); // 입고
   const [releaseData, setReleaseData] = useState([]); // 출고
   const [delayReceiptData, setDelayReceiptData] = useState([]); // 입고 지연
@@ -268,7 +269,8 @@ const OrderRelease = (props) => {
         setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
         getOrderList('ship');
       } else if (more.delay === false) {
-        setSearchData({ set: false, field: '', word: '' });
+        setSearchData({ set: false, field: '', word: '', site: '전체', s_code: 'all' });
+        getOrderList('delay');
       }
     }
   }, [more]);
@@ -399,6 +401,8 @@ const OrderRelease = (props) => {
         headerSet={receiptHeaderSet}
         data={delayReceiptData}
         total={delayTotal}
+        searchData={searchData}
+        setSearchData={setSearchData}
         more={more}
         onMoreBtn={onMoreBtn}
         viewModal={viewModal}
