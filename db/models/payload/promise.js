@@ -34,12 +34,28 @@ module.exports = {
         };
     },
     selectQueryById: function (reqParams) {
-        const name = reqParams.name;
-        const telpno = reqParams.telpno;
         return {
-            where: {
-                name: name,
-                telpno: telpno
+            attributes: [
+                "id",
+                "site",
+                "name",
+                "telpno",
+                [Sequelize.fn('DATE_FORMAT',
+                    Sequelize.col('start_date'),'%Y-%m-%d %H:%i'), 'start_date'],
+                [Sequelize.fn('DATE_FORMAT',
+                    Sequelize.col('end_date'),'%Y-%m-%d %H:%i'), 'end_date'],
+                "memo",
+                "meeting_category"
+            ],
+            include: [{
+                model: db.MeetingCateCode,
+                required: false,
+                attributes: ["disc"]
+            }],
+            where : {
+                start_date : {
+                    [Op.between]: [reqParams.startDay,reqParams.endDay]
+                }
             }
         };
     },

@@ -26,9 +26,44 @@ module.exports = {
             throw err;
         }
     },
+    selectById : async (reqParams) =>{
+        let result = null;
+        try {
+            let query = null;
+
+            query = PromiseQuery.selectQueryById(reqParams);
+            result = await Promise.findAll(query);
+            return result;
+
+        } catch (err) {
+            throw err;
+        }
+    },
     promiseInfoInsert: async (reqParams) => {
         try {
             const result = await Promise.create(reqParams);
+            return result !== null;
+
+        } catch (err) {
+            throw err;
+        }
+    },
+    promiseInfoUpdate: async (reqParams) => {
+        try {
+            const result = await Promise.update(reqParams, {where: {id: reqParams.id}});
+            return result !== null;
+
+        } catch (err) {
+            throw err;
+        }
+    },
+    promiseInfoDelete: async (reqParams) => {
+        try {
+            const result = await Promise.destroy({
+                where: {
+                    id: reqParams.id
+                }
+            });
             return result !== null;
 
         } catch (err) {

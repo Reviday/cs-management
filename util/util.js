@@ -402,3 +402,12 @@ module.exports.getNowMonthDay = function(nowMonth){
 
     return result;
 }
+
+module.exports.getTimestamp = function (month, day, hours, minutes) {
+    const year = new Date().getFullYear();
+    const beforeDateFormat = year+'-'+month+'-'+day+' '+hours+':'+minutes;
+    // yyyy-mm-dd hh:mn
+    return moment(beforeDateFormat,'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm');
+}
+
+
