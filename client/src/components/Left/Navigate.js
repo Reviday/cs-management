@@ -11,7 +11,8 @@ import { UserInfoContext } from 'contexts/UserInfoContext';
 const navList = [
   { name: 'dashboard', explain: 'DASHBOARD', url: '/dashboard', auth: 2 },
   { name: 'order-release', explain: '입/출고 조회', url: '/order', auth: 2 },
-  { name: 'customer-info', explain: '고객정보 조회', url: '/customer', auth: 1 }
+  { name: 'customer-info', explain: '고객정보 조회', url: '/customer', auth: 1 },
+  { name: 'customer-schedule', explain: '상담 일정', url: '/schedule', auth: 1 }
 ];
 
 const CollapseButton = ({ active, onClick }) => {

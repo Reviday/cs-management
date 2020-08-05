@@ -245,11 +245,6 @@ const DashBoard = (props) => {
     if (scheduleList.length === 0) getScheduleList();
   }, [progress]);
 
-  //  리스트를 가져온다.
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <React.Fragment>
       <div className="ct_layout">

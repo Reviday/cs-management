@@ -49,7 +49,7 @@ function Header() {
             <div className="pro_id">{userInfo.userName}</div>
             {isShown && (
               <div className="pro_view pointer">
-                <div className="">사용자 설정</div>
+                {/* <div className="">사용자 설정</div> */}
                 <div className="logoutBtn" onClick={doLogout}>로그아웃</div>
               </div>
             )}

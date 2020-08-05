@@ -5,6 +5,7 @@ import Left from 'components/Left';
 import DashBoard from 'components/Contents/DashBoard';
 import CustomerInfo from 'components/Contents/CustomerInfo';
 import OrderRelease from 'components/Contents/OrderRelease';
+import CustomerSchedule from 'components/Contents/CustomerSchedule';
 import NotFound from 'components/Common/NotFound';
 import './Content.scss';
 
@@ -23,6 +24,7 @@ const Content = () => {
               <Route exact path="/dashboard" component={DashBoard} />
               <Route exact path="/customer" component={CustomerInfo} />
               <Route exact path="/order" component={OrderRelease} />
+              <Route exact path="/schedule" component={CustomerSchedule} />
 
               <Route path="/NotFound" component={NotFound} />
               <Redirect from="*" exact to="/NotFound" />

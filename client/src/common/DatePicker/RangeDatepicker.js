@@ -78,7 +78,7 @@ const RangeDatepicker = (props) => {
             yearDropdownItemNumber={15}
             scrollableYearDropdown
             isClearable={isClearable}
-            // disabled={disabled}
+            disabled={disabled}
             readOnly={disabled}
           />
         </div>
@@ -105,7 +105,7 @@ const RangeDatepicker = (props) => {
             yearDropdownItemNumber={15}
             scrollableYearDropdown
             isClearable={isClearable}
-            // disabled={disabled}
+            disabled={disabled}
             readOnly={disabled}
           />
         </div>

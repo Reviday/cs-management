@@ -366,11 +366,11 @@ const Calendar = (props) => {
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: `dayGridMonth,timeGridWeek,timeGridDay,${userInfo.auth < 2 && 'addEventButton'}`
+                  right: `dayGridMonth,timeGridWeek,timeGridDay${userInfo.auth < 2 ? ',addEventButton' : ''}`
                 }}
                 customButtons={{
                   addEventButton: {
-                    text: '일정 추가',
+                    text: '일정 등록',
                     click: () => {
                       viewModal('addEvent');
                     }
