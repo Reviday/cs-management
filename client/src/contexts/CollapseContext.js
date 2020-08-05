@@ -4,7 +4,7 @@ const CollapseContext = createContext([]);
 
 const CollapseProvider = (props) => {
 
-  const [isCollapse, setCollapse] = useState(false);
+  const [isCollapse, setCollapse] = useState(true);
 
   return (
     <CollapseContext.Provider value={[isCollapse, setCollapse]}>
