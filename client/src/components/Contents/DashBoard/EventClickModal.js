@@ -27,10 +27,11 @@ const ModalContents = (props) => {
     items.type === 'showEvent'
       ? props.data
       : {
+        id: '',
         site: siteList[0].site,
         name: '',
         telpno: '',
-        memo: '',
+        customer_memo: '',
         meeting_category: 1,
         start_date: null,
         end_date: null,
@@ -163,7 +164,7 @@ const ModalContents = (props) => {
     return validation;
   };
 
-  const executeEvent = async (type) => {
+  const executeEvent = async (type, id) => {
     if (type === 'cancel') { // cancel이 안들어오긴 하지만, 추후 사용 여지를 위해.
       // state값 초기화 후, modal 닫기
       setState({});
@@ -174,33 +175,36 @@ const ModalContents = (props) => {
     // 권한 부족 시, 수행 안 함
     if (userInfo.auth > 1) return false;
     
-    let data = {};
-    // 일단은 insert밖에 없긴한데..
+    // set options
+    let options = {
+      url: '',
+      method: 'post',
+      data: {}
+    };
+
     switch (type) {
 
       case 'insert':
+        options.url = `http://${Config.API_HOST.IP}/api/promise/insert`;
         // data.action = 'i';
         break;
       case 'update':
-        data.id = id;
-        data.action = 'u';
+        options.url = `http://${Config.API_HOST.IP}/api/promise/update`;
+        options.data.id = id;
         break;
       case 'delete':
-        data = {
-          id: id,
-          action: 'd',
-        };
+        options.url = `http://${Config.API_HOST.IP}/api/promise/delete`;
+        options.data.id = id;
         break;
       default: return false;
 
     }
 
     // set options
-    let options = {
-      url: `http://${Config.API_HOST.IP}/api/promise/insert`,
-      method: 'post',
+    options = {
+      ...options,
       data: {
-        ...data,
+        ...options.data,
         site: state.site,
         name: state.name,
         telpno: state.telpno,
@@ -208,7 +212,7 @@ const ModalContents = (props) => {
           + moment(startTime).format(' HH:mm'),
         end_date: moment(state.date).format('YYYY-MM-DD')
         + moment(endTime).format(' HH:mm'),
-        memo: state.memo,
+        customer_memo: state.customer_memo,
         meeting_category: state.meeting_category
       },
     };
@@ -223,16 +227,16 @@ const ModalContents = (props) => {
       // 정상적으로 처리되었을 때,
       // 리스트를 다시 호출하나.. 기존 state에서 update를 할까..
       if (result === true) {
-        // 보여주는건 임시 id값 붙여서 보여주기로 하고..
-        // insert하고 해당 id값 가져오는 식으로 새로 넣어주어야 할 듯.
-        // 새로 인서트했을 때, 할당된 id 값을 리턴 받는다던가 하는 방식.
-        calendarApi.addEvent({
-          id: Math.random() * 1000,
-          title: options.data.name,
-          start: options.data.start_date,
-          end: options.data.end_date,
-          allDay: false
-        });
+        // 리스트를 다시 불러온다.
+        // 아무리 문서를 찾아봐도 calendarApi.addEvent를 사용할 방법이 없음.
+        items.getList();
+        // items.calendarApi.addEvent({
+        //   id: Math.random() * 1000,
+        //   title: options.data.name,
+        //   start: options.data.start_date,
+        //   end: options.data.end_date,
+        //   allDay: false
+        // });
       }
 
       // 정상적으로 처리되었고, type이 insert일 때
@@ -281,6 +285,7 @@ const ModalContents = (props) => {
 
   return (
     <React.Fragment>
+      {console.log(props.set)}
       <div className="modal_content" style={{ height: 'fit-content', overflow: 'hidden', padding: '20px 10px', display: 'inline-block' }}>
         <div className="box_div" style={{ minHeight: '515px', height: 'fit-content' }}>
           <div className="box_layout noshadow">
@@ -361,10 +366,10 @@ const ModalContents = (props) => {
                   </div>
                   <div className="needs_area">
                     <textarea
-                      value={state.memo}
+                      value={state.customer_memo}
                       onChange={e => setState({
                         ...state,
-                        memo: e.target.value
+                        customer_memo: e.target.value
                       })}
                     />
                   </div>
@@ -456,7 +461,8 @@ const ModalContents = (props) => {
                               show: true,
                               title: '확인 메시지',
                               content: '상담 일정을 수정하시겠습니까?',
-                              type: 'update'
+                              type: 'update',
+                              id: state.id
                             });
                           }}
                           name="수정"
@@ -476,7 +482,8 @@ const ModalContents = (props) => {
                               show: true,
                               title: '확인 메시지',
                               content: '상담 일정을 삭제하시겠습니까?',
-                              type: 'delete'
+                              type: 'delete',
+                              id: state.id
                             });
                           }}
                           name="삭제"
@@ -501,7 +508,7 @@ const ModalContents = (props) => {
         title={confirmModal.title}
         content={confirmModal.content}
         hide={toggleConfirm}
-        execute={() => executeEvent(confirmModal.type)}
+        execute={() => executeEvent(confirmModal.type, confirmModal.id)}
       />
       <Alert
         view={alertModal.show}

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -12,6 +13,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
 import BorderButton from 'common/Button/BorderButton';
+import Config from 'config';
 
 /*  Context  */
 import { UserInfoContext } from 'contexts/UserInfoContext';
@@ -82,13 +84,12 @@ const Calendar = (props) => {
   });
   const [data, setData] = useState(props.events || []); // 없어도 될 것 같기도
 
-  const calendarApi = FullCalendar.prototype.getApi();
-
   // Modal State
   const [isModal, setIsModal] = useState({
     view: false,
     type: '',
-    data: {}
+    data: {},
+    calendarApi: {}
   });
 
   // close modal
@@ -96,15 +97,17 @@ const Calendar = (props) => {
     setIsModal({ ...isModal,
       view: !isModal.view,
       type: '',
-      data: {}
+      data: {},
+      calendarApi: {}
     });
   };
 
-  const viewModal = async (type, data) => {
+  const viewModal = async (type, data, calendarApi) => {
     setIsModal({
       view: true,
       type: type,
-      data: data
+      data: data,
+      calendarApi: calendarApi
     });
   };
 
@@ -169,7 +172,7 @@ const Calendar = (props) => {
     // modal로 날려주기 전에 -9을 하여 정상적인 시간을 강제적으로 만들 생각.
     let start = new Date(clickInfo.event._instance.range.start);
     let end = new Date(clickInfo.event._instance.range.end);
-    // let calendarApi = clickInfo.view.calendar;
+    let calendarApi = clickInfo.view.calendar;
 
     console.log(calendarApi);
 
@@ -181,7 +184,7 @@ const Calendar = (props) => {
       start: start.setHours(start.getHours() - 9),
       end: end.setHours(end.getHours() - 9),
       date: start.setHours(start.getHours() - 9)
-    });
+    }, calendarApi);
 
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //  clickInfo.event.remove();
@@ -230,7 +233,7 @@ const Calendar = (props) => {
           
           <h2 className="h2_date">
             {moment(selectDate).format('YYYY년 MM월 DD일')}
-            {
+            {/* {
               userInfo.auth < 2
                 && (
                   <div className="_rt">
@@ -244,7 +247,7 @@ const Calendar = (props) => {
                     </div>
                   </div>
                 )
-            }
+            } */}
           </h2>
           <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>
@@ -310,6 +313,21 @@ const Calendar = (props) => {
   //   // if (events.length === 0) setEvents(props.events);
   // }, [props.events]);
 
+  const addButton = () => {
+    return (
+      <div className="_rt">
+        <div className="_more">
+          <BorderButton
+            addClass="moreBtn"
+            onHandle={() => viewModal('addEvent')}
+            style={{ width: '100px' }}
+            name="일정 추가"
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <React.Fragment>
       <div className="mypage-body">
@@ -326,7 +344,7 @@ const Calendar = (props) => {
             </label> */}
             
             {/* 시험용 기능 */}
-            <label htmlFor="locale_chkbox">
+            {/* <label htmlFor="locale_chkbox">
               <input
                 type="checkbox"
                 id="locale_chkbox"
@@ -340,7 +358,7 @@ const Calendar = (props) => {
                 }}
               />
               한국어
-            </label>
+            </label> */}
             <div className="calendar-wrapper">
               {console.log('cal_state::', state, props.events)}
               <FullCalendar
@@ -348,10 +366,18 @@ const Calendar = (props) => {
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                  right: `dayGridMonth,timeGridWeek,timeGridDay,${userInfo.auth < 2 && 'addEventButton'}`
+                }}
+                customButtons={{
+                  addEventButton: {
+                    text: '일정 추가',
+                    click: () => {
+                      viewModal('addEvent');
+                    }
+                  }
                 }}
                 initialView="dayGridMonth"
-                editable
+                // editable={userInfo.auth < 2}
                 selectable
                 selectMirror
                 dayMaxEvents
@@ -383,7 +409,7 @@ const Calendar = (props) => {
         title={isModal.type === 'showEvent' ? '일정 상세' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
-        items={{ type: isModal.type, calendarApi: calendarApi }}
+        items={{ type: isModal.type, getList: props.getList, calendarApi: isModal.calendarApi }}
       />
     </React.Fragment>
   );

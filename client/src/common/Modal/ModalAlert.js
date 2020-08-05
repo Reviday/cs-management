@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import BorderButton from 'common/Button/BorderButton';
 import './Modal.scss';
 
 const Alert = (props) => {
@@ -43,7 +44,6 @@ const Alert = (props) => {
     }
   };
 
-
   if (props.view) {
     return ReactDOM.createPortal(
       <React.Fragment>
@@ -65,6 +65,15 @@ const Alert = (props) => {
                 { props.type === 'error' && <div className="_alert">{props.content}</div> }
                 { props.type === 'common' && <div className="_alert" style={{ color: '#505050' }}>{props.content}</div> }
 
+              </div>
+              <div className="modal_btn_center">
+                <div className="_confirmBtn">
+                  <BorderButton
+                    addClass="cancel"
+                    onHandle={e => onHandle(e)}
+                    name="확인"
+                  />
+                </div>
               </div>
             </div>
           </div>

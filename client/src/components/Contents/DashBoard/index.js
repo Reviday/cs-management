@@ -138,7 +138,7 @@ const DashBoard = (props) => {
       method: 'post',
       data: {
         site: calState.s_code === 'all' ? undefined : calState.site,
-        now_month: '07'
+        now_month: '08'
       }
     };
     try {
@@ -286,6 +286,7 @@ const DashBoard = (props) => {
           <Calendar
             events={scheduleList}
             eventClick={EventClickModal}
+            getList={getScheduleList}
           />
         </div>
 
