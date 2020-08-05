@@ -196,7 +196,7 @@ const DashBoard = (props) => {
       data: {
         user_site: userInfo.site,
         site: site || undefined,
-        category: 'checklist',
+        category: 'today_order_list',
         search_field: data?.field || undefined,
         search_word: data?.word || undefined
       }

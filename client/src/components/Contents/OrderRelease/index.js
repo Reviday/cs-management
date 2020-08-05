@@ -382,9 +382,9 @@ const OrderRelease = (props) => {
         viewModal={viewModal}
         getOrderList={getOrderList}
       />
-      <OrderPage // 출고 일정
+      <OrderPage // 출고 현황
         category="ship"
-        title="출고 일정"
+        title="출고 현황"
         headerSet={releaseHeaderSet}
         data={releaseData}
         total={releaseTotal}
