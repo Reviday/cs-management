@@ -1,7 +1,8 @@
 .mypage-body {
   display: flex;
   min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica Neue, Helvetica, sans-serif; */
+  font-family: nsr !important;
   font-size: 14px;
   width: fit-content;
   margin: auto;
@@ -52,6 +53,10 @@
   /* background-color: #d3e2e8; */
 }
 
+div.app-sidebar-section h2.am_list + ul {
+  margin-bottom: 20px;
+}
+
 div.app-sidebar-section h2.am_list,
 div.app-sidebar-section h2.pm_list {
   color: #426cc3;
@@ -68,4 +73,17 @@ div.app-sidebar-section ul {
 
 div.app-sidebar-section ul li{
   font-size: 12px;
+  background: lightskyblue;
+  padding: 0 15px;
+  width: fit-content;
+  border-radius: 20px;
+  margin: 5px 0;
+}
+
+div.app-sidebar-section ul li b {
+  padding-right: 10px;
+}
+
+div.app-sidebar-section ul li i {
+  padding-right: 10px;
 }
