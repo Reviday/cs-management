@@ -226,7 +226,7 @@ const Calendar = (props) => {
         </div>
         <div className="app-sidebar-section">
           <h2 className="am_list">
-            오전
+            오전 일정
             (
             {state.currentEvents
               .filter(event => moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오전')).length}
@@ -241,7 +241,7 @@ const Calendar = (props) => {
             }
           </ul>
           <h2 className="pm_list">
-            오후
+            오후 일정
             (
             {state.currentEvents.filter((event) => {
               if (moment(new Date(event.start)).format('YYYY-MM-DD a') === moment(selectDate).format('YYYY-MM-DD 오후')) {

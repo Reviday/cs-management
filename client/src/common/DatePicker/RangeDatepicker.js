@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
+
+import Alert from 'common/Modal/ModalAlert';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './index.css';
@@ -43,6 +45,23 @@ const RangeDatepicker = (props) => {
   // 출력된 형식을 사용하는 듯 하니 주의.
   const [startDate, setStartDate] = props.startState;
   const [endDate, setEndDate] = props.endState;
+
+  // alertModal State
+  const [alertModal, setAlertModal] = useState({
+    show: false,
+    title: '',
+    content: '',
+    type: ''
+  });
+
+  const toggleAlert = () => {
+    setAlertModal({
+      show: false,
+      title: '',
+      content: '',
+      type: ''
+    });
+  };
 
   const CustomTimeInput = ({ value, onChange }) => (
     <input
@@ -88,7 +107,30 @@ const RangeDatepicker = (props) => {
           </div>
           <DatePicker
             selected={endDate}
-            onChange={date => setEndDate(date)}
+            onChange={(date) => {
+              // startDate가 설정되어 있지 않을 경우.
+              if (startDate === null) {
+                setAlertModal({
+                  show: true,
+                  title: '안내 메시지',
+                  content: `시작 ${props.onlyTime ? '시간을' : '날짜를'} 먼저 선택하시기 바랍니다.`,
+                  type: 'common'
+                });
+                return false;
+              
+              // startDate가 endDate보다 크거나 같을 경우
+              } if (startDate >= date) {
+                setAlertModal({
+                  show: true,
+                  title: '안내 메시지',
+                  content: `시작 ${props.onlyTime ? '시간이' : '날짜가'} 종료 ${props.onlyTime ? '시간' : '날짜'}보다 빨라야 합니다.`,
+                  type: 'common'
+                });
+                return false;
+              }
+
+              setEndDate(date);
+            }}
             dateFormat={props.useTime || props.onlyTime ? props.onlyTime ? 'h:mm aa' : 'MMMM d, yyyy h:mm aa' : 'yyyy년 MM월 dd일'}
             selectsEnd
             startDate={startDate}
@@ -110,7 +152,13 @@ const RangeDatepicker = (props) => {
           />
         </div>
       </div>
-      
+      <Alert
+        view={alertModal.show}
+        title={alertModal.title}
+        content={alertModal.content}
+        hide={toggleAlert}
+        type={alertModal.type}
+      />
     </React.Fragment>
   );
 };
