@@ -36,7 +36,7 @@ const CustomerTablePage = (props) => {
   };
 
   return (
-    <div className="flex_box">
+    <div className="flex_box customer_page">
       <div className="ct_box">
         <div className="rows" style={{ width: 'calc(100% - 100px)' }}>
           <div className="_rt">

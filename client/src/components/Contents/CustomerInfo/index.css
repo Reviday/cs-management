@@ -12,6 +12,14 @@ div.ct_flex div.flex_box {
   overflow: auto;
 }
 
+div.ct_flex div.flex_box.customer_info {
+  width: 60%;
+}
+
+div.ct_flex div.flex_box.customer_page {
+  width: 40%;
+}
+
 div.name_title {
   font-size: 25px;
   font-weight: 600;

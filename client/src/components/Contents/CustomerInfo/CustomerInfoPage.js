@@ -114,7 +114,7 @@ const CustomerInfoPage = (props) => {
 
   return (
     <React.Fragment>
-      <div className="flex_box">
+      <div className="flex_box customer_info">
         <div className="ct_box">
           <div className="name_title">
           고객명
@@ -191,7 +191,7 @@ const CustomerInfoPage = (props) => {
               ? (
                 <React.Fragment>
                   <Table
-                    headerSet={userInfo?.auth === 0 ? orderHeaderSet : orderHeaderSet.filter(item => item.field !== 'price')}
+                    headerSet={Number(userInfo?.auth) === 0 ? orderHeaderSet : orderHeaderSet.filter(item => item.field !== 'price')}
                     data={orderList}
                     recordLimit="none"
                     tableStyle={{ margin: '0' }}
