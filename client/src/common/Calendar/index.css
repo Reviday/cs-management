@@ -72,12 +72,16 @@ div.app-sidebar-section ul {
 }
 
 div.app-sidebar-section ul li{
+  border-bottom: 1px solid #aaa;
+  height: 19px;
   font-size: 12px;
-  background: lightskyblue;
-  padding: 0 15px;
   width: fit-content;
-  border-radius: 20px;
   margin: 5px 0;
+}
+
+div.app-sidebar-section ul li.comp {
+  opacity: 0.3;
+  text-decoration: line-through;
 }
 
 div.app-sidebar-section ul li b {
@@ -86,4 +90,99 @@ div.app-sidebar-section ul li b {
 
 div.app-sidebar-section ul li i {
   padding-right: 10px;
+}
+
+div.app-sidebar-section ul li i.i_title {
+  width: 100px;
+}
+
+/* BorderButton Custom CSS */
+.mt {
+  width: 80px !important;
+  font-size: 10px;
+  height: 15px !important;
+  margin-left: 10px;
+  cursor: default !important;
+}
+
+.mt:active {
+  opacity: 0.8;
+}
+
+.mt.type1 {
+  border: none;
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type1:hover {
+  background-color: rgb(255, 206, 84);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type2 {
+  border: none;
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type2:hover {
+  background-color: rgb(126, 197, 237);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type3 {
+  border: none;
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 0.8;
+}
+
+.mt.type3:hover {
+  background-color: rgb(237, 85, 101);
+  color: white;
+  opacity: 0.8;
+}
+
+.mt.type4 {
+  border: none;
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type4:hover {
+  background-color: rgb(72, 207, 173);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type5 {
+  border: none;
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 0.8;
+}
+
+.mt.type5:hover {
+  background-color: rgb(93, 156, 236);
+  color: white;
+  opacity: 0.8;
+}
+
+.mt.type6 {
+  border: none;
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
+}
+
+.mt.type6:hover {
+  background-color: rgb(236, 135, 192);
+  color: rgb(80, 80, 80);
+  opacity: 0.8;
 }

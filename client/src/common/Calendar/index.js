@@ -11,6 +11,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
+import BorderButton from 'common/Button/BorderButton';
 
 /*  Context  */
 import { UserInfoContext } from 'contexts/UserInfoContext';
@@ -55,17 +56,42 @@ const renderEventContent = (eventInfo) => {
 };
 
 const renderSidebarEvent = (event) => {
+  const categoryList = [
+    { meeting_category: 1, status_name: '신규' },
+    { meeting_category: 2, status_name: '가봉' },
+    { meeting_category: 3, status_name: '완성' },
+    { meeting_category: 4, status_name: '수선피팅' },
+    { meeting_category: 5, status_name: '대여복 셀렉' },
+    { meeting_category: 6, status_name: '기타' },
+  ];
+
   return (
-    <li key={event.id}>
+    <li key={event.id} className={moment(event._instance.range.end).subtract(9, 'hours') < moment() ? 'comp' : ''}>
       {/* <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b> */}
       <b>{formatDate(event.start, { hour: 'numeric', minute: '2-digit' })}</b>
-      <i>{event.title}</i>
+      <i className="i_title">
+        {event.title}
+      </i>
+      <i className="i_mt">
+        {
+          categoryList.map((item) => {
+            if (String(item.meeting_category) === String(event.extendedProps.meeting_category)) {
+              let name = item.status_name;
+              let addClass = `type${item.meeting_category}`;
+
+              return (
+                <BorderButton
+                  addClass={`mt ${addClass}`}
+                  name={name}
+                />
+              );
+            }
+            return null;
+          })
+        }
+      </i>
     </li>
   );
-};
-
-const createEventId = () => {
-  return String(eventGuid++);
 };
 
 const Calendar = (props) => {

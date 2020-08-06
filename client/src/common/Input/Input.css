@@ -29,6 +29,6 @@ div.row_input input[type="text"]:focus {
 }
 
 div.row_input input[type="text"]::placeholder {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
 }
