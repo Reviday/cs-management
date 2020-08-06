@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -12,8 +11,6 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 /*  User Import  */
 import Modal from 'common/Modal/ModalCover';
-import BorderButton from 'common/Button/BorderButton';
-import Config from 'config';
 
 /*  Context  */
 import { UserInfoContext } from 'contexts/UserInfoContext';
@@ -88,8 +85,7 @@ const Calendar = (props) => {
   const [isModal, setIsModal] = useState({
     view: false,
     type: '',
-    data: {},
-    calendarApi: {}
+    data: {}
   });
 
   // close modal
@@ -97,17 +93,15 @@ const Calendar = (props) => {
     setIsModal({ ...isModal,
       view: !isModal.view,
       type: '',
-      data: {},
-      calendarApi: {}
+      data: {}
     });
   };
 
-  const viewModal = async (type, data, calendarApi) => {
+  const viewModal = async (type, data) => {
     setIsModal({
       view: true,
       type: type,
-      data: data,
-      calendarApi: calendarApi
+      data: data
     });
   };
 
@@ -124,16 +118,6 @@ const Calendar = (props) => {
     start: moment().subtract(2, 'years').format('YYYY-MM-DD'),
     end: moment().add(2, 'years').format('YYYY-MM-DD'),
   };
-
-
-  /*
-[
-      { id: 0, title: 'event 1', date: '2020-07-01' },
-      { id: 12312, title: 'event 3', date: '2020-07-01' },
-      { id: 2, title: 'event 2', date: '2020-07-14' },
-      { id: 3, title: 'event 5', date: '2020-07-14T12:00:00' }
-    ]
-  */
 
   // const handleWeekendsToggle = () => {
   //   console.log(weekendsVisible);
@@ -172,11 +156,7 @@ const Calendar = (props) => {
     // modal로 날려주기 전에 -9을 하여 정상적인 시간을 강제적으로 만들 생각.
     let start = new Date(clickInfo.event._instance.range.start);
     let end = new Date(clickInfo.event._instance.range.end);
-    let calendarApi = clickInfo.view.calendar;
-
-    console.log(calendarApi);
-
-    console.log('clickinfo:::', clickInfo.view.calendar);
+    // let calendarApi = clickInfo.view.calendar;
 
     viewModal('showEvent', {
       ...clickInfo.event.extendedProps,
@@ -184,15 +164,8 @@ const Calendar = (props) => {
       start: start.setHours(start.getHours() - 9),
       end: end.setHours(end.getHours() - 9),
       date: start.setHours(start.getHours() - 9)
-    }, calendarApi);
+    });
 
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //  clickInfo.event.remove();
-    // }
-
-    console.log('range:::', clickInfo.event._instance.range);
-    console.log('info:::', clickInfo.event._def);
-    console.log('extendedProps:::', clickInfo.event.extendedProps);
   };
 
   // Event move
@@ -215,8 +188,8 @@ const Calendar = (props) => {
   };
 
   const handleEvents = (events) => {
-    console.log('handleEvent:::', state.currentEvents);
-    console.log('handleEvent after:::', events);
+    // console.log('handleEvent:::', state.currentEvents);
+    // console.log('handleEvent after:::', events);
     // setState({
     //   currentEvents: events
     // });
@@ -252,7 +225,7 @@ const Calendar = (props) => {
           <h2 className="h2_day">{moment(selectDate).format('dd요일')}</h2>
         </div>
         <div className="app-sidebar-section">
-          <h2>
+          <h2 className="am_list">
             오전
             (
             {state.currentEvents
@@ -267,7 +240,7 @@ const Calendar = (props) => {
                 .map(renderSidebarEvent)
             }
           </ul>
-          <h2>
+          <h2 className="pm_list">
             오후
             (
             {state.currentEvents.filter((event) => {
@@ -287,42 +260,6 @@ const Calendar = (props) => {
                 .map(renderSidebarEvent)
             }
           </ul>
-        </div>
-      </div>
-    );
-  };
-
-  // useEffect(() => {
-  //   if (props.events?.length > 0) {
-  //     let convertEvents = [];
-  //     for (let i = 0; i < props.events.length; i++) {
-  //       let item = {
-  //         id: props.events[i].id,
-  //         title: props.events[i].title,
-  //         start: new Date(props.events[i].start_date).toISOString().replace(/T.*$/, ''),
-  //         end: new Date(props.events[i].end_date).toISOString().replace(/T.*$/, ''),
-  //       };
-  //       convertEvents.push(item);
-  //     }
-  //     // setState({
-  //     //   ...state,
-  //     //   currentEvents: convertEvents
-  //     // });
-  //     setinitEvents(convertEvents);
-  //   }
-  //   // if (events.length === 0) setEvents(props.events);
-  // }, [props.events]);
-
-  const addButton = () => {
-    return (
-      <div className="_rt">
-        <div className="_more">
-          <BorderButton
-            addClass="moreBtn"
-            onHandle={() => viewModal('addEvent')}
-            style={{ width: '100px' }}
-            name="일정 추가"
-          />
         </div>
       </div>
     );
@@ -409,7 +346,7 @@ const Calendar = (props) => {
         title={isModal.type === 'showEvent' ? '일정 상세' : '일정 등록'}
         style={{ width: '600px', height: 'fit-content' }}
         contents={props.eventClick}
-        items={{ type: isModal.type, getList: props.getList, calendarApi: isModal.calendarApi }}
+        items={{ type: isModal.type, getList: props.getList }}
       />
     </React.Fragment>
   );

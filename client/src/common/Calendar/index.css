@@ -51,3 +51,21 @@
 .fc-daygrid-day-events > div.fc-daygrid-event-harness:nth-child(2n) > a {
   /* background-color: #d3e2e8; */
 }
+
+div.app-sidebar-section h2.am_list,
+div.app-sidebar-section h2.pm_list {
+  color: #426cc3;
+  font-weight: 600;
+  font-size: 15px;
+  border-left: 2px solid;
+  padding-left: 5px;
+  line-height: 15px;
+}
+
+div.app-sidebar-section ul {
+  padding: 5px 10px;
+}
+
+div.app-sidebar-section ul li{
+  font-size: 12px;
+}
