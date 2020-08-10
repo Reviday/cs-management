@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import sanitizeHtml from 'sanitize-html';
 import qs from 'qs';
 import moment from 'moment';
 
@@ -153,7 +154,22 @@ const ModalContents = (props) => {
     // 2. 전달받은 data가 정상적인 값인지 확인
     // 아직은 체크해야할 부분이 명확하지 않음...
     if (validation) {
-      //
+      // 이름 정규식 체크
+      let reg = /^[가-힣]{2,5}|[a-zA-Z]{2,10}\s[a-zA-Z]{2,10}$/;
+      if (!reg.test(state.name)) {
+        validation = false;
+        message = '고객명이 올바르지 않습니다.';
+      } else if (!reg.test(state.manager)) {
+        validation = false;
+        message = '매니저 이름이 올바르지 않습니다.';
+      }
+
+      // 전화번호 정규식 체크
+      reg = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+      if (!reg.test(state.telpno)) {
+        validation = false;
+        message = '전화번호 형식이 올바르지 않습니다.';
+      }
     }
 
 
@@ -189,8 +205,8 @@ const ModalContents = (props) => {
       name: state.name,
       telpno: state.telpno.replace(/[^0-9]/g, ''),
       address: state.address,
-      needs: state.needs,
-      product: state.product,
+      needs: sanitizeHtml(state.needs),
+      product: sanitizeHtml(state.product),
       price: state.price.replace(/[^0-9]/g, ''),
       order_status: state.order_status,
       price_type: state.price_type,

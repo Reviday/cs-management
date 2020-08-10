@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
+import sanitizeHtml from 'sanitize-html';
 import moment from 'moment';
 import 'moment/locale/ko';
 
@@ -124,14 +125,11 @@ const ModalContents = (props) => {
       // 필수로 입력되어야 하는 요소 목록
       // select는 넣을 필요가 없지만 일단 필수 요소이기에 추가.
 
-      /*
       let checkList = [
         { key: 'site', name: '지점' }, // select
         { key: 'name', name: '고객명' }, // input
         { key: 'telpno', name: '연락처' }, // input
-        { key: 'zipcode', name: '우편번호' }, // input - API
-        { key: 'address', name: '주소' }, // input - API
-        { key: 'detail_addr', name: '상세주소' }, // input
+        { ket: 'customer_memo', name: '메모' } // input
       ];
 
       for (let key in state) {
@@ -147,7 +145,37 @@ const ModalContents = (props) => {
           }
         }
       }
-      */
+
+      // 날짜/시간 체크
+      if (!state.date || !startTime || !endTime) {
+        validation = false;
+        message = '상담일정(시간)을 선택해주시기 바랍니다.';
+      }
+
+    }
+
+    // 2. 각 data 별로 적절한 형식인지 체크
+    if (validation) {
+      // 이름 정규식 체크
+      let reg = /^[가-힣]{2,5}|[a-zA-Z]{2,10}\s[a-zA-Z]{2,10}$/;
+      if (!reg.test(state.name)) {
+        validation = false;
+        message = '고객명이 올바르지 않습니다.';
+      }
+
+      // 전화번호 정규식 체크
+      reg = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+      if (!reg.test(state.telpno)) {
+        validation = false;
+        message = '전화번호 형식이 올바르지 않습니다.';
+      }
+
+      // 존재하는 고객정보인지 확인
+      // 필요 여부를 확인하지 못했기 때문에 비활성
+      // if (duplCheck()) {
+      //   validation = false;
+      //   message = '등록되지 않은 고객정보 입니다.';
+      // }
     }
 
 
@@ -212,7 +240,7 @@ const ModalContents = (props) => {
           + moment(startTime).format(' HH:mm'),
         end_date: moment(state.date).format('YYYY-MM-DD')
         + moment(endTime).format(' HH:mm'),
-        customer_memo: state.customer_memo,
+        customer_memo: sanitizeHtml(state.customer_memo),
         meeting_category: state.meeting_category
       },
     };

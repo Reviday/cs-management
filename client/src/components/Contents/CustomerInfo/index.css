@@ -225,17 +225,18 @@ ul.img_list, ol.img_list {
     padding: 0px;
     max-width: calc(100% - 100px);;
     width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 ul.img_list li, ol.img_list li {
+    width: 300px;
     padding: 5px 0px 5px 5px;
     margin-bottom: 5px;
     border-bottom: 1px solid #efefef;
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 ul.img_list li:before,
@@ -244,4 +245,7 @@ ol.img_list li:before {
     display: inline-block;
     vertical-align: middle;
     padding: 0px 5px 6px 0px;
+}
+
+.img_list {
 }

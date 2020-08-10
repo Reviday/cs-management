@@ -74,7 +74,8 @@ div.app-sidebar-section ul {
 div.app-sidebar-section ul li{
   border-bottom: 1px solid #aaa;
   height: 19px;
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 12px;
   width: fit-content;
   margin: 5px 0;
 }
@@ -89,10 +90,11 @@ div.app-sidebar-section ul li b {
 }
 
 div.app-sidebar-section ul li i {
-  padding-right: 10px;
+  
 }
 
 div.app-sidebar-section ul li i.i_title {
+  padding-right: 10px;
   width: 100px;
 }
 

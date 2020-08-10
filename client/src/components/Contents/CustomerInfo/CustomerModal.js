@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import sanitizeHtml from 'sanitize-html';
 import moment from 'moment';
 
 import Select from 'common/Select/Select';
@@ -195,7 +196,7 @@ const ModalContents = (props) => {
         if (key === 'telpno') {
           formData.append(key, state[key].replace(/[^0-9]/g, ''));
         } else {
-          formData.append(key, state[key]);
+          formData.append(key, sanitizeHtml(state[key]));
         }
       }
     }
